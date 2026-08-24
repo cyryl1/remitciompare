@@ -16,7 +16,14 @@ const providers_module_1 = require("./providers/providers.module");
 const comparison_module_1 = require("./comparison/comparison.module");
 const auth_module_1 = require("./auth/auth.module");
 const email_module_1 = require("./email/email.module");
+const workers_module_1 = require("./workers/workers.module");
 const env_validation_1 = require("./config/env.validation");
+const bullmq_1 = require("@nestjs/bullmq");
+const schedule_1 = require("@nestjs/schedule");
+const rates_module_1 = require("./rates/rates.module");
+const users_module_1 = require("./users/users.module");
+const alerts_module_1 = require("./alerts/alerts.module");
+const admin_module_1 = require("./admin/admin.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -27,11 +34,23 @@ exports.AppModule = AppModule = __decorate([
                 isGlobal: true,
                 validate: env_validation_1.validate,
             }),
+            schedule_1.ScheduleModule.forRoot(),
+            bullmq_1.BullModule.forRoot({
+                connection: {
+                    host: process.env.REDIS_HOST || 'localhost',
+                    port: parseInt(process.env.REDIS_PORT || '6379', 10),
+                },
+            }),
             prisma_module_1.PrismaModule,
             providers_module_1.ProvidersModule,
             comparison_module_1.ComparisonModule,
             auth_module_1.AuthModule,
             email_module_1.EmailModule,
+            workers_module_1.WorkersModule,
+            rates_module_1.RatesModule,
+            users_module_1.UsersModule,
+            alerts_module_1.AlertsModule,
+            admin_module_1.AdminModule,
         ],
         controllers: [app_controller_1.AppController],
         providers: [app_service_1.AppService],

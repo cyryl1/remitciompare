@@ -9,13 +9,19 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProvidersModule = exports.PROVIDER_ADAPTERS = void 0;
 const common_1 = require("@nestjs/common");
 const wise_adapter_1 = require("./adapters/wise/wise.adapter");
+const providers_service_1 = require("./providers.service");
+const providers_controller_1 = require("./providers.controller");
+const prisma_module_1 = require("../prisma/prisma.module");
 exports.PROVIDER_ADAPTERS = 'PROVIDER_ADAPTERS';
 let ProvidersModule = class ProvidersModule {
 };
 exports.ProvidersModule = ProvidersModule;
 exports.ProvidersModule = ProvidersModule = __decorate([
     (0, common_1.Module)({
+        imports: [prisma_module_1.PrismaModule],
+        controllers: [providers_controller_1.ProvidersController],
         providers: [
+            providers_service_1.ProvidersService,
             wise_adapter_1.WiseAdapter,
             {
                 provide: exports.PROVIDER_ADAPTERS,

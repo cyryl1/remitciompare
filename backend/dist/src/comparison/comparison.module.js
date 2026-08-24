@@ -11,14 +11,16 @@ const common_1 = require("@nestjs/common");
 const comparison_service_1 = require("./comparison.service");
 const comparison_controller_1 = require("./comparison.controller");
 const providers_module_1 = require("../providers/providers.module");
+const prisma_module_1 = require("../prisma/prisma.module");
 let ComparisonModule = class ComparisonModule {
 };
 exports.ComparisonModule = ComparisonModule;
 exports.ComparisonModule = ComparisonModule = __decorate([
     (0, common_1.Module)({
-        imports: [providers_module_1.ProvidersModule],
+        imports: [providers_module_1.ProvidersModule, prisma_module_1.PrismaModule],
         controllers: [comparison_controller_1.ComparisonController],
         providers: [comparison_service_1.ComparisonService],
+        exports: [comparison_service_1.ComparisonService],
     })
 ], ComparisonModule);
 //# sourceMappingURL=comparison.module.js.map

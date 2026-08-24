@@ -1,6 +1,9 @@
 import { Injectable, Inject, Logger } from '@nestjs/common';
 import { BaseProviderAdapter, QuoteRequest, ProviderQuote } from '../providers/interfaces/provider-adapter.interface';
 import { PROVIDER_ADAPTERS } from '../providers/providers.module';
+import { PrismaService } from '../prisma/prisma.service';
+import { Prisma } from '@prisma/client';
+import { CreateComparisonDto } from './dto/create-comparison.dto';
 
 export enum Priority {
   MOST_RECEIVED = 'MOST_RECEIVED',
@@ -23,14 +26,46 @@ export class ComparisonService {
 
   constructor(
     @Inject(PROVIDER_ADAPTERS)
-    private readonly adapters: BaseProviderAdapter[]
+    private readonly adapters: BaseProviderAdapter[],
+    private readonly prisma: PrismaService,
   ) {}
 
-  async compare(request: QuoteRequest, priority: Priority): Promise<ComparisonResult> {
-    this.logger.debug(`Starting comparison for ${request.sendAmount} ${request.sourceCurrency}->${request.targetCurrency}. Priority: ${priority}`);
+  async compare(
+    dto: CreateComparisonDto,
+    userId?: string,
+    anonymousSessionId?: string,
+  ): Promise<ComparisonResult> {
+    this.logger.debug(`Starting comparison for ${dto.sendAmount} ${dto.sourceCurrency}->${dto.targetCurrency}. Priority: ${dto.priority}`);
 
-    // Fire all adapters concurrently
-    const promises = this.adapters.map(adapter => 
+    // Pre-flight check: Get active providers for this route
+    const activeProviders = await this.prisma.provider.findMany({
+      where: {
+        isActive: true,
+        status: 'INTEGRATED',
+        routes: {
+          some: {
+            fromCurrency: dto.sourceCurrency,
+            toCurrency: dto.targetCurrency,
+            isActive: true,
+          }
+        }
+      },
+      select: { slug: true }
+    });
+
+    const activeSlugs = new Set(activeProviders.map(p => p.slug.toLowerCase()));
+    
+    // Filter adapters
+    const activeAdapters = this.adapters.filter(adapter => activeSlugs.has(adapter.name.toLowerCase()));
+
+    const request: QuoteRequest = {
+      sendAmount: dto.sendAmount,
+      sourceCurrency: dto.sourceCurrency,
+      targetCurrency: dto.targetCurrency,
+    };
+
+    // Fire all active adapters concurrently
+    const promises = activeAdapters.map(adapter => 
       this.executeWithTimeout(adapter.getQuote(request), this.TIMEOUT_MS)
         .catch(err => {
           this.logger.error(`Adapter ${adapter.name} failed or timed out: ${err.message}`);
@@ -44,22 +79,72 @@ export class ComparisonService {
     const successfulQuotes = results.filter(q => q.status === 'SUCCESS');
     
     // Sort based on the primary priority input
-    successfulQuotes.sort((a, b) => this.rankQuotes(a, b, priority));
+    successfulQuotes.sort((a, b) => this.rankQuotes(a, b, dto.priority!));
 
     const recommended = successfulQuotes.length > 0 ? successfulQuotes[0] : null;
     
     let moneyLeftOnTable = 0;
     if (successfulQuotes.length > 1) {
-      // "Potential Savings" (D-16) calculation for the UI: difference between best and second best 
       const sortedByRecipient = [...successfulQuotes].sort((a, b) => b.recipientAmount - a.recipientAmount);
       moneyLeftOnTable = sortedByRecipient[0].recipientAmount - sortedByRecipient[1].recipientAmount;
     }
+
+    // Persist comparison to DB
+    await this.persistComparison(dto, results, recommended, userId, anonymousSessionId);
 
     return {
       recommended,
       allQuotes: results,
       moneyLeftOnTable
     };
+  }
+
+  private async persistComparison(
+    dto: CreateComparisonDto, 
+    results: ProviderQuote[], 
+    recommended: ProviderQuote | null,
+    userId?: string, 
+    anonymousSessionId?: string
+  ) {
+    try {
+      const expirationDate = new Date();
+      expirationDate.setHours(expirationDate.getHours() + 1); // staleAt in 1 hour
+
+      await this.prisma.comparison.create({
+        data: {
+          userId,
+          anonymousSessionId,
+          fromCurrency: dto.sourceCurrency,
+          toCurrency: dto.targetCurrency,
+          fromCountry: dto.fromCountry!,
+          toCountry: dto.toCountry!,
+          sendAmount: dto.sendAmount,
+          priority: dto.priority as any,
+          paymentMethod: dto.paymentMethod,
+          deliveryPreference: dto.deliveryPreference,
+          staleAt: expirationDate,
+          quotes: {
+            create: results.map(q => ({
+              provider: q.provider,
+              exchangeRate: q.exchangeRate,
+              fees: q.fees as Prisma.InputJsonValue,
+              totalFees: q.totalFees,
+              grossRecipientAmount: q.grossRecipientAmount,
+              recipientAmount: q.recipientAmount,
+              deliveryEstimate: q.deliveryEstimate,
+              paymentMethod: q.paymentMethod,
+              isBestValue: recommended?.provider === q.provider,
+              status: q.status as any,
+              errorType: q.status === 'TIMEOUT' ? 'TIMEOUT' : (q.status === 'FAILED' ? 'API_ERROR' : null),
+              quoteTimestamp: q.quoteTimestamp,
+              expiresAt: q.expiresAt,
+            }))
+          }
+        }
+      });
+    } catch (err) {
+      this.logger.error(`Failed to persist comparison to DB: ${err.message}`);
+    }
   }
 
   private rankQuotes(a: ProviderQuote, b: ProviderQuote, priority: Priority): number {
@@ -104,5 +189,23 @@ export class ComparisonService {
       expiresAt: null,
       status
     };
+  }
+
+  async getSnapshots(fromCurrency: string, toCurrency: string, hours: number = 24) {
+    const timeLimit = new Date();
+    timeLimit.setHours(timeLimit.getHours() - hours);
+
+    return this.prisma.rateSnapshot.findMany({
+      where: {
+        fromCurrency,
+        toCurrency,
+        createdAt: {
+          gte: timeLimit,
+        }
+      },
+      orderBy: {
+        createdAt: 'asc',
+      }
+    });
   }
 }
