@@ -17,12 +17,14 @@ export declare class ComparisonService {
     private readonly logger;
     private readonly TIMEOUT_MS;
     constructor(adapters: BaseProviderAdapter[], prisma: PrismaService);
-    compare(dto: CreateComparisonDto, userId?: string, anonymousSessionId?: string): Promise<ComparisonResult>;
+    compare(dto: CreateComparisonDto, userId?: string, anonymousSessionId?: string, persist?: boolean): Promise<ComparisonResult>;
     private persistComparison;
     private rankQuotes;
     private executeWithTimeout;
     private buildFailedQuote;
     getSnapshots(fromCurrency: string, toCurrency: string, hours?: number): Promise<{
+        id: string;
+        createdAt: Date;
         provider: string;
         sendAmount: number;
         exchangeRate: number;
@@ -31,8 +33,6 @@ export declare class ComparisonService {
         paymentMethod: string;
         fromCurrency: string;
         toCurrency: string;
-        id: string;
-        createdAt: Date;
         dataType: import("@prisma/client").$Enums.DataType;
     }[]>;
 }

@@ -20,6 +20,7 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
     constructor(configService, prisma) {
         super({
             jwtFromRequest: passport_jwt_1.ExtractJwt.fromExtractors([
+                passport_jwt_1.ExtractJwt.fromAuthHeaderAsBearerToken(),
                 (request) => {
                     return request?.cookies?.access_token || null;
                 },
@@ -32,11 +33,14 @@ let JwtStrategy = class JwtStrategy extends (0, passport_1.PassportStrategy)(pas
     async validate(payload) {
         const user = await this.prisma.user.findUnique({
             where: { id: payload.sub },
-            select: { id: true, email: true, role: true, emailVerified: true },
+            select: { id: true, email: true, role: true, emailVerified: true, fullName: true },
         });
         if (!user)
             throw new common_1.UnauthorizedException();
-        return user;
+        const nameParts = user.fullName ? user.fullName.split(' ') : [''];
+        const firstName = nameParts[0];
+        const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+        return { ...user, firstName, lastName };
     }
 };
 exports.JwtStrategy = JwtStrategy;

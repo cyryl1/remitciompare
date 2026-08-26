@@ -9,21 +9,25 @@ export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
     register(registerDto: RegisterDto, res: Response): Promise<{
+        accessToken: string;
         user: {
             id: any;
             email: any;
             role: any;
             emailVerified: any;
-            fullName: any;
+            firstName: any;
+            lastName: any;
         };
     }>;
     login(loginDto: LoginDto, res: Response): Promise<{
+        accessToken: string;
         user: {
             id: any;
             email: any;
             role: any;
             emailVerified: any;
-            fullName: any;
+            firstName: any;
+            lastName: any;
         };
     }>;
     refresh(req: any, res: Response): Promise<{
@@ -32,7 +36,8 @@ export declare class AuthController {
             email: any;
             role: any;
             emailVerified: any;
-            fullName: any;
+            firstName: any;
+            lastName: any;
         };
     }>;
     logout(res: Response): Promise<{

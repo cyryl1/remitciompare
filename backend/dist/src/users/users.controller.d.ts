@@ -3,14 +3,26 @@ export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     getPreferences(req: any): Promise<{
-        notifications: {
-            email: boolean;
-            push: boolean;
-        };
-        defaultRoute: {
-            from: string;
-            to: string;
-        };
+        id: string;
+        email: string;
+        fullName: string | null;
+        countryOfResidence: string | null;
+        defaultRoute: string | null;
+        notificationSettings: {
+            id: string;
+            updatedAt: Date;
+            userId: string;
+            emailAlerts: boolean;
+            comparisonNotifications: boolean;
+            marketingEmails: boolean;
+        } | null;
+    } | null>;
+    updatePreferences(req: any, body: any): Promise<{
+        id: string;
+        updatedAt: Date;
+        userId: string;
+        emailAlerts: boolean;
+        comparisonNotifications: boolean;
+        marketingEmails: boolean;
     }>;
-    updatePreferences(req: any, body: any): Promise<any>;
 }

@@ -18,6 +18,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
+        ExtractJwt.fromAuthHeaderAsBearerToken(),
         (request: any) => {
           return request?.cookies?.access_token || null;
         },
@@ -30,10 +31,15 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   async validate(payload: JwtPayload) {
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },
-      select: { id: true, email: true, role: true, emailVerified: true },
+      select: { id: true, email: true, role: true, emailVerified: true, fullName: true },
     });
 
     if (!user) throw new UnauthorizedException();
-    return user;
+    
+    const nameParts = user.fullName ? user.fullName.split(' ') : [''];
+    const firstName = nameParts[0];
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+    
+    return { ...user, firstName, lastName };
   }
 }

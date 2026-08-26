@@ -4,14 +4,26 @@ export declare class UsersService {
     private readonly logger;
     constructor(prisma: PrismaService);
     getPreferences(userId: string): Promise<{
-        notifications: {
-            email: boolean;
-            push: boolean;
-        };
-        defaultRoute: {
-            from: string;
-            to: string;
-        };
+        id: string;
+        email: string;
+        fullName: string | null;
+        countryOfResidence: string | null;
+        defaultRoute: string | null;
+        notificationSettings: {
+            id: string;
+            updatedAt: Date;
+            userId: string;
+            emailAlerts: boolean;
+            comparisonNotifications: boolean;
+            marketingEmails: boolean;
+        } | null;
+    } | null>;
+    updatePreferences(userId: string, data: any): Promise<{
+        id: string;
+        updatedAt: Date;
+        userId: string;
+        emailAlerts: boolean;
+        comparisonNotifications: boolean;
+        marketingEmails: boolean;
     }>;
-    updatePreferences(userId: string, data: any): Promise<any>;
 }

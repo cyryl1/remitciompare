@@ -26,8 +26,11 @@ let ProvidersController = class ProvidersController {
     constructor(providersService) {
         this.providersService = providersService;
     }
-    findAll(includeInactive) {
-        return this.providersService.findAll(includeInactive === 'true');
+    findAll(page, limit, search) {
+        return this.providersService.findAll(page ? parseInt(page, 10) : 1, limit ? parseInt(limit, 10) : 20, search);
+    }
+    findFeatured() {
+        return this.providersService.findFeatured();
     }
     findOne(slug) {
         return this.providersService.findOne(slug);
@@ -49,13 +52,25 @@ exports.ProvidersController = ProvidersController;
 __decorate([
     (0, common_1.Get)(),
     (0, swagger_1.ApiOperation)({ summary: 'Get all active providers (public) or all providers (admin)' }),
-    (0, swagger_1.ApiQuery)({ name: 'includeInactive', required: false, type: Boolean }),
+    (0, swagger_1.ApiQuery)({ name: 'page', required: false, type: Number }),
+    (0, swagger_1.ApiQuery)({ name: 'limit', required: false, type: Number }),
+    (0, swagger_1.ApiQuery)({ name: 'search', required: false, type: String }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'List of providers' }),
-    __param(0, (0, common_1.Query)('includeInactive')),
+    __param(0, (0, common_1.Query)('page')),
+    __param(1, (0, common_1.Query)('limit')),
+    __param(2, (0, common_1.Query)('search')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", void 0)
 ], ProvidersController.prototype, "findAll", null);
+__decorate([
+    (0, common_1.Get)('featured'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get featured providers' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'List of featured providers' }),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], ProvidersController.prototype, "findFeatured", null);
 __decorate([
     (0, common_1.Get)(':slug'),
     (0, swagger_1.ApiOperation)({ summary: 'Get provider details by slug' }),

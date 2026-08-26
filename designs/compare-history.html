@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Comparison History - RemitCompare</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "outline-variant": "#c0c8cb",
+                        "primary-fixed-dim": "#9acee1",
+                        "on-tertiary-fixed": "#00210c",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-low": "#f2f4f6",
+                        "on-error": "#ffffff",
+                        "background": "#f7f9fb",
+                        "surface": "#f7f9fb",
+                        "data-gray": "#64748B",
+                        "primary-container": "#0f4c5c",
+                        "tertiary-fixed-dim": "#61de8a",
+                        "on-surface": "#191c1e",
+                        "on-primary-container": "#87bbce",
+                        "on-primary-fixed-variant": "#114d5d",
+                        "on-tertiary-fixed-variant": "#005228",
+                        "surface-bright": "#f7f9fb",
+                        "surface-container-highest": "#e0e3e5",
+                        "outline": "#70787c",
+                        "on-secondary-fixed-variant": "#004f55",
+                        "on-secondary-container": "#006c74",
+                        "secondary-fixed-dim": "#3cdae8",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-fixed": "#7efba4",
+                        "tertiary-container": "#005127",
+                        "on-secondary-fixed": "#002023",
+                        "surface-container-high": "#e6e8ea",
+                        "primary": "#003441",
+                        "surface-tint": "#306576",
+                        "on-background": "#191c1e",
+                        "on-tertiary-container": "#4bca79",
+                        "secondary-fixed": "#84f3ff",
+                        "error-red": "#E63946",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "surface-dim": "#d8dadc",
+                        "inverse-surface": "#2d3133",
+                        "on-secondary": "#ffffff",
+                        "vibrant-green": "#00D66B",
+                        "on-primary": "#ffffff",
+                        "inverse-primary": "#9acee1",
+                        "error": "#ba1a1a",
+                        "primary-fixed": "#b6ebfe",
+                        "surface-white": "#FFFFFF",
+                        "on-surface-variant": "#40484b",
+                        "on-error-container": "#93000a",
+                        "surface-container": "#eceef0",
+                        "tertiary": "#003819",
+                        "deep-navy": "#0A2540",
+                        "error-container": "#ffdad6",
+                        "secondary-container": "#5cf0ff",
+                        "on-primary-fixed": "#001f28",
+                        "secondary": "#006971"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "80px",
+                        "stack-lg": "32px",
+                        "gutter": "24px",
+                        "container-max": "1280px",
+                        "stack-sm": "8px",
+                        "margin-mobile": "16px",
+                        "stack-md": "16px"
+                    },
+                    "fontFamily": {
+                        "body-md": ["Inter"],
+                        "data-mono": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "body-xl": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                        "data-mono": ["18px", {"lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "fontWeight": "600"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "display-lg": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500"}],
+                        "body-xl": ["20px", {"lineHeight": "30px", "fontWeight": "400"}]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="bg-surface-white dark:bg-surface border-b border-outline-variant shadow-sm docked full-width top-0 sticky z-50">
+<div class="flex justify-between items-center px-gutter py-4 w-full max-w-container-max mx-auto">
+<a class="font-display-lg text-display-lg font-bold text-primary dark:text-primary-fixed-dim tracking-tight" href="#">RemitCompare</a>
+<div class="hidden md:flex space-x-8">
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-body-md text-body-md py-2" href="#">Compare</a>
+<a class="text-primary dark:text-primary-fixed-dim font-bold border-b-2 border-primary font-body-md text-body-md py-2" href="#">History</a>
+<a class="text-on-surface-variant dark:text-on-surface-variant hover:text-primary dark:hover:text-primary-fixed-dim transition-colors font-body-md text-body-md py-2" href="#">Providers</a>
+</div>
+<div class="flex items-center space-x-4">
+<button class="hidden md:flex items-center text-primary font-medium hover:opacity-80 transition-opacity">
+<span class="material-symbols-outlined mr-2">person</span>
+                    My Account
+                </button>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined">menu</span>
+</button>
+</div>
+</div>
+</nav>
+<!-- Main Content -->
+<main class="flex-grow w-full max-w-container-max mx-auto px-gutter py-stack-lg md:py-section-gap flex flex-col gap-stack-lg md:gap-section-gap">
+<!-- Page Header & Stats -->
+<section class="flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-md">
+<div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-2">Comparison History</h1>
+<p class="text-data-gray font-body-md text-body-md">Review your previous comparisons and quickly check current rates again.</p>
+<div class="flex flex-wrap gap-4 mt-6">
+<div class="bg-surface-white border border-outline-variant rounded-lg px-4 py-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">history</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Total Comparisons:</span>
+<span class="font-data-mono text-data-mono text-primary">24</span>
+</div>
+<div class="bg-surface-white border border-outline-variant rounded-lg px-4 py-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">calendar_month</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">This Month:</span>
+<span class="font-data-mono text-data-mono text-primary">8</span>
+</div>
+<div class="bg-surface-white border border-outline-variant rounded-lg px-4 py-2 flex items-center gap-2">
+<span class="material-symbols-outlined text-outline">swap_horiz</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant">Most Compared:</span>
+<span class="font-data-mono text-data-mono text-primary">GBP → NGN</span>
+</div>
+</div>
+</div>
+<button class="bg-vibrant-green text-surface-white font-body-md text-body-md font-medium px-6 py-3 rounded-lg flex items-center gap-2 hover:opacity-90 active:scale-95 transition-all w-full md:w-auto justify-center shadow-sm">
+<span class="material-symbols-outlined">add</span>
+                New Comparison
+            </button>
+</section>
+<!-- Main Layout: Sidebar & Content -->
+<div class="flex flex-col lg:flex-row gap-gutter">
+<!-- Sidebar: Saved Routes & Filters -->
+<aside class="w-full lg:w-1/4 flex flex-col gap-stack-lg">
+<!-- Saved Routes -->
+<div class="bg-surface-white border border-outline-variant rounded-xl p-6 shadow-sm">
+<h2 class="font-body-xl text-body-xl text-primary font-semibold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined text-error-red icon-fill">favorite</span>
+                        Saved Routes
+                    </h2>
+<ul class="space-y-3">
+<li class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-transparent hover:border-outline-variant transition-colors group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="flex -space-x-2">
+<img alt="UK Flag" class="w-6 h-6 rounded-full border border-surface-white" data-alt="Small round icon representing the United Kingdom flag, clean and flat design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCq3PSGxqrDH2O1PaOSOxnrS8mKzNBQA5bONRPqcmKP3cjSr9SAs2YzyEkuWx77A5iJJLa6S9JiRVgFF0l6V5lFf6JXZlyaBXzZ85NiRnQtTzbqwcDScU9MGF0-9wAvBYi3PdETYLZcasfddAp2cdeSgSMeVY3-tXd8fw7e1Px6IeqsvWCSIt9cHHv6oAPYTJIfQR5_8Y3zxrp4IRhnjgdIdOmD91hRpGLo9xeNJeRju3dhXgsBePjOrQ"/>
+<img alt="Nigeria Flag" class="w-6 h-6 rounded-full border border-surface-white" data-alt="Small round icon representing the Nigerian flag, clean and flat design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBq5lqC9E9KaUcWNvDnLhUsMJ39F1Au2uITILpBvHjFW2ebnKGvgg9bTdF-F5AsnEpZHGr7iOMvt_bcyuQgK4Z34DW19Mhb8EZbp-DFF4uIFSrcnZjClSYug0UVehScNZPYaROBlYJPyD22VIgYnSsgohpSmQnQD4hpL5htZ7-3iKM0lWho3AA6dJtTI3Wi9H1HVJnCD46Rd2DrkASyxWXQHaXQ8twuNv2p2jfBTR-dHh_WmSNiegAljg"/>
+</div>
+<span class="font-data-mono text-[14px] text-primary">GBP → NGN</span>
+</div>
+<button class="text-primary hover:text-vibrant-green transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</li>
+<li class="flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-transparent hover:border-outline-variant transition-colors group cursor-pointer">
+<div class="flex items-center gap-3">
+<div class="flex -space-x-2">
+<img alt="US Flag" class="w-6 h-6 rounded-full border border-surface-white" data-alt="Small round icon representing the United States flag, clean and flat design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX8U0K2U2M5HoHMi469JdB4bT3pQpvsmqQ15TZTz5s4BRaC9dr1K7Mh5W3Rn_K7lMgxiah3Wc5s2U7cuaNOdApRjtPc66NE6SuFC50j-nn5oNI1-emRKtm_ZemZvmONGbPtAdazmrAIAT07cB9OBbK-OYPAqH1Az91L1mxV403jHyFE7_iNqBHYmq_J5VQKcbm-SdNPpO7MMOoOPy7v65ofIaIvDKvvPepMDERmMOnxCiqiv7HXhuzNA"/>
+<img alt="India Flag" class="w-6 h-6 rounded-full border border-surface-white" data-alt="Small round icon representing the Indian flag, clean and flat design." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAU6L0M6Wb4vDj6ilnz_vFInvz5aZhvkJ1DLBdv-H3dVQf6xw2sCQFoDuqSO2sGUQzxM4xfbZSBgbedudujKPJNXKKWZnPpPE7HH0xNdBlDQ5zDgnzP9HqKymLlLvtRg9bw3ucap0ykD2ir3I1x0y7ioYJZ7xLBX2C_EG8PVVh61QORmZyuwB25Y8VIUPok2Ua19Hu3ZQ3r2NVxGN5x_ID-YpahFOLNgR9YOQNWTo5h6ZMveGg--iQMIg"/>
+</div>
+<span class="font-data-mono text-[14px] text-primary">USD → INR</span>
+</div>
+<button class="text-primary hover:text-vibrant-green transition-colors opacity-0 group-hover:opacity-100">
+<span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+</button>
+</li>
+</ul>
+</div>
+<!-- Filters -->
+<div class="bg-surface-white border border-outline-variant rounded-xl p-6 shadow-sm">
+<h3 class="font-body-md text-body-md text-primary font-semibold mb-4 flex items-center gap-2">
+<span class="material-symbols-outlined">filter_list</span>
+                        Filters
+                    </h3>
+<div class="space-y-4">
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">Search</label>
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-[20px]">search</span>
+<input class="w-full pl-10 pr-3 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-fixed-dim focus:border-primary outline-none font-body-md text-[14px] text-on-surface transition-all" placeholder="Search comparisons..." type="text"/>
+</div>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">Date Range</label>
+<select class="w-full px-3 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-fixed-dim focus:border-primary outline-none font-body-md text-[14px] text-on-surface transition-all appearance-none cursor-pointer">
+<option>All time</option>
+<option>Past 7 days</option>
+<option>Past 30 days</option>
+<option>This year</option>
+</select>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-1 uppercase tracking-wider">Route</label>
+<select class="w-full px-3 py-2 bg-surface-container-low border border-outline-variant rounded-lg focus:ring-2 focus:ring-primary-fixed-dim focus:border-primary outline-none font-body-md text-[14px] text-on-surface transition-all appearance-none cursor-pointer">
+<option>All routes</option>
+<option>GBP → NGN</option>
+<option>USD → INR</option>
+</select>
+</div>
+</div>
+</div>
+</aside>
+<!-- History List -->
+<div class="w-full lg:w-3/4 flex flex-col gap-4">
+<!-- Card 1 -->
+<div class="bg-surface-white border border-outline-variant rounded-xl p-5 hover:bg-surface-container-low transition-colors shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group relative overflow-hidden">
+<!-- Subtle accent line -->
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-outline-variant group-hover:bg-vibrant-green transition-colors"></div>
+<div class="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 w-full pl-3">
+<!-- Route & Date -->
+<div class="flex flex-col gap-1 min-w-[140px]">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<img alt="UK" class="w-5 h-5 rounded-full border border-surface-white" data-alt="Small round icon representing the United Kingdom flag." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBKS9JAd-IvyffKyqogBVj9CRB-8zJoum7fIDNzDRJ7TZcke-LvAMQowPshAZL2k99hknD8ISGVyJDk1lSDnNKsjICi7nIhkNVXftRufOED_jRnHf5hfezwcWsZxzZyr8FiOpiQbKuDSZw5eoMdAZOE3aijzzqLDzOBVZDGNFl7JClKCV5oroaatYo_O4aea8pUezVSrfx9D_sBVBDgCGFlW-uzGqSkXPYCi1c3cpuTO61qyFq08kRWOQ"/>
+<img alt="Nigeria" class="w-5 h-5 rounded-full border border-surface-white" data-alt="Small round icon representing the Nigerian flag." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA7PdvVMem2CjccCxuKV0kUA0kc3wrY_TKtNLBR_2VQUIq199rGNxdhHvFyoHgOiqiYLN8rc5vTa-euksbH9ICRF2YqbtMbygAA0Cz7HQnybo6DrsebtywRXRziLBNORG4PgArW7LshCq-p0w8PGVftEizMg6SPFwf4JA3PVlbA6VcqvsaoK8fTFnE5mJQuND5ogbPHuCqHHhaVKW6qOfcnfu2aGoFcgyPWfguoW38mASsnbekzIKswLQ"/>
+</div>
+<span class="font-data-mono text-[16px] text-primary">GBP → NGN</span>
+</div>
+<span class="font-label-sm text-label-sm text-data-gray flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">schedule</span>
+                                Today, 3:42 PM
+                            </span>
+</div>
+<!-- Amount -->
+<div class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Sent</span>
+<span class="font-data-mono text-[18px] text-primary">£1,000.00</span>
+</div>
+<!-- Result -->
+<div class="flex flex-col gap-1 flex-grow md:border-l md:border-outline-variant md:pl-6">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Best Result</span>
+<span class="bg-surface-container-low text-primary text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">Wise</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-data-mono text-[20px] text-vibrant-green">₦1,384,250</span>
+<span class="font-label-sm text-label-sm text-data-gray">est. delivery: 2 hrs</span>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex items-center gap-3 w-full md:w-auto justify-end mt-2 md:mt-0 pt-4 md:pt-0 border-t border-outline-variant md:border-none">
+<button class="px-4 py-2 text-primary font-body-md text-[14px] font-medium border border-outline-variant rounded-lg hover:bg-surface-container-high transition-colors">View</button>
+<button class="px-4 py-2 bg-primary text-surface-white font-body-md text-[14px] font-medium rounded-lg hover:opacity-90 active:scale-95 transition-all flex items-center gap-1 whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+                            Compare Again
+                        </button>
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Card 2 (Older, with warning) -->
+<div class="bg-surface-white border border-outline-variant rounded-xl p-5 hover:bg-surface-container-low transition-colors shadow-sm flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group relative overflow-hidden">
+<div class="absolute left-0 top-0 bottom-0 w-1 bg-outline-variant group-hover:bg-primary-fixed-dim transition-colors"></div>
+<div class="flex flex-col md:flex-row items-start md:items-center gap-4 md:gap-8 w-full pl-3">
+<div class="flex flex-col gap-1 min-w-[140px]">
+<div class="flex items-center gap-2">
+<div class="flex -space-x-2">
+<img alt="US" class="w-5 h-5 rounded-full border border-surface-white" data-alt="Small round icon representing the United States flag." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9Ojyh1r2fky5hkZsSniu3LnTY78nBK3hdEHRGA-Jro7db0Xhs1teuPYIjgvL_M-w0Pde1VUF6PN3sNWCWJKU0lubmFLMop13_yyrzpm-hGmGpTkhARYu1wRHLTzWRjllgL4oFmRobp9VVwj230-nx_I_MtEFGpQr19dhzeJBn67iHl6_rXmNdknWxL2yjST7JbSZfoVncgTwG6G8yleCAPhhWIvOhPep3gPyr2mkQ0j8_jJwYGE4QZw"/>
+<img alt="India" class="w-5 h-5 rounded-full border border-surface-white" data-alt="Small round icon representing the Indian flag." src="https://lh3.googleusercontent.com/aida-public/AB6AXuASEVrZ4bEEw_aJFvpA98JcK7OTGbMbTbhIXnAdoylo1PDzdpnaJBfTQD0TbnuttGEPV6PnDmQCQM2uDrz63Q1ltXuiTm8GKam7se7Fzy9SIwkLBPlkeSdfEbhFfZsqbF648r-L03y2_4Rq3o2ipxydvvqqdbHm5fEg-ghG-xVOecGLRSVqP7iRSB3qD5wonfCLc8W_lE3laWECBUH9sQXjBWbDUZu4yeyMzXg0UcCSLbudS9XU4osD4Q"/>
+</div>
+<span class="font-data-mono text-[16px] text-primary">USD → INR</span>
+</div>
+<span class="font-label-sm text-label-sm text-data-gray flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]">calendar_today</span>
+                                Oct 24, 2023
+                            </span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Sent</span>
+<span class="font-data-mono text-[18px] text-primary">$2,500.00</span>
+</div>
+<div class="flex flex-col gap-1 flex-grow md:border-l md:border-outline-variant md:pl-6">
+<div class="flex items-center gap-2 mb-1">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Historical Best</span>
+<span class="bg-surface-container-low text-primary text-[10px] px-2 py-0.5 rounded font-bold uppercase tracking-wider">Remitly</span>
+</div>
+<div class="flex items-baseline gap-2">
+<span class="font-data-mono text-[20px] text-primary">₹207,500</span>
+</div>
+<span class="font-label-sm text-label-sm text-error-red flex items-center gap-1 mt-1">
+<span class="material-symbols-outlined text-[12px]">info</span>
+                                Rates have likely changed
+                            </span>
+</div>
+</div>
+<div class="flex items-center gap-3 w-full md:w-auto justify-end mt-2 md:mt-0 pt-4 md:pt-0 border-t border-outline-variant md:border-none">
+<button class="px-4 py-2 text-primary font-body-md text-[14px] font-medium border border-outline-variant rounded-lg hover:bg-surface-container-high transition-colors">View</button>
+<button class="px-4 py-2 bg-primary text-surface-white font-body-md text-[14px] font-medium rounded-lg hover:opacity-90 active:scale-95 transition-all flex items-center gap-1 whitespace-nowrap">
+<span class="material-symbols-outlined text-[18px]">refresh</span>
+                            Update Rates
+                        </button>
+<button class="p-2 text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined">more_vert</span>
+</button>
+</div>
+</div>
+<!-- Pagination -->
+<div class="flex justify-center items-center gap-2 mt-6">
+<button class="p-2 rounded-lg border border-outline-variant text-outline hover:bg-surface-container-low transition-colors disabled:opacity-50">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-lg bg-primary text-surface-white font-data-mono text-[14px] flex items-center justify-center">1</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant text-primary font-data-mono text-[14px] flex items-center justify-center hover:bg-surface-container-low transition-colors">2</button>
+<button class="w-10 h-10 rounded-lg border border-outline-variant text-primary font-data-mono text-[14px] flex items-center justify-center hover:bg-surface-container-low transition-colors">3</button>
+<span class="text-data-gray">...</span>
+<button class="p-2 rounded-lg border border-outline-variant text-outline hover:bg-surface-container-low transition-colors">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="bg-deep-navy dark:bg-primary border-t border-primary-container full-width mt-auto">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-stack-lg px-gutter py-section-gap w-full max-w-container-max mx-auto">
+<div class="flex flex-col gap-4">
+<span class="font-headline-lg text-headline-lg font-bold text-vibrant-green">RemitCompare</span>
+<p class="text-surface-variant font-body-md text-sm mt-2 max-w-xs">Empowering global citizens with transparent, real-time exchange rates and provider comparisons.</p>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-surface-white dark:text-primary-fixed font-bold mb-2">Product</span>
+<a class="text-on-primary-container dark:text-surface-variant hover:text-vibrant-green transition-colors font-label-sm text-label-sm opacity-80 hover:opacity-100" href="#">Compare Rates</a>
+<a class="text-on-primary-container dark:text-surface-variant hover:text-vibrant-green transition-colors font-label-sm text-label-sm opacity-80 hover:opacity-100" href="#">Providers</a>
+<a class="text-on-primary-container dark:text-surface-variant hover:text-vibrant-green transition-colors font-label-sm text-label-sm opacity-80 hover:opacity-100" href="#">API Access</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-surface-white dark:text-primary-fixed font-bold mb-2">Company</span>
+<a class="text-on-primary-container dark:text-surface-variant hover:text-vibrant-green transition-colors font-label-sm text-label-sm opacity-80 hover:opacity-100" href="#">About Us</a>
+<a class="text-on-primary-container dark:text-surface-variant hover:text-vibrant-green transition-colors font-label-sm text-label-sm opacity-80 hover:opacity-100" href="#">Careers</a>
+<a class="text-on-primary-container dark:text-surface-variant hover:text-vibrant-green transition-colors font-label-sm text-label-sm opacity-80 hover:opacity-100" href="#">Contact</a>
+</div>
+<div class="flex flex-col gap-3">
+<span class="text-surface-white dark:text-primary-fixed font-bold mb-2">Legal</span>
+<a class="text-on-primary-container dark:text-surface-variant hover:text-vibrant-green transition-colors font-label-sm text-label-sm opacity-80 hover:opacity-100" href="#">Privacy Policy</a>
+<a class="text-on-primary-container dark:text-surface-variant hover:text-vibrant-green transition-colors font-label-sm text-label-sm opacity-80 hover:opacity-100" href="#">Terms of Service</a>
+<a class="text-on-primary-container dark:text-surface-variant hover:text-vibrant-green transition-colors font-label-sm text-label-sm opacity-80 hover:opacity-100" href="#">Cookie Policy</a>
+</div>
+</div>
+<div class="border-t border-primary-container/30 px-gutter py-6 text-center">
+<span class="text-on-primary-container font-label-sm text-label-sm opacity-60">© 2024 RemitCompare. All rights reserved.</span>
+</div>
+</footer>
+</body></html>

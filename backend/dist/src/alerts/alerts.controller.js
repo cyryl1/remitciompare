@@ -28,6 +28,15 @@ let AlertsController = class AlertsController {
     async createAlert(req, body) {
         return this.alertsService.createAlert(req.user.id, body);
     }
+    async updateAlert(req, id, body) {
+        return this.alertsService.updateAlert(req.user.id, id, body);
+    }
+    async deleteAlert(req, id) {
+        return this.alertsService.deleteAlert(req.user.id, id);
+    }
+    async toggleAlert(req, id) {
+        return this.alertsService.toggleAlert(req.user.id, id);
+    }
 };
 exports.AlertsController = AlertsController;
 __decorate([
@@ -47,6 +56,34 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], AlertsController.prototype, "createAlert", null);
+__decorate([
+    (0, common_1.Patch)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Update an alert' }),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('id')),
+    __param(2, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String, Object]),
+    __metadata("design:returntype", Promise)
+], AlertsController.prototype, "updateAlert", null);
+__decorate([
+    (0, common_1.Delete)(':id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete an alert' }),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], AlertsController.prototype, "deleteAlert", null);
+__decorate([
+    (0, common_1.Patch)(':id/toggle'),
+    (0, swagger_1.ApiOperation)({ summary: 'Toggle an alert status' }),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], AlertsController.prototype, "toggleAlert", null);
 exports.AlertsController = AlertsController = __decorate([
     (0, swagger_1.ApiTags)('alerts'),
     (0, swagger_1.ApiBearerAuth)(),

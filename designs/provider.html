@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>RemitCompare - Providers</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "primary-fixed": "#b6ebfe",
+                        "on-tertiary-fixed-variant": "#005228",
+                        "surface-container-high": "#e6e8ea",
+                        "surface-bright": "#f7f9fb",
+                        "on-primary-fixed": "#001f28",
+                        "on-error": "#ffffff",
+                        "deep-navy": "#0A2540",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-fixed-dim": "#61de8a",
+                        "outline-variant": "#c0c8cb",
+                        "surface-variant": "#e0e3e5",
+                        "primary-fixed-dim": "#9acee1",
+                        "tertiary": "#003819",
+                        "inverse-primary": "#9acee1",
+                        "outline": "#70787c",
+                        "on-secondary-fixed-variant": "#004f55",
+                        "on-primary-container": "#87bbce",
+                        "vibrant-green": "#00D66B",
+                        "surface-dim": "#d8dadc",
+                        "on-surface-variant": "#40484b",
+                        "primary": "#003441",
+                        "surface-tint": "#306576",
+                        "on-tertiary-container": "#4bca79",
+                        "data-gray": "#64748B",
+                        "primary-container": "#0f4c5c",
+                        "tertiary-container": "#005127",
+                        "surface-container-highest": "#e0e3e5",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#7efba4",
+                        "surface-white": "#FFFFFF",
+                        "on-surface": "#191c1e",
+                        "error-red": "#E63946",
+                        "surface-container-lowest": "#ffffff",
+                        "on-tertiary": "#ffffff",
+                        "inverse-surface": "#2d3133",
+                        "on-primary-fixed-variant": "#114d5d",
+                        "secondary": "#006971",
+                        "on-primary": "#ffffff",
+                        "on-tertiary-fixed": "#00210c",
+                        "error": "#ba1a1a",
+                        "surface-container-low": "#f2f4f6",
+                        "secondary-fixed-dim": "#3cdae8",
+                        "on-secondary-fixed": "#002023",
+                        "on-error-container": "#93000a",
+                        "secondary-container": "#5cf0ff",
+                        "on-secondary-container": "#006c74",
+                        "surface-container": "#eceef0",
+                        "secondary-fixed": "#84f3ff",
+                        "on-background": "#191c1e",
+                        "background": "#f7f9fb",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f7f9fb"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "section-gap": "80px",
+                        "stack-lg": "32px",
+                        "margin-mobile": "16px",
+                        "container-max": "1280px",
+                        "stack-md": "16px",
+                        "gutter": "24px",
+                        "stack-sm": "8px"
+                    },
+                    "fontFamily": {
+                        "display-lg": ["Plus Jakarta Sans"],
+                        "body-md": ["Inter"],
+                        "data-mono": ["Inter"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "headline-lg-mobile": ["Plus Jakarta Sans"],
+                        "label-sm": ["Inter"],
+                        "body-xl": ["Inter"]
+                    },
+                    "fontSize": {
+                        "display-lg": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "data-mono": ["18px", { "lineHeight": "24px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "500" }],
+                        "body-xl": ["20px", { "lineHeight": "30px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        [data-weight="fill"] {
+            font-variation-settings: 'FILL' 1;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased selection:bg-primary selection:text-white flex flex-col min-h-screen">
+<!-- TopNavBar -->
+<header class="bg-surface-white dark:bg-surface-dim sticky top-0 w-full z-50 border-b border-surface-variant dark:border-outline-variant shadow-sm transition-transform scale-95 active:scale-90 duration-200">
+<div class="flex items-center justify-between px-gutter max-w-container-max mx-auto h-20">
+<!-- Brand Logo -->
+<a class="font-headline-lg text-headline-lg font-bold text-primary dark:text-inverse-primary flex items-center gap-2 hover:opacity-90 transition-opacity" href="#">
+<span class="material-symbols-outlined text-primary" data-icon="compare_arrows" data-weight="fill">compare_arrows</span>
+                RemitCompare
+            </a>
+<!-- Desktop Navigation Links -->
+<nav class="hidden md:flex items-center space-x-8">
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors duration-200 px-3 py-2 rounded-md" href="#">Compare</a>
+<a class="font-body-md text-body-md text-on-surface-variant dark:text-surface-variant hover:text-primary hover:bg-surface-container-low transition-colors duration-200 px-3 py-2 rounded-md" href="#">How It Works</a>
+<a class="font-body-md text-body-md text-secondary dark:text-secondary-fixed-dim font-semibold border-b-2 border-secondary px-3 py-2 hover:bg-surface-container-low transition-colors duration-200" href="#">Providers</a>
+</nav>
+<!-- Actions -->
+<div class="flex items-center space-x-4">
+<a class="hidden md:inline-flex items-center justify-center font-body-md text-body-md font-medium text-primary hover:text-primary-container transition-colors" href="#">Login</a>
+<a class="inline-flex items-center justify-center bg-vibrant-green text-surface-white font-body-md text-body-md font-medium rounded-lg px-6 py-2.5 hover:bg-opacity-90 transition-all shadow-sm" href="#">Start Comparing</a>
+<!-- Mobile Menu Toggle -->
+<button class="md:hidden text-primary p-2 focus:outline-none focus:ring-2 focus:ring-primary rounded-md">
+<span class="material-symbols-outlined" data-icon="menu">menu</span>
+</button>
+</div>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-grow">
+<!-- Hero Section -->
+<section class="bg-surface-white py-12 md:py-16 border-b border-surface-variant">
+<div class="px-gutter max-w-container-max mx-auto text-center md:text-left">
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider block mb-stack-sm">TRANSFER PROVIDERS</span>
+<h1 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-deep-navy mb-stack-md max-w-3xl">Compare the providers available for your transfer.</h1>
+<p class="font-body-md text-body-md text-data-gray mb-stack-lg max-w-2xl md:mx-0 mx-auto">Explore supported money transfer providers, understand what they offer, and compare their rates and fees before you send.</p>
+<div class="flex flex-col sm:flex-row justify-center md:justify-start gap-4">
+<a class="inline-flex items-center justify-center bg-vibrant-green text-surface-white font-body-md text-body-md font-medium rounded-lg px-8 py-3 hover:bg-opacity-90 transition-all shadow-sm w-full sm:w-auto" href="#">Compare Rates</a>
+</div>
+</div>
+</section>
+<!-- Search and Filter Toolbar -->
+<section class="bg-surface-container-low py-stack-lg border-b border-surface-variant">
+<div class="px-gutter max-w-container-max mx-auto">
+<div class="bg-surface-white p-6 rounded-xl border border-surface-variant shadow-sm flex flex-col lg:flex-row gap-4 items-center">
+<!-- Search Input -->
+<div class="relative w-full lg:w-1/4">
+<span class="material-symbols-outlined absolute left-3 top-1/2 transform -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full pl-10 pr-4 py-2.5 bg-surface-bright border border-outline-variant rounded-lg font-body-md text-body-md focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow text-on-surface placeholder:text-outline" placeholder="Search providers..." type="text"/>
+</div>
+<div class="w-px h-10 bg-surface-variant hidden lg:block mx-2"></div>
+<!-- Filters -->
+<div class="flex flex-col sm:flex-row w-full lg:w-3/4 gap-4 flex-wrap lg:flex-nowrap">
+<!-- Sending Country -->
+<div class="relative w-full sm:w-1/2 lg:w-1/4">
+<select class="w-full pl-4 pr-10 py-2.5 bg-surface-bright border border-outline-variant rounded-lg font-body-md text-body-md appearance-none focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow text-on-surface cursor-pointer">
+<option disabled="" selected="" value="">Sending from</option>
+<option value="gb">United Kingdom (GBP)</option>
+<option value="us">United States (USD)</option>
+<option value="eu">Europe (EUR)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 transform -translate-y-1/2 text-outline pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Receiving Country -->
+<div class="relative w-full sm:w-1/2 lg:w-1/4">
+<select class="w-full pl-4 pr-10 py-2.5 bg-surface-bright border border-outline-variant rounded-lg font-body-md text-body-md appearance-none focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow text-on-surface cursor-pointer">
+<option disabled="" selected="" value="">Sending to</option>
+<option value="ng">Nigeria (NGN)</option>
+<option value="in">India (INR)</option>
+<option value="ph">Philippines (PHP)</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 transform -translate-y-1/2 text-outline pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Transfer Method -->
+<div class="relative w-full sm:w-1/2 lg:w-1/4">
+<select class="w-full pl-4 pr-10 py-2.5 bg-surface-bright border border-outline-variant rounded-lg font-body-md text-body-md appearance-none focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow text-on-surface cursor-pointer">
+<option disabled="" selected="" value="">Pay with</option>
+<option value="bank">Bank Transfer</option>
+<option value="card">Debit/Credit Card</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 transform -translate-y-1/2 text-outline pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+<!-- Delivery Method -->
+<div class="relative w-full sm:w-1/2 lg:w-1/4">
+<select class="w-full pl-4 pr-10 py-2.5 bg-surface-bright border border-outline-variant rounded-lg font-body-md text-body-md appearance-none focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary transition-shadow text-on-surface cursor-pointer">
+<option disabled="" selected="" value="">Deliver to</option>
+<option value="bank">Bank Account</option>
+<option value="mobile">Mobile Wallet</option>
+<option value="cash">Cash Pickup</option>
+</select>
+<span class="material-symbols-outlined absolute right-3 top-1/2 transform -translate-y-1/2 text-outline pointer-events-none" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Provider Directory Area -->
+<section class="py-section-gap px-gutter max-w-container-max mx-auto">
+<!-- Results Summary -->
+<div class="flex flex-col sm:flex-row justify-between items-center mb-stack-lg gap-4">
+<p class="font-body-md text-body-md text-on-surface-variant font-medium">12 providers available</p>
+<div class="flex items-center gap-2">
+<label class="font-label-sm text-label-sm text-data-gray" for="sort-select">Sort by:</label>
+<div class="relative">
+<select class="pl-3 pr-8 py-1.5 bg-transparent border-none font-body-md text-body-md text-primary font-medium appearance-none focus:outline-none focus:ring-0 cursor-pointer" id="sort-select">
+<option value="recommended">Recommended</option>
+<option value="a-z">Name (A-Z)</option>
+<option value="speed">Speed (Fastest)</option>
+</select>
+<span class="material-symbols-outlined absolute right-0 top-1/2 transform -translate-y-1/2 text-primary pointer-events-none text-sm" data-icon="expand_more">expand_more</span>
+</div>
+</div>
+</div>
+<!-- Provider Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-stack-lg">
+<!-- Provider Card 1 -->
+<div class="bg-surface-white border border-surface-variant rounded-xl p-6 flex flex-col h-full hover:shadow-md hover:bg-slate-50 transition-all duration-200 group relative overflow-hidden">
+<div class="flex items-center justify-between mb-4">
+<div class="w-16 h-16 rounded-lg bg-surface-container flex items-center justify-center p-2 border border-surface-variant">
+<img alt="Wise Logo" class="w-full h-full object-contain mix-blend-multiply" data-alt="A clean, minimalist logo of a modern money transfer company named Wise, utilizing a recognizable bright blue flag icon in a professional white square format, suited for a high-end corporate financial interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCKz0gF_zKSn2xCcjf6dO5xEhMaOpbA8ey-fINCR62BdzOgS28Au3V3z4-gU0MSXsEzbFxHEzcpED18kNCwWumYZpJido4BYUmEYLRHK3N4JWcF2-ciSHmNYz_wlLBxB45YXMdSNa0p0KUGk-HJyFhfT6S13hIhoaBpM-QIoPG2ZD5vfjohjEqNTM75L28nKOXNeKTviDaWru3O3JnLoXn6ldXpuE0x6d_zb4P4JwSt-uKwGwYTtVTKdw"/>
+</div>
+<span class="bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm px-2.5 py-1 rounded-full border border-surface-variant">Sponsored</span>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-deep-navy mb-2 group-hover:text-secondary transition-colors">Wise</h3>
+<p class="font-body-md text-body-md text-data-gray mb-6 flex-grow">International transfers and multi-currency services with transparent mid-market rates.</p>
+<div class="space-y-2 mb-6">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm bg-surface-bright px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="currency_exchange">currency_exchange</span>
+                            GBP → NGN supported
+                        </div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm bg-surface-bright px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="bolt">bolt</span>
+                            Delivery: Fast (Often seconds)
+                        </div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm bg-surface-bright px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-base text-data-gray" data-icon="info">info</span>
+                            Fees: Variable percentage
+                        </div>
+</div>
+<div class="mt-auto flex flex-col gap-3">
+<p class="font-label-sm text-label-sm text-data-gray flex items-center gap-1.5 mb-1">
+<span class="w-1.5 h-1.5 rounded-full bg-vibrant-green block"></span> Availability varies by route
+                        </p>
+<div class="grid grid-cols-2 gap-3">
+<button class="w-full py-2 px-4 rounded-lg border border-secondary text-secondary font-body-md text-body-md font-medium hover:bg-secondary hover:text-white transition-colors">View Provider</button>
+<button class="w-full py-2 px-4 rounded-lg bg-surface-container-high text-on-surface font-body-md text-body-md font-medium hover:bg-surface-variant transition-colors">Compare</button>
+</div>
+</div>
+</div>
+<!-- Provider Card 2 -->
+<div class="bg-surface-white border border-surface-variant rounded-xl p-6 flex flex-col h-full hover:shadow-md hover:bg-slate-50 transition-all duration-200 group relative overflow-hidden">
+<div class="flex items-center justify-between mb-4">
+<div class="w-16 h-16 rounded-lg bg-surface-container flex items-center justify-center p-2 border border-surface-variant">
+<img alt="Remitly Logo" class="w-full h-full object-contain mix-blend-multiply" data-alt="A clean, minimalist logo of a modern money transfer company named Remitly, utilizing a stylized 'R' icon in a professional white square format, suited for a high-end corporate financial interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB9UHR53yWnjtitWoomoFafCfJImbeUnO2P09AYiREwgF9hxLprdosZWycfu5TE3gOQqoYZWR5zPnT6lKMBFcXMRrWu2knGE18GDfb3CORKp1Wj1zR-mNO1cf1AisFEjAVybL4jxcfLR2jTO9mlD4TLZbmTi-W941RCLqn95CGUGSMnfom_P7BpoQFsG-ISnUx2HSVWWX7qRlvOMj_Co3zDvG7CDvcFUxQb0M7zYkQMdK2iFFzi4bbV-Q"/>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-deep-navy mb-2 group-hover:text-secondary transition-colors">Remitly</h3>
+<p class="font-body-md text-body-md text-data-gray mb-6 flex-grow">Reliable global money transfers with promotional rates for first-time users.</p>
+<div class="space-y-2 mb-6">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm bg-surface-bright px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="currency_exchange">currency_exchange</span>
+                            USD, GBP, EUR → NGN
+                        </div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm bg-surface-bright px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="schedule">schedule</span>
+                            Delivery: Express &amp; Economy options
+                        </div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm bg-surface-bright px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-base text-data-gray" data-icon="sell">sell</span>
+                            Fees: Fixed fee structure
+                        </div>
+</div>
+<div class="mt-auto flex flex-col gap-3">
+<p class="font-label-sm text-label-sm text-data-gray flex items-center gap-1.5 mb-1">
+<span class="w-1.5 h-1.5 rounded-full bg-vibrant-green block"></span> Availability varies by route
+                        </p>
+<div class="grid grid-cols-2 gap-3">
+<button class="w-full py-2 px-4 rounded-lg border border-secondary text-secondary font-body-md text-body-md font-medium hover:bg-secondary hover:text-white transition-colors">View Provider</button>
+<button class="w-full py-2 px-4 rounded-lg bg-surface-container-high text-on-surface font-body-md text-body-md font-medium hover:bg-surface-variant transition-colors">Compare</button>
+</div>
+</div>
+</div>
+<!-- Provider Card 3 -->
+<div class="bg-surface-white border border-surface-variant rounded-xl p-6 flex flex-col h-full hover:shadow-md hover:bg-slate-50 transition-all duration-200 group relative overflow-hidden">
+<div class="flex items-center justify-between mb-4">
+<div class="w-16 h-16 rounded-lg bg-surface-container flex items-center justify-center p-2 border border-surface-variant">
+<img alt="LemFi Logo" class="w-full h-full object-contain mix-blend-multiply" data-alt="A clean, minimalist logo of a modern money transfer company named LemFi, utilizing a bold text-based logo in a professional white square format, suited for a high-end corporate financial interface focusing on African remittance." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA3UL_uXMc_4rIGmuUV07j_v3LcO1nZzkmV-YhoccvXYq15z_yVBCZzhiXkLJajRRpiv7l6XEsR2DDN9pMThVQeultLfdHqWw4BYAfwCEi-0W9ctYYi0QLgR2fPKwBEPPyxrgCI41RKhwQcn9d8tqWbbKyqzBBeXVYmTXtaSaoXyBhkqVqK77hXPKyrrJ7Kzy5pnW9s878g2SL5jBqBtNZKmEu2fpkXjFZjLFbtXIZ8DOfgCGEGuA3gkg"/>
+</div>
+</div>
+<h3 class="font-headline-lg-mobile text-headline-lg-mobile text-deep-navy mb-2 group-hover:text-secondary transition-colors">LemFi</h3>
+<p class="font-body-md text-body-md text-data-gray mb-6 flex-grow">Zero-fee international transfers specializing in routes to Africa and Asia.</p>
+<div class="space-y-2 mb-6">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm bg-surface-bright px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="public">public</span>
+                            GBP, CAD, USD → NGN
+                        </div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm bg-surface-bright px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-base text-secondary" data-icon="bolt">bolt</span>
+                            Delivery: Instant to banks
+                        </div>
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm bg-surface-bright px-3 py-1.5 rounded-md">
+<span class="material-symbols-outlined text-base text-vibrant-green" data-icon="check_circle">check_circle</span>
+                            Fees: Zero fees
+                        </div>
+</div>
+<div class="mt-auto flex flex-col gap-3">
+<p class="font-label-sm text-label-sm text-data-gray flex items-center gap-1.5 mb-1">
+<span class="w-1.5 h-1.5 rounded-full bg-vibrant-green block"></span> Availability varies by route
+                        </p>
+<div class="grid grid-cols-2 gap-3">
+<button class="w-full py-2 px-4 rounded-lg border border-secondary text-secondary font-body-md text-body-md font-medium hover:bg-secondary hover:text-white transition-colors">View Provider</button>
+<button class="w-full py-2 px-4 rounded-lg bg-surface-container-high text-on-surface font-body-md text-body-md font-medium hover:bg-surface-variant transition-colors">Compare</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Pagination / Load More (Stub) -->
+<div class="mt-12 flex justify-center">
+<button class="py-2.5 px-6 rounded-lg border border-outline-variant text-on-surface-variant font-body-md text-body-md font-medium hover:bg-surface-container-low transition-colors inline-flex items-center gap-2">
+                    Load More Providers <span class="material-symbols-outlined text-sm" data-icon="arrow_downward">arrow_downward</span>
+</button>
+</div>
+</section>
+<!-- Informational Section -->
+<section class="bg-surface-bright py-section-gap border-y border-surface-variant">
+<div class="px-gutter max-w-container-max mx-auto">
+<div class="text-center mb-12">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-deep-navy">Why compare providers?</h2>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+<!-- Benefit 1 -->
+<div class="flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-6 shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="trending_up" data-weight="fill">trending_up</span>
+</div>
+<h3 class="font-data-mono text-data-mono text-deep-navy mb-3">Compare rates</h3>
+<p class="font-body-md text-body-md text-data-gray">Exchange rates fluctuate constantly. Comparing ensures you lock in the most competitive rate available at the moment you transfer.</p>
+</div>
+<!-- Benefit 2 -->
+<div class="flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-6 shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="account_balance_wallet" data-weight="fill">account_balance_wallet</span>
+</div>
+<h3 class="font-data-mono text-data-mono text-deep-navy mb-3">Understand fees</h3>
+<p class="font-body-md text-body-md text-data-gray">Avoid hidden charges. We break down transfer fees, markup, and intermediary costs so you know exactly what you're paying.</p>
+</div>
+<!-- Benefit 3 -->
+<div class="flex flex-col items-center text-center">
+<div class="w-16 h-16 bg-primary-fixed rounded-full flex items-center justify-center mb-6 shadow-sm">
+<span class="material-symbols-outlined text-primary text-3xl" data-icon="visibility" data-weight="fill">visibility</span>
+</div>
+<h3 class="font-data-mono text-data-mono text-deep-navy mb-3">See what your recipient gets</h3>
+<p class="font-body-md text-body-md text-data-gray">Focus on the final number. We calculate the exact amount that will land in your recipient's account, taking all factors into consideration.</p>
+</div>
+</div>
+</div>
+</section>
+<!-- Final CTA -->
+<section class="py-section-gap px-gutter max-w-container-max mx-auto text-center">
+<div class="bg-deep-navy rounded-2xl p-8 md:p-12 relative overflow-hidden shadow-md">
+<!-- Decorative abstract shape placeholder -->
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at top right, #9acee1 0%, transparent 60%);"></div>
+<div class="relative z-10 max-w-2xl mx-auto">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile md:font-headline-lg md:text-headline-lg text-surface-white mb-4">Ready to compare your transfer?</h2>
+<p class="font-body-xl text-body-xl text-inverse-primary mb-8 opacity-90">Enter your transfer details once and instantly see which provider offers the best value for your specific route.</p>
+<a class="inline-flex items-center justify-center bg-vibrant-green text-surface-white font-body-md text-body-md font-medium rounded-lg px-8 py-3.5 hover:bg-opacity-90 transition-all shadow-sm" href="#">Compare Rates Now</a>
+</div>
+</div>
+</section>
+</main>
+<!-- Footer -->
+<footer class="bg-deep-navy dark:bg-primary w-full py-section-gap flat no shadows">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-stack-lg px-gutter max-w-container-max mx-auto">
+<!-- Brand Column -->
+<div class="flex flex-col gap-4 col-span-1 md:col-span-1">
+<a class="font-headline-lg text-headline-lg-mobile font-black text-on-primary flex items-center gap-2" href="#">
+<span class="material-symbols-outlined text-vibrant-green" data-icon="compare_arrows" data-weight="fill">compare_arrows</span>
+                    RemitCompare
+                </a>
+<p class="font-body-md text-body-md text-on-primary dark:text-on-primary-container opacity-80 mt-2 max-w-xs">
+                    © 2024 RemitCompare. All rights reserved. Precise rates for global citizens.
+                </p>
+</div>
+<!-- Links Column 1 -->
+<div class="flex flex-col gap-3">
+<h4 class="font-label-sm text-label-sm text-surface-variant uppercase tracking-widest mb-2 font-semibold">Company</h4>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all underline-offset-4 hover:underline" href="#">About Us</a>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all underline-offset-4 hover:underline" href="#">Contact</a>
+</div>
+<!-- Links Column 2 -->
+<div class="flex flex-col gap-3">
+<h4 class="font-label-sm text-label-sm text-surface-variant uppercase tracking-widest mb-2 font-semibold">Legal</h4>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all underline-offset-4 hover:underline" href="#">Privacy Policy</a>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all underline-offset-4 hover:underline" href="#">Terms of Service</a>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all underline-offset-4 hover:underline" href="#">Cookie Policy</a>
+</div>
+<!-- Links Column 3 -->
+<div class="flex flex-col gap-3">
+<h4 class="font-label-sm text-label-sm text-surface-variant uppercase tracking-widest mb-2 font-semibold">Developers</h4>
+<a class="font-body-md text-body-md text-surface-variant opacity-80 hover:opacity-100 hover:text-tertiary-fixed transition-all underline-offset-4 hover:underline" href="#">Provider API</a>
+</div>
+</div>
+</footer>
+</body></html>

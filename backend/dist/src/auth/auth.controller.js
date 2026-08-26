@@ -31,12 +31,12 @@ let AuthController = class AuthController {
     async register(registerDto, res) {
         const { accessToken, refreshToken, user } = await this.authService.register(registerDto);
         this.setAuthCookies(res, accessToken, refreshToken);
-        return { user };
+        return { accessToken, user };
     }
     async login(loginDto, res) {
         const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
         this.setAuthCookies(res, accessToken, refreshToken);
-        return { user };
+        return { accessToken, user };
     }
     async refresh(req, res) {
         const userId = req.user.id;

@@ -15,7 +15,8 @@ const swagger_1 = require("@nestjs/swagger");
 class RegisterDto {
     email;
     password;
-    fullName;
+    firstName;
+    lastName;
 }
 exports.RegisterDto = RegisterDto;
 __decorate([
@@ -31,10 +32,15 @@ __decorate([
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'John Doe', required: false }),
+    (0, swagger_1.ApiProperty)({ example: 'John', required: true }),
     (0, class_validator_1.IsString)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.MaxLength)(100),
+    (0, class_validator_1.MaxLength)(50),
     __metadata("design:type", String)
-], RegisterDto.prototype, "fullName", void 0);
+], RegisterDto.prototype, "firstName", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)({ example: 'Doe', required: true }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.MaxLength)(50),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "lastName", void 0);
 //# sourceMappingURL=register.dto.js.map

@@ -19,7 +19,8 @@ export declare class AuthService {
             email: any;
             role: any;
             emailVerified: any;
-            fullName: any;
+            firstName: any;
+            lastName: any;
         };
     }>;
     login(dto: LoginDto): Promise<{
@@ -30,7 +31,8 @@ export declare class AuthService {
             email: any;
             role: any;
             emailVerified: any;
-            fullName: any;
+            firstName: any;
+            lastName: any;
         };
     }>;
     refreshTokens(userId: string): Promise<{
@@ -41,7 +43,8 @@ export declare class AuthService {
             email: any;
             role: any;
             emailVerified: any;
-            fullName: any;
+            firstName: any;
+            lastName: any;
         };
     }>;
     forgotPassword(email: string): Promise<{

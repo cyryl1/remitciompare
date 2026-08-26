@@ -20,13 +20,45 @@ let UsersService = UsersService_1 = class UsersService {
         this.prisma = prisma;
     }
     async getPreferences(userId) {
-        return {
-            notifications: { email: true, push: false },
-            defaultRoute: { from: 'GBP', to: 'NGN' }
-        };
+        const user = await this.prisma.user.findUnique({
+            where: { id: userId },
+            select: {
+                id: true,
+                fullName: true,
+                email: true,
+                defaultRoute: true,
+                countryOfResidence: true,
+                notificationSettings: true,
+            },
+        });
+        return user;
     }
     async updatePreferences(userId, data) {
-        return data;
+        const { emailAlerts, comparisonNotifications, marketingEmails, defaultRoute, countryOfResidence } = data;
+        if (defaultRoute !== undefined || countryOfResidence !== undefined) {
+            await this.prisma.user.update({
+                where: { id: userId },
+                data: {
+                    ...(defaultRoute !== undefined && { defaultRoute }),
+                    ...(countryOfResidence !== undefined && { countryOfResidence }),
+                },
+            });
+        }
+        const settings = await this.prisma.notificationSettings.upsert({
+            where: { userId },
+            create: {
+                userId,
+                emailAlerts: emailAlerts ?? true,
+                comparisonNotifications: comparisonNotifications ?? false,
+                marketingEmails: marketingEmails ?? false,
+            },
+            update: {
+                ...(emailAlerts !== undefined && { emailAlerts }),
+                ...(comparisonNotifications !== undefined && { comparisonNotifications }),
+                ...(marketingEmails !== undefined && { marketingEmails }),
+            },
+        });
+        return settings;
     }
 };
 exports.UsersService = UsersService;

@@ -32,7 +32,7 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
         this.adapters = adapters;
         this.prisma = prisma;
     }
-    async compare(dto, userId, anonymousSessionId) {
+    async compare(dto, userId, anonymousSessionId, persist = true) {
         this.logger.debug(`Starting comparison for ${dto.sendAmount} ${dto.sourceCurrency}->${dto.targetCurrency}. Priority: ${dto.priority}`);
         const activeProviders = await this.prisma.provider.findMany({
             where: {
@@ -69,7 +69,9 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
             const sortedByRecipient = [...successfulQuotes].sort((a, b) => b.recipientAmount - a.recipientAmount);
             moneyLeftOnTable = sortedByRecipient[0].recipientAmount - sortedByRecipient[1].recipientAmount;
         }
-        await this.persistComparison(dto, results, recommended, userId, anonymousSessionId);
+        if (persist) {
+            await this.persistComparison(dto, results, recommended, userId, anonymousSessionId);
+        }
         return {
             recommended,
             allQuotes: results,

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Transfer Summary - RemitCompare</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "error": "#ba1a1a",
+                      "outline": "#70787c",
+                      "on-tertiary": "#ffffff",
+                      "on-tertiary-container": "#4bca79",
+                      "inverse-on-surface": "#eff1f3",
+                      "surface-tint": "#306576",
+                      "surface": "#f7f9fb",
+                      "tertiary": "#003819",
+                      "primary-fixed-dim": "#9acee1",
+                      "surface-container-lowest": "#ffffff",
+                      "on-surface": "#191c1e",
+                      "surface-container": "#eceef0",
+                      "inverse-primary": "#9acee1",
+                      "on-tertiary-fixed-variant": "#005228",
+                      "tertiary-fixed": "#7efba4",
+                      "on-primary-fixed": "#001f28",
+                      "primary": "#003441",
+                      "error-red": "#E63946",
+                      "on-primary-fixed-variant": "#114d5d",
+                      "on-secondary-container": "#006c74",
+                      "outline-variant": "#c0c8cb",
+                      "surface-white": "#FFFFFF",
+                      "error-container": "#ffdad6",
+                      "on-error-container": "#93000a",
+                      "vibrant-green": "#00D66B",
+                      "on-primary-container": "#87bbce",
+                      "surface-container-low": "#f2f4f6",
+                      "data-gray": "#64748B",
+                      "background": "#f7f9fb",
+                      "primary-fixed": "#b6ebfe",
+                      "on-surface-variant": "#40484b",
+                      "surface-variant": "#e0e3e5",
+                      "tertiary-container": "#005127",
+                      "on-tertiary-fixed": "#00210c",
+                      "on-background": "#191c1e",
+                      "secondary-container": "#5cf0ff",
+                      "secondary": "#006971",
+                      "on-error": "#ffffff",
+                      "surface-dim": "#d8dadc",
+                      "on-secondary-fixed-variant": "#004f55",
+                      "secondary-fixed": "#84f3ff",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-secondary-fixed": "#002023",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#e6e8ea",
+                      "surface-bright": "#f7f9fb",
+                      "on-secondary": "#ffffff",
+                      "primary-container": "#0f4c5c",
+                      "inverse-surface": "#2d3133",
+                      "deep-navy": "#0A2540",
+                      "secondary-fixed-dim": "#3cdae8",
+                      "tertiary-fixed-dim": "#61de8a"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "gutter": "24px",
+                      "stack-md": "16px",
+                      "stack-sm": "8px",
+                      "container-max": "1280px",
+                      "stack-lg": "32px",
+                      "margin-mobile": "16px",
+                      "section-gap": "80px"
+              },
+              "fontFamily": {
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "data-mono": [
+                              "Inter"
+                      ],
+                      "body-xl": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "display-lg": [
+                              "Plus Jakarta Sans"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "data-mono": [
+                              "18px",
+                              {
+                                      "lineHeight": "24px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-xl": [
+                              "20px",
+                              {
+                                      "lineHeight": "30px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased pt-[88px] min-h-screen flex flex-col">
+<!-- TopNavBar -->
+<nav class="fixed top-0 w-full z-50 bg-surface-white border-b border-outline-variant shadow-sm transition-all duration-300">
+<div class="flex justify-between items-center px-gutter py-4 max-w-container-max mx-auto">
+<a class="font-display-lg text-display-lg font-bold text-primary" href="#">RemitCompare</a>
+<div class="hidden md:flex gap-8">
+<a class="text-primary border-b-2 border-primary pb-1 font-body-md text-body-md cursor-pointer active:opacity-80" href="#">Compare</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-vibrant-green transition-colors duration-200 cursor-pointer active:opacity-80" href="#">How It Works</a>
+<a class="text-on-surface-variant font-body-md text-body-md hover:text-vibrant-green transition-colors duration-200 cursor-pointer active:opacity-80" href="#">Providers</a>
+</div>
+<div class="hidden md:flex items-center gap-4">
+<a class="text-primary font-body-md text-body-md font-semibold cursor-pointer active:opacity-80" href="#">Login</a>
+<a class="bg-vibrant-green text-surface-white font-body-md text-body-md font-semibold px-6 py-2 rounded shadow-sm hover:opacity-90 transition-opacity cursor-pointer active:opacity-80" href="#">Start Comparing</a>
+</div>
+<button class="md:hidden text-primary">
+<span class="material-symbols-outlined text-3xl">menu</span>
+</button>
+</div>
+</nav>
+<!-- Main Content Canvas -->
+<main class="flex-grow flex flex-col items-center justify-start px-gutter py-section-gap w-full">
+<div class="w-full max-w-[800px] flex flex-col gap-stack-lg">
+<!-- Breadcrumb & Title -->
+<div class="flex flex-col gap-stack-sm w-full">
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm">
+<a class="hover:text-primary transition-colors" href="#">Comparison Results</a>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+<span class="font-semibold text-primary">Wise</span>
+</div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Review your transfer</h1>
+<p class="text-on-surface-variant font-body-md text-body-md">Check the details below before continuing to Wise.</p>
+</div>
+<!-- Provider Header -->
+<div class="bg-surface-white rounded-xl shadow-sm border border-outline-variant p-stack-lg flex items-center justify-between">
+<div class="flex items-center gap-6">
+<div class="w-16 h-16 rounded-full overflow-hidden border border-outline-variant flex-shrink-0 bg-surface-container flex items-center justify-center" data-alt="A stylized logo icon for a financial app, featuring a sleek, minimalist geometric shape in deep corporate blue and vibrant teal. Set against a pure white background, well-lit, evoking trust, speed, and modern digital banking." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCJAPlhd_47zSW_8BC_qhB7LF-jUShYIAXBIDGA8aYjxO1MYseq5n50MWn6rccXz0RJBs2Vk-WzHwapNDxoj2fn4Yv_Qn09i1HrCCKrB3hqzmrXvv_4B7Kx6jmgna6_nb1b67sMMbk22luJ6qPhAapGP2ccyfOiXPgeRdu-xkXstzPyJ0N5BnkvgIMAt1tJQ7BKLv4dImaT2JaTniijKDb-5PKa8T5XVSKAc3jBgiE_6FFPRGR58tCYdw')"></div>
+<div class="flex flex-col">
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile text-primary">Wise</h2>
+<span class="text-data-gray font-label-sm text-label-sm uppercase tracking-wider">International money transfer provider</span>
+</div>
+</div>
+<div class="hidden sm:flex bg-tertiary-fixed text-on-tertiary-fixed px-3 py-1 rounded font-label-sm text-label-sm uppercase font-bold items-center gap-1 shadow-sm">
+<span class="material-symbols-outlined text-sm">workspace_premium</span> Best Value
+                </div>
+</div>
+<!-- Main Summary Card -->
+<div class="bg-surface-white rounded-xl shadow-[0_4px_12px_rgba(10,37,64,0.05)] border border-outline-variant p-stack-lg relative overflow-hidden flex flex-col gap-stack-lg">
+<!-- Decorative top bar -->
+<div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-container to-vibrant-green"></div>
+<h3 class="font-body-xl text-body-xl text-primary font-semibold border-b border-surface-variant pb-4">Your transfer</h3>
+<!-- Transfer Flow -->
+<div class="flex flex-col md:flex-row items-stretch justify-between gap-6">
+<!-- Sending -->
+<div class="flex-1 flex flex-col gap-2 p-4 bg-surface rounded-lg border border-surface-variant relative">
+<span class="text-data-gray font-label-sm text-label-sm uppercase">You Send (GBP)</span>
+<span class="font-data-mono text-headline-lg-mobile text-primary">£1,000.00</span>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-5 h-5 rounded-full overflow-hidden border border-outline-variant bg-surface-container flex-shrink-0" data-alt="A tiny crisp graphic of the United Kingdom Union Jack flag, circular, high resolution, minimalist flat vector style on a bright background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAYbVWeF_AUaONNTd_mbS54dUimciMTfYfcdCay-uatqsagRT1CiKxYrNgzk8DUaigb8BJLMWbYJgaj9MCIJvy5qwnRgsBy-BJIeJCgyL2xMD4rXNkibqVv2bRzQw766obpce4wZtapCViqpRPLA8eJpnQr1KCpk5-xKetUkP6eQ5Kb_D23_L-15PPUBv29RnhylHHMpu3PR_MCqsyDxWdq7YNxjFXRUlon8njOp9BKqiRUZP2y-RWTAA')"></div>
+<span class="text-on-surface-variant font-label-sm text-label-sm">United Kingdom</span>
+</div>
+</div>
+<!-- Arrow -->
+<div class="flex items-center justify-center md:rotate-0 rotate-90 my-auto text-primary-container opacity-50">
+<span class="material-symbols-outlined text-3xl">arrow_forward</span>
+</div>
+<!-- Receiving -->
+<div class="flex-1 flex flex-col gap-2 p-4 bg-primary-container rounded-lg border border-primary relative shadow-inner">
+<span class="text-primary-fixed font-label-sm text-label-sm uppercase">Recipient Gets (NGN)</span>
+<span class="font-data-mono text-headline-lg text-surface-white">₦1,384,250</span>
+<div class="flex items-center gap-2 mt-2">
+<div class="w-5 h-5 rounded-full overflow-hidden border border-primary bg-surface-container flex-shrink-0" data-alt="A tiny crisp graphic of the Nigerian national flag, circular, green and white vertical stripes, high resolution, minimalist flat vector style on a bright background." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuC3rN7-WeGpuuPSTDNEsZv0SAXIkM8WszUx4mpsD081OlmHopmoLJ-nFk6zrUCRN7iq1s491Chvcxr1SDOw0-IKZI60hd6QeW1Dyc-wZilPUGjF875iw41xlSMPdLuUuUbD3Wq3AN3UOJZyw6ihmIFUQ3-zKbbkmE6qGiiZs88zT8xVRx6AQC4RSTJGao1pNuAtccHHG_dQnQx0jp8Uy4fsShXUNYt1AJkRGRKGlg0tkEDUTt7FeGUs3g')"></div>
+<span class="text-primary-fixed-dim font-label-sm text-label-sm">Nigeria</span>
+</div>
+</div>
+</div>
+<!-- Quote Details Grid -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 pt-6 border-t border-surface-variant">
+<div class="flex flex-col gap-1">
+<span class="text-data-gray font-label-sm text-label-sm uppercase">Exchange Rate</span>
+<span class="font-data-mono text-data-mono text-on-surface">1 GBP = ₦1,850</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-data-gray font-label-sm text-label-sm uppercase">Transfer Fee</span>
+<span class="font-data-mono text-data-mono text-on-surface">£4.50</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-data-gray font-label-sm text-label-sm uppercase">Delivery</span>
+<span class="font-body-md text-body-md font-medium text-on-surface">Minutes</span>
+</div>
+<div class="flex flex-col gap-1">
+<span class="text-data-gray font-label-sm text-label-sm uppercase">Method</span>
+<span class="font-body-md text-body-md font-medium text-on-surface">Bank transfer</span>
+</div>
+</div>
+</div>
+<!-- Freshness & Disclaimer -->
+<div class="flex items-center gap-2 text-on-surface-variant font-label-sm text-label-sm px-2">
+<span class="material-symbols-outlined text-sm text-data-gray">schedule</span>
+<span>Quote checked 45 seconds ago. Rates and fees may change.</span>
+</div>
+<!-- Primary Action -->
+<div class="flex flex-col gap-4 items-center mt-4">
+<button class="w-full md:w-auto bg-vibrant-green text-deep-navy font-body-xl text-body-xl font-bold py-4 px-12 rounded-lg shadow-md hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300 flex items-center justify-center gap-2 group">
+                    Continue with Wise
+                    <span class="material-symbols-outlined text-xl group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform">north_east</span>
+</button>
+<p class="text-data-gray font-label-sm text-label-sm">You'll continue on Wise's website. RemitCompare does not process your payment.</p>
+</div>
+<!-- Security/Trust Section -->
+<div class="bg-surface-container-lowest border border-outline-variant rounded-xl p-stack-md mt-6">
+<h4 class="font-body-md text-body-md font-semibold text-primary mb-4 flex items-center gap-2 border-b border-surface-variant pb-2">
+<span class="material-symbols-outlined text-vibrant-green">lock</span>
+                    Your transfer is completed with the provider
+                </h4>
+<ul class="flex flex-col gap-3 font-body-md text-body-md text-on-surface-variant pl-2">
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container text-base mt-0.5">verified_user</span>
+<span><strong>Your money stays with the provider.</strong> We simply help you find the best rate.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container text-base mt-0.5">credit_card</span>
+<span><strong>Your payment details are secure.</strong> You will only enter payment information on Wise's secure platform.</span>
+</li>
+<li class="flex items-start gap-3">
+<span class="material-symbols-outlined text-primary-container text-base mt-0.5">fact_check</span>
+<span><strong>Verify the final quote.</strong> Always double-check the final rate and fees before confirming payment on the provider's site.</span>
+</li>
+</ul>
+</div>
+<!-- Secondary Actions -->
+<div class="flex flex-col md:flex-row justify-center items-center gap-6 mt-8 w-full border-t border-outline-variant pt-6">
+<a class="text-primary font-body-md text-body-md font-semibold hover:text-vibrant-green transition-colors flex items-center gap-1" href="#">
+<span class="material-symbols-outlined text-sm">arrow_back</span>
+                    Back to Results
+                </a>
+<a class="text-secondary font-body-md text-body-md font-semibold hover:underline transition-all flex items-center gap-1" href="#">
+                    View provider details
+                    <span class="material-symbols-outlined text-sm">open_in_new</span>
+</a>
+</div>
+</div>
+</main>
+<!-- Footer -->
+<footer class="w-full py-section-gap bg-surface-container">
+<div class="grid grid-cols-1 md:grid-cols-4 gap-stack-lg px-gutter max-w-container-max mx-auto">
+<div class="flex flex-col gap-4">
+<a class="font-headline-lg text-headline-lg font-bold text-primary" href="#">RemitCompare</a>
+<p class="font-label-sm text-label-sm text-on-surface">© 2024 RemitCompare. All rights reserved. Precise exchange rates and fees are subject to provider terms.</p>
+</div>
+<div class="flex flex-col gap-2">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-vibrant-green underline transition-all duration-300" href="#">Product</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-vibrant-green underline transition-all duration-300" href="#">Company</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-vibrant-green underline transition-all duration-300" href="#">Legal</a>
+</div>
+<div class="flex flex-col gap-2">
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-vibrant-green underline transition-all duration-300" href="#">Privacy Policy</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-vibrant-green underline transition-all duration-300" href="#">Terms of Service</a>
+<a class="font-label-sm text-label-sm text-on-surface-variant hover:text-vibrant-green underline transition-all duration-300" href="#">Transparency Disclosure</a>
+</div>
+<div></div> <!-- Empty column to match the 4 col grid in JSON -->
+</div>
+</footer>
+</body></html>

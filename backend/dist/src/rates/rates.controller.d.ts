@@ -2,17 +2,31 @@ import { ComparisonService } from '../comparison/comparison.service';
 export declare class RatesController {
     private readonly comparisonService;
     constructor(comparisonService: ComparisonService);
-    getSnapshots(source?: string, target?: string, hours?: string): Promise<{
-        provider: string;
-        sendAmount: number;
+    compare(sendAmount: string, sendCurrency: string, receiveCurrency: string): Promise<{
+        providerId: string;
+        providerName: string;
+        providerSlug: string;
+        providerLogo: string;
         exchangeRate: number;
-        totalFees: number;
-        recipientAmount: number;
-        paymentMethod: string;
-        fromCurrency: string;
-        toCurrency: string;
-        id: string;
-        createdAt: Date;
-        dataType: import("@prisma/client").$Enums.DataType;
+        fee: number;
+        feeType: string;
+        receiveAmount: number;
+        deliveryTime: string;
+        deliveryMethods: string[];
+        transferLimit: {
+            min: number;
+            max: number;
+        };
+        updatedAt: string;
+        badge: string | null;
     }[]>;
+    getHistory(sendCurrency?: string, receiveCurrency?: string, days?: string): Promise<{
+        date: string;
+        rate: number;
+        provider: string;
+    }[]>;
+    getLatest(sendCurrency?: string, receiveCurrency?: string): Promise<{
+        rate: number;
+        updatedAt: string;
+    }>;
 }

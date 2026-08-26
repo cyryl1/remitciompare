@@ -11,12 +11,13 @@ const common_1 = require("@nestjs/common");
 const alerts_controller_1 = require("./alerts.controller");
 const alerts_service_1 = require("./alerts.service");
 const prisma_module_1 = require("../prisma/prisma.module");
+const email_module_1 = require("../email/email.module");
 let AlertsModule = class AlertsModule {
 };
 exports.AlertsModule = AlertsModule;
 exports.AlertsModule = AlertsModule = __decorate([
     (0, common_1.Module)({
-        imports: [prisma_module_1.PrismaModule],
+        imports: [prisma_module_1.PrismaModule, email_module_1.EmailModule],
         controllers: [alerts_controller_1.AlertsController],
         providers: [alerts_service_1.AlertsService],
         exports: [alerts_service_1.AlertsService]

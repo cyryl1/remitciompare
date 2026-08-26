@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Platform Overview - RemitCompare Admin</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "on-secondary-container": "#006c74",
+                    "tertiary-fixed-dim": "#61de8a",
+                    "surface-container-lowest": "#ffffff",
+                    "outline": "#70787c",
+                    "on-secondary-fixed": "#002023",
+                    "surface-tint": "#306576",
+                    "surface-container-high": "#e6e8ea",
+                    "primary-fixed": "#b6ebfe",
+                    "surface-dim": "#d8dadc",
+                    "outline-variant": "#c0c8cb",
+                    "primary-container": "#0f4c5c",
+                    "deep-navy": "#0A2540",
+                    "surface-bright": "#f7f9fb",
+                    "inverse-on-surface": "#eff1f3",
+                    "error-container": "#ffdad6",
+                    "primary-fixed-dim": "#9acee1",
+                    "vibrant-green": "#00D66B",
+                    "on-background": "#191c1e",
+                    "inverse-primary": "#9acee1",
+                    "on-secondary-fixed-variant": "#004f55",
+                    "secondary-container": "#5cf0ff",
+                    "data-gray": "#64748B",
+                    "surface-container-highest": "#e0e3e5",
+                    "on-tertiary-fixed": "#00210c",
+                    "surface": "#f7f9fb",
+                    "on-tertiary": "#ffffff",
+                    "surface-container-low": "#f2f4f6",
+                    "on-tertiary-container": "#4bca79",
+                    "error-red": "#E63946",
+                    "surface-white": "#FFFFFF",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#3cdae8",
+                    "tertiary-container": "#005127",
+                    "error": "#ba1a1a",
+                    "on-primary-fixed-variant": "#114d5d",
+                    "background": "#f7f9fb",
+                    "on-error": "#ffffff",
+                    "on-surface": "#191c1e",
+                    "on-error-container": "#93000a",
+                    "on-tertiary-fixed-variant": "#005228",
+                    "on-primary-fixed": "#001f28",
+                    "tertiary-fixed": "#7efba4",
+                    "inverse-surface": "#2d3133",
+                    "secondary-fixed": "#84f3ff",
+                    "secondary": "#006971",
+                    "on-primary-container": "#87bbce",
+                    "tertiary": "#003819",
+                    "on-primary": "#ffffff",
+                    "on-surface-variant": "#40484b",
+                    "primary": "#003441",
+                    "surface-container": "#eceef0",
+                    "surface-variant": "#e0e3e5"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "container-max": "1280px",
+                    "stack-md": "16px",
+                    "margin-mobile": "16px",
+                    "section-gap": "80px",
+                    "stack-sm": "8px",
+                    "gutter": "24px",
+                    "stack-lg": "32px"
+            },
+            "fontFamily": {
+                    "label-sm": [
+                            "Inter"
+                    ],
+                    "headline-lg-mobile": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "display-lg": [
+                            "Plus Jakarta Sans"
+                    ],
+                    "body-xl": [
+                            "Inter"
+                    ],
+                    "data-mono": [
+                            "Inter"
+                    ],
+                    "body-md": [
+                            "Inter"
+                    ],
+                    "headline-lg": [
+                            "Plus Jakarta Sans"
+                    ]
+            },
+            "fontSize": {
+                    "label-sm": [
+                            "12px",
+                            {
+                                    "lineHeight": "16px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-lg-mobile": [
+                            "24px",
+                            {
+                                    "lineHeight": "32px",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "56px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-xl": [
+                            "20px",
+                            {
+                                    "lineHeight": "30px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "data-mono": [
+                            "18px",
+                            {
+                                    "lineHeight": "24px",
+                                    "letterSpacing": "0.01em",
+                                    "fontWeight": "600"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-lg": [
+                            "32px",
+                            {
+                                    "lineHeight": "40px",
+                                    "fontWeight": "600"
+                            }
+                    ]
+            }
+        },
+        },
+      }
+    </script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&amp;family=Plus+Jakarta+Sans:wght@600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+</head>
+<body class="bg-surface text-on-surface font-body-md text-body-md antialiased min-h-screen flex">
+<!-- Fixed Left Sidebar -->
+<aside class="w-64 bg-surface-white border-r border-surface-variant flex flex-col justify-between fixed h-full z-10">
+<div>
+<div class="h-20 flex items-center px-gutter border-b border-surface-variant">
+<span class="font-headline-lg text-headline-lg-mobile font-bold text-primary">RemitCompare</span>
+</div>
+<nav class="p-stack-md flex flex-col gap-1">
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase mb-2 px-3">Overview</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-surface-container-low text-primary font-semibold" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+                    Dashboard
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+                    Quote Monitoring
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">currency_exchange</span>
+                    Providers
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">route</span>
+                    Routes
+                </a>
+<div class="font-label-sm text-label-sm text-on-surface-variant uppercase mt-6 mb-2 px-3">Administration</div>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">group</span>
+                    Users
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">link</span>
+                    Referral Links
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">notifications</span>
+                    Alerts
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">health_and_safety</span>
+                    System Health
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined">history</span>
+                    Activity Logs
+                </a>
+</nav>
+</div>
+<div class="p-stack-md border-t border-surface-variant">
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container-low hover:text-primary transition-colors mb-4" href="#">
+<span class="material-symbols-outlined">settings</span>
+                Settings
+            </a>
+<div class="flex items-center justify-between px-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary text-surface-white flex items-center justify-center font-bold font-label-sm">
+                        J
+                    </div>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-semibold text-primary">Judah</span>
+<span class="text-xs text-on-surface-variant">Administrator</span>
+</div>
+</div>
+<button class="text-on-surface-variant hover:text-error-red transition-colors">
+<span class="material-symbols-outlined">logout</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 flex flex-col min-h-screen">
+<!-- Header -->
+<header class="h-20 bg-surface-white border-b border-surface-variant px-gutter flex items-center justify-between sticky top-0 z-10">
+<div>
+<h1 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary">Platform Overview</h1>
+<p class="text-on-surface-variant">Monitor RemitCompare's providers, quotes, users and system health.</p>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-sm text-data-gray">Last updated 30 seconds ago</span>
+<button class="flex items-center gap-2 bg-primary text-on-primary px-4 py-2 rounded-lg hover:bg-on-primary-fixed-variant transition-colors shadow-sm">
+<span class="material-symbols-outlined text-[20px]">refresh</span>
+                    Refresh Data
+                </button>
+</div>
+</header>
+<!-- Dashboard Content -->
+<div class="p-gutter flex-1 space-y-gutter max-w-container-max mx-auto w-full">
+<!-- KPI Cards -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-gutter">
+<!-- Card 1 -->
+<div class="bg-surface-white rounded-xl p-stack-md border border-surface-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="text-on-surface-variant font-label-sm text-label-sm uppercase">Active Providers</span>
+<span class="material-symbols-outlined text-primary">currency_exchange</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-primary">12</span>
+<span class="text-vibrant-green font-label-sm text-label-sm bg-tertiary-fixed/20 px-2 py-1 rounded">+2 this month</span>
+</div>
+</div>
+<!-- Card 2 -->
+<div class="bg-surface-white rounded-xl p-stack-md border border-surface-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="text-on-surface-variant font-label-sm text-label-sm uppercase">Comparisons Today</span>
+<span class="material-symbols-outlined text-primary">compare_arrows</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-primary">1,284</span>
+<span class="text-vibrant-green font-label-sm text-label-sm bg-tertiary-fixed/20 px-2 py-1 rounded">+14.2%</span>
+</div>
+</div>
+<!-- Card 3 -->
+<div class="bg-surface-white rounded-xl p-stack-md border border-surface-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="text-on-surface-variant font-label-sm text-label-sm uppercase">Quotes Retrieved Today</span>
+<span class="material-symbols-outlined text-primary">receipt_long</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-primary">18,492</span>
+<span class="text-vibrant-green font-label-sm text-label-sm bg-tertiary-fixed/20 px-2 py-1 rounded">+8.7%</span>
+</div>
+</div>
+<!-- Card 4 -->
+<div class="bg-surface-white rounded-xl p-stack-md border border-surface-variant shadow-sm flex flex-col justify-between">
+<div class="flex items-center justify-between mb-2">
+<span class="text-on-surface-variant font-label-sm text-label-sm uppercase">Quote Success Rate</span>
+<span class="material-symbols-outlined text-primary">task_alt</span>
+</div>
+<div class="flex items-end justify-between">
+<span class="font-display-lg text-display-lg text-primary">97.8%</span>
+<span class="text-vibrant-green font-label-sm text-label-sm bg-tertiary-fixed/20 px-2 py-1 rounded">+1.4%</span>
+</div>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- Platform Health -->
+<div class="lg:col-span-1 bg-surface-white border border-surface-variant rounded-xl p-stack-md shadow-sm">
+<h2 class="font-headline-lg text-headline-lg-mobile text-primary mb-4 border-b border-surface-variant pb-2">Platform Health</h2>
+<div class="space-y-4">
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low border border-surface-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-data-gray">api</span>
+<span class="font-semibold text-primary">API</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-vibrant-green"></div>
+<span class="text-sm text-vibrant-green font-medium">Operational</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low border border-surface-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-data-gray">database</span>
+<span class="font-semibold text-primary">Database</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-vibrant-green"></div>
+<span class="text-sm text-vibrant-green font-medium">Operational</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low border border-surface-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-data-gray">memory</span>
+<span class="font-semibold text-primary">Quote Engine</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-vibrant-green"></div>
+<span class="text-sm text-vibrant-green font-medium">Operational</span>
+</div>
+</div>
+<div class="flex items-center justify-between p-3 rounded-lg bg-surface-container-low border border-surface-variant">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-data-gray">campaign</span>
+<span class="font-semibold text-primary">Notifications</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-2.5 h-2.5 rounded-full bg-vibrant-green"></div>
+<span class="text-sm text-vibrant-green font-medium">Operational</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Provider Health Table -->
+<div class="lg:col-span-2 bg-surface-white border border-surface-variant rounded-xl shadow-sm overflow-hidden flex flex-col">
+<div class="p-stack-md border-b border-surface-variant">
+<h2 class="font-headline-lg text-headline-lg-mobile text-primary">Provider Health</h2>
+</div>
+<div class="overflow-x-auto flex-1">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low border-b border-surface-variant text-on-surface-variant font-label-sm text-label-sm uppercase">
+<tr>
+<th class="p-4 font-semibold">Provider</th>
+<th class="p-4 font-semibold">Status</th>
+<th class="p-4 font-semibold">Last Quote</th>
+<th class="p-4 font-semibold">Success Rate</th>
+<th class="p-4 font-semibold">Avg Response</th>
+<th class="p-4 font-semibold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant">
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-4 font-semibold text-primary">Wise</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-tertiary-fixed/20 text-tertiary-container border border-tertiary-fixed">
+<div class="w-1.5 h-1.5 rounded-full bg-vibrant-green"></div>
+                                            Operational
+                                        </span>
+</td>
+<td class="p-4 text-data-gray">2 min ago</td>
+<td class="p-4 font-data-mono text-data-mono">99.2%</td>
+<td class="p-4 font-data-mono text-data-mono">420ms</td>
+<td class="p-4 text-right">
+<button class="text-secondary hover:text-on-secondary-container font-label-sm text-label-sm font-semibold uppercase">View</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-4 font-semibold text-primary">LemFi</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-amber-100 text-amber-800 border border-amber-200">
+<div class="w-1.5 h-1.5 rounded-full bg-amber-500"></div>
+                                            Degraded
+                                        </span>
+</td>
+<td class="p-4 text-data-gray">8 min ago</td>
+<td class="p-4 font-data-mono text-data-mono text-amber-700">89.3%</td>
+<td class="p-4 font-data-mono text-data-mono text-amber-700">1.8s</td>
+<td class="p-4 text-right">
+<button class="text-secondary hover:text-on-secondary-container font-label-sm text-label-sm font-semibold uppercase">Investigate</button>
+</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-4 font-semibold text-primary">WorldRemit</td>
+<td class="p-4">
+<span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium bg-error-container text-on-error-container border border-error">
+<div class="w-1.5 h-1.5 rounded-full bg-error-red"></div>
+                                            Down
+                                        </span>
+</td>
+<td class="p-4 text-data-gray">22 min ago</td>
+<td class="p-4 font-data-mono text-data-mono text-data-gray">--</td>
+<td class="p-4 font-data-mono text-data-mono text-data-gray">--</td>
+<td class="p-4 text-right">
+<button class="text-error-red hover:text-on-error-container font-label-sm text-label-sm font-semibold uppercase">Investigate</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Bottom Section: Chart & Table -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Simple Chart Placeholder -->
+<div class="bg-surface-white border border-surface-variant rounded-xl p-stack-md shadow-sm h-80 flex flex-col">
+<h2 class="font-headline-lg text-headline-lg-mobile text-primary mb-4">Quote Monitoring (24h)</h2>
+<div class="flex-1 border border-surface-variant border-dashed rounded flex items-center justify-center bg-surface-bright relative overflow-hidden">
+<!-- Simulated Chart Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between opacity-10">
+<div class="border-t border-data-gray w-full h-0"></div>
+<div class="border-t border-data-gray w-full h-0"></div>
+<div class="border-t border-data-gray w-full h-0"></div>
+<div class="border-t border-data-gray w-full h-0"></div>
+<div class="border-t border-data-gray w-full h-0"></div>
+</div>
+<div class="text-center z-10">
+<span class="material-symbols-outlined text-4xl text-data-gray mb-2">show_chart</span>
+<p class="text-data-gray font-label-sm text-label-sm">Successful vs Failed Requests visualization</p>
+<p class="text-xs text-data-gray mt-1">(Chart Component Placeholder)</p>
+</div>
+</div>
+</div>
+<!-- Recent Failures -->
+<div class="bg-surface-white border border-surface-variant rounded-xl shadow-sm overflow-hidden flex flex-col h-80">
+<div class="p-stack-md border-b border-surface-variant flex justify-between items-center">
+<h2 class="font-headline-lg text-headline-lg-mobile text-primary">Recent Quote Failures</h2>
+<button class="text-secondary hover:text-primary transition-colors">
+<span class="material-symbols-outlined">filter_list</span>
+</button>
+</div>
+<div class="overflow-y-auto flex-1">
+<table class="w-full text-left text-sm">
+<thead class="bg-surface-container-low border-b border-surface-variant text-on-surface-variant font-label-sm uppercase sticky top-0">
+<tr>
+<th class="p-3 font-semibold">Time</th>
+<th class="p-3 font-semibold">Provider</th>
+<th class="p-3 font-semibold">Route</th>
+<th class="p-3 font-semibold">Error</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-variant">
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-3 text-data-gray">10:42 AM</td>
+<td class="p-3 font-medium text-primary">WorldRemit</td>
+<td class="p-3">GBP → NGN</td>
+<td class="p-3 text-error-red font-data-mono">Timeout (5000ms)</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-3 text-data-gray">10:38 AM</td>
+<td class="p-3 font-medium text-primary">WorldRemit</td>
+<td class="p-3">USD → INR</td>
+<td class="p-3 text-error-red font-data-mono">503 Service Unavail</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-3 text-data-gray">10:15 AM</td>
+<td class="p-3 font-medium text-primary">LemFi</td>
+<td class="p-3">CAD → GHS</td>
+<td class="p-3 text-amber-600 font-data-mono">Rate Limit Exceeded</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-3 text-data-gray">09:55 AM</td>
+<td class="p-3 font-medium text-primary">Sendwave</td>
+<td class="p-3">EUR → KES</td>
+<td class="p-3 text-error-red font-data-mono">Invalid Auth Token</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-3 text-data-gray">09:12 AM</td>
+<td class="p-3 font-medium text-primary">WorldRemit</td>
+<td class="p-3">AUD → PHP</td>
+<td class="p-3 text-error-red font-data-mono">Timeout (5000ms)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+</main>
+</body></html>

@@ -9,6 +9,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProvidersModule = exports.PROVIDER_ADAPTERS = void 0;
 const common_1 = require("@nestjs/common");
 const wise_adapter_1 = require("./adapters/wise/wise.adapter");
+const lemfi_adapter_1 = require("./adapters/lemfi/lemfi.adapter");
+const remitly_adapter_1 = require("./adapters/remitly/remitly.adapter");
+const worldremit_adapter_1 = require("./adapters/worldremit/worldremit.adapter");
 const providers_service_1 = require("./providers.service");
 const providers_controller_1 = require("./providers.controller");
 const prisma_module_1 = require("../prisma/prisma.module");
@@ -23,12 +26,15 @@ exports.ProvidersModule = ProvidersModule = __decorate([
         providers: [
             providers_service_1.ProvidersService,
             wise_adapter_1.WiseAdapter,
+            lemfi_adapter_1.LemFiAdapter,
+            remitly_adapter_1.RemitlyAdapter,
+            worldremit_adapter_1.WorldRemitAdapter,
             {
                 provide: exports.PROVIDER_ADAPTERS,
-                useFactory: (wise) => {
-                    return [wise];
+                useFactory: (wise, lemfi, remitly, worldremit) => {
+                    return [wise, lemfi, remitly, worldremit];
                 },
-                inject: [wise_adapter_1.WiseAdapter],
+                inject: [wise_adapter_1.WiseAdapter, lemfi_adapter_1.LemFiAdapter, remitly_adapter_1.RemitlyAdapter, worldremit_adapter_1.WorldRemitAdapter],
             },
         ],
         exports: [exports.PROVIDER_ADAPTERS],

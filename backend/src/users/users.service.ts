@@ -8,15 +8,50 @@ export class UsersService {
   constructor(private prisma: PrismaService) {}
 
   async getPreferences(userId: string) {
-    // Basic implementation for MVP
-    return {
-      notifications: { email: true, push: false },
-      defaultRoute: { from: 'GBP', to: 'NGN' }
-    };
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        fullName: true,
+        email: true,
+        defaultRoute: true,
+        countryOfResidence: true,
+        notificationSettings: true,
+      },
+    });
+    return user;
   }
 
   async updatePreferences(userId: string, data: any) {
-    // For MVP, just return the data
-    return data;
+    const { emailAlerts, comparisonNotifications, marketingEmails, defaultRoute, countryOfResidence } = data;
+
+    // Update top-level user fields if provided
+    if (defaultRoute !== undefined || countryOfResidence !== undefined) {
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: {
+          ...(defaultRoute !== undefined && { defaultRoute }),
+          ...(countryOfResidence !== undefined && { countryOfResidence }),
+        },
+      });
+    }
+
+    // Upsert notification settings
+    const settings = await this.prisma.notificationSettings.upsert({
+      where: { userId },
+      create: {
+        userId,
+        emailAlerts: emailAlerts ?? true,
+        comparisonNotifications: comparisonNotifications ?? false,
+        marketingEmails: marketingEmails ?? false,
+      },
+      update: {
+        ...(emailAlerts !== undefined && { emailAlerts }),
+        ...(comparisonNotifications !== undefined && { comparisonNotifications }),
+        ...(marketingEmails !== undefined && { marketingEmails }),
+      },
+    });
+
+    return settings;
   }
 }

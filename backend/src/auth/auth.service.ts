@@ -31,7 +31,7 @@ export class AuthService {
       data: {
         email: dto.email,
         passwordHash,
-        fullName: dto.fullName,
+        fullName: `${dto.firstName} ${dto.lastName}`.trim(),
         emailVerificationToken: verificationToken,
       },
     });
@@ -147,6 +147,10 @@ export class AuthService {
       }),
     ]);
 
-    return { accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, emailVerified: user.emailVerified, fullName: user.fullName } };
+    const nameParts = user.fullName ? user.fullName.split(' ') : [''];
+    const firstName = nameParts[0];
+    const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
+
+    return { accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, emailVerified: user.emailVerified, firstName, lastName } };
   }
 }

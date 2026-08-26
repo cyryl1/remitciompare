@@ -96,6 +96,32 @@ let EmailService = EmailService_1 = class EmailService {
         };
         return this.sendMail(mailOptions);
     }
+    async sendRateAlert(opts) {
+        const frontendUrl = this.configService.get('FRONTEND_URL');
+        const compareUrl = `${frontendUrl}/compare?sendAmount=${opts.sendAmount}&from=${opts.fromCurrency}&to=${opts.toCurrency}`;
+        const formattedRecipient = new Intl.NumberFormat('en-NG').format(opts.recipientAmount);
+        const formattedTarget = new Intl.NumberFormat('en-NG').format(opts.targetRecipientAmount);
+        const mailOptions = {
+            from: this.configService.get('EMAIL_FROM') || '"RemitCompare" <noreply@remitcompare.com>',
+            to: opts.to,
+            subject: `🎯 Your rate alert has been triggered! ${opts.toCurrency} ${formattedRecipient} available`,
+            html: `
+        <h2>Your rate alert has triggered!</h2>
+        <p>Great news! Your target of <strong>${opts.toCurrency} ${formattedTarget}</strong> has been reached.</p>
+        <p>
+          Sending <strong>${opts.fromCurrency} ${opts.sendAmount}</strong> via <strong>${opts.provider}</strong>
+          will give your recipient <strong>${opts.toCurrency} ${formattedRecipient}</strong> right now.
+        </p>
+        <a href="${compareUrl}" style="background:#2563eb;color:white;padding:12px 24px;border-radius:6px;text-decoration:none;display:inline-block;margin-top:16px">
+          Compare Rates Now
+        </a>
+        <p style="margin-top:24px;color:#6b7280;font-size:14px">
+          Rates change frequently. This alert is based on our latest snapshot — lock in the rate quickly!
+        </p>
+      `,
+        };
+        return this.sendMail(mailOptions);
+    }
     async sendMail(mailOptions) {
         try {
             const info = await this.transporter.sendMail(mailOptions);

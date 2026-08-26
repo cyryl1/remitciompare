@@ -34,6 +34,7 @@ export class ComparisonService {
     dto: CreateComparisonDto,
     userId?: string,
     anonymousSessionId?: string,
+    persist: boolean = true,
   ): Promise<ComparisonResult> {
     this.logger.debug(`Starting comparison for ${dto.sendAmount} ${dto.sourceCurrency}->${dto.targetCurrency}. Priority: ${dto.priority}`);
 
@@ -90,7 +91,9 @@ export class ComparisonService {
     }
 
     // Persist comparison to DB
-    await this.persistComparison(dto, results, recommended, userId, anonymousSessionId);
+    if (persist) {
+      await this.persistComparison(dto, results, recommended, userId, anonymousSessionId);
+    }
 
     return {
       recommended,

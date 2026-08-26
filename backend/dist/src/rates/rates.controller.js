@@ -16,28 +16,92 @@ exports.RatesController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const comparison_service_1 = require("../comparison/comparison.service");
+const create_comparison_dto_1 = require("../comparison/dto/create-comparison.dto");
 let RatesController = class RatesController {
     comparisonService;
     constructor(comparisonService) {
         this.comparisonService = comparisonService;
     }
-    async getSnapshots(source = 'GBP', target = 'NGN', hours = '24') {
-        const hoursNum = parseInt(hours, 10) || 24;
-        return this.comparisonService.getSnapshots(source.toUpperCase(), target.toUpperCase(), hoursNum);
+    async compare(sendAmount, sendCurrency, receiveCurrency) {
+        const dto = new create_comparison_dto_1.CreateComparisonDto();
+        dto.sendAmount = parseFloat(sendAmount) || 1000;
+        dto.sourceCurrency = sendCurrency || 'GBP';
+        dto.targetCurrency = receiveCurrency || 'NGN';
+        dto.priority = comparison_service_1.Priority.MOST_RECEIVED;
+        dto.fromCountry = 'GB';
+        dto.toCountry = 'NG';
+        const result = await this.comparisonService.compare(dto, undefined, undefined, false);
+        return result.allQuotes.map(q => ({
+            providerId: q.provider,
+            providerName: q.provider.charAt(0).toUpperCase() + q.provider.slice(1),
+            providerSlug: q.provider.toLowerCase(),
+            providerLogo: `https://logo.clearbit.com/${q.provider.toLowerCase()}.com`,
+            exchangeRate: q.exchangeRate,
+            fee: q.totalFees,
+            feeType: 'flat',
+            receiveAmount: q.recipientAmount,
+            deliveryTime: q.deliveryEstimate || '1-3 days',
+            deliveryMethods: [q.paymentMethod || 'Bank Transfer'],
+            transferLimit: { min: 10, max: 50000 },
+            updatedAt: q.quoteTimestamp.toISOString(),
+            badge: result.recommended?.provider === q.provider ? 'best_rate' : null
+        }));
+    }
+    async getHistory(sendCurrency = 'GBP', receiveCurrency = 'NGN', days = '30') {
+        const hoursNum = (parseInt(days, 10) || 30) * 24;
+        const snapshots = await this.comparisonService.getSnapshots(sendCurrency.toUpperCase(), receiveCurrency.toUpperCase(), hoursNum);
+        return snapshots.map(s => ({
+            date: s.createdAt.toISOString(),
+            rate: s.exchangeRate,
+            provider: s.provider
+        }));
+    }
+    async getLatest(sendCurrency = 'GBP', receiveCurrency = 'NGN') {
+        const snapshots = await this.comparisonService.getSnapshots(sendCurrency.toUpperCase(), receiveCurrency.toUpperCase(), 24);
+        if (snapshots.length > 0) {
+            const latest = snapshots[snapshots.length - 1];
+            return {
+                rate: latest.exchangeRate,
+                updatedAt: latest.createdAt.toISOString(),
+            };
+        }
+        return {
+            rate: 1.0,
+            updatedAt: new Date().toISOString(),
+        };
     }
 };
 exports.RatesController = RatesController;
 __decorate([
-    (0, common_1.Get)('snapshots'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get historical rate snapshots for a specific route' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Rate snapshots' }),
-    __param(0, (0, common_1.Query)('source')),
-    __param(1, (0, common_1.Query)('target')),
-    __param(2, (0, common_1.Query)('hours')),
+    (0, common_1.Get)('compare'),
+    (0, swagger_1.ApiOperation)({ summary: 'Compare rates across providers' }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: 'Comparison rates' }),
+    __param(0, (0, common_1.Query)('sendAmount')),
+    __param(1, (0, common_1.Query)('sendCurrency')),
+    __param(2, (0, common_1.Query)('receiveCurrency')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", Promise)
-], RatesController.prototype, "getSnapshots", null);
+], RatesController.prototype, "compare", null);
+__decorate([
+    (0, common_1.Get)('history'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get historical rates' }),
+    __param(0, (0, common_1.Query)('sendCurrency')),
+    __param(1, (0, common_1.Query)('receiveCurrency')),
+    __param(2, (0, common_1.Query)('days')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:returntype", Promise)
+], RatesController.prototype, "getHistory", null);
+__decorate([
+    (0, common_1.Get)('latest'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get latest rate' }),
+    __param(0, (0, common_1.Query)('sendCurrency')),
+    __param(1, (0, common_1.Query)('receiveCurrency')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], RatesController.prototype, "getLatest", null);
 exports.RatesController = RatesController = __decorate([
     (0, swagger_1.ApiTags)('rates'),
     (0, common_1.Controller)('api/rates'),

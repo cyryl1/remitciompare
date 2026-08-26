@@ -5,79 +5,74 @@ import { CreateRouteDto } from './dto/create-route.dto';
 export declare class ProvidersService {
     private prisma;
     constructor(prisma: PrismaService);
-    findAll(includeInactive?: boolean): Promise<({
-        routes: {
-            isActive: boolean;
-            fromCurrency: string;
-            toCurrency: string;
-            fromCountry: string | null;
-            toCountry: string | null;
+    private mapToFrontendProvider;
+    findAll(page?: number, limit?: number, search?: string): Promise<{
+        data: {
             id: string;
-            createdAt: Date;
-            providerId: string;
+            slug: string;
+            name: string;
+            logo: string | null;
+            tagline: string | null;
+            description: string | null;
+            rating: number;
+            reviewCount: number;
+            supportedCurrencies: never[];
+            deliveryMethods: string[];
+            countries: never[];
+            features: string[];
+            pros: never[];
+            cons: never[];
+            affiliateUrl: string | null;
+            isActive: boolean;
+            isFeatured: boolean;
         }[];
-    } & {
+        total: number;
+        page: number;
+        limit: number;
+    }>;
+    findFeatured(): Promise<{
+        id: string;
         slug: string;
         name: string;
-        description: string | null;
-        about: string | null;
+        logo: string | null;
         tagline: string | null;
-        websiteUrl: string;
-        affiliateUrl: string | null;
-        trustpilotRating: number | null;
-        trustpilotCount: number | null;
-        regulatoryInfo: string | null;
-        countriesSupported: number;
-        currenciesSupported: number;
-        paymentMethods: string[];
-        payoutMethods: string[];
+        description: string | null;
+        rating: number;
+        reviewCount: number;
+        supportedCurrencies: never[];
         deliveryMethods: string[];
+        countries: never[];
         features: string[];
-        status: import("@prisma/client").$Enums.ProviderStatus;
-        logoUrl: string | null;
+        pros: never[];
+        cons: never[];
+        affiliateUrl: string | null;
         isActive: boolean;
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
-    })[]>;
+        isFeatured: boolean;
+    }[]>;
     findOne(slug: string): Promise<{
-        routes: {
-            isActive: boolean;
-            fromCurrency: string;
-            toCurrency: string;
-            fromCountry: string | null;
-            toCountry: string | null;
-            id: string;
-            createdAt: Date;
-            providerId: string;
-        }[];
-    } & {
+        id: string;
         slug: string;
         name: string;
-        description: string | null;
-        about: string | null;
+        logo: string | null;
         tagline: string | null;
-        websiteUrl: string;
-        affiliateUrl: string | null;
-        trustpilotRating: number | null;
-        trustpilotCount: number | null;
-        regulatoryInfo: string | null;
-        countriesSupported: number;
-        currenciesSupported: number;
-        paymentMethods: string[];
-        payoutMethods: string[];
+        description: string | null;
+        rating: number;
+        reviewCount: number;
+        supportedCurrencies: never[];
         deliveryMethods: string[];
+        countries: never[];
         features: string[];
-        status: import("@prisma/client").$Enums.ProviderStatus;
-        logoUrl: string | null;
+        pros: never[];
+        cons: never[];
+        affiliateUrl: string | null;
         isActive: boolean;
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
+        isFeatured: boolean;
     }>;
     create(createProviderDto: CreateProviderDto): Promise<{
+        id: string;
         slug: string;
         name: string;
+        logoUrl: string | null;
         description: string | null;
         about: string | null;
         tagline: string | null;
@@ -93,15 +88,15 @@ export declare class ProvidersService {
         deliveryMethods: string[];
         features: string[];
         status: import("@prisma/client").$Enums.ProviderStatus;
-        logoUrl: string | null;
         isActive: boolean;
-        id: string;
         createdAt: Date;
         updatedAt: Date;
     }>;
     update(id: string, updateProviderDto: UpdateProviderDto): Promise<{
+        id: string;
         slug: string;
         name: string;
+        logoUrl: string | null;
         description: string | null;
         about: string | null;
         tagline: string | null;
@@ -117,15 +112,15 @@ export declare class ProvidersService {
         deliveryMethods: string[];
         features: string[];
         status: import("@prisma/client").$Enums.ProviderStatus;
-        logoUrl: string | null;
         isActive: boolean;
-        id: string;
         createdAt: Date;
         updatedAt: Date;
     }>;
     remove(id: string): Promise<{
+        id: string;
         slug: string;
         name: string;
+        logoUrl: string | null;
         description: string | null;
         about: string | null;
         tagline: string | null;
@@ -141,20 +136,18 @@ export declare class ProvidersService {
         deliveryMethods: string[];
         features: string[];
         status: import("@prisma/client").$Enums.ProviderStatus;
-        logoUrl: string | null;
         isActive: boolean;
-        id: string;
         createdAt: Date;
         updatedAt: Date;
     }>;
     addRoute(providerId: string, createRouteDto: CreateRouteDto): Promise<{
+        id: string;
         isActive: boolean;
+        createdAt: Date;
         fromCurrency: string;
         toCurrency: string;
         fromCountry: string | null;
         toCountry: string | null;
-        id: string;
-        createdAt: Date;
         providerId: string;
     }>;
 }

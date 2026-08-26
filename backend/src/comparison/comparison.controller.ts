@@ -1,4 +1,4 @@
-import { Controller, Get, Query, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query, Req, Res, UseGuards } from '@nestjs/common';
 import { ComparisonService } from './comparison.service';
 import { CreateComparisonDto } from './dto/create-comparison.dto';
 import type { Request, Response } from 'express';
@@ -16,12 +16,81 @@ export class ComparisonController {
     private readonly prisma: PrismaService,
   ) {}
 
-  @Get()
+  @Get('history')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Get comparison history for logged in user' })
+  @ApiResponse({ status: 200, description: 'User history' })
+  async getHistory(@Req() req: Request, @Query('page') page: string = '1', @Query('limit') limit: string = '20') {
+    const user = req.user as any;
+    const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
+    const take = parseInt(limit, 10);
+    
+    const [comparisons, total] = await Promise.all([
+      this.prisma.comparison.findMany({
+        where: { userId: user.id },
+        include: { quotes: true },
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take,
+      }),
+      this.prisma.comparison.count({ where: { userId: user.id } })
+    ]);
+    
+    const data = comparisons.map(c => ({
+      id: c.id,
+      sendAmount: c.sendAmount,
+      sendCurrency: c.fromCurrency,
+      receiveCurrency: c.toCurrency,
+      createdAt: c.createdAt.toISOString(),
+      results: c.quotes.map(q => ({
+        providerId: q.provider,
+        providerName: q.provider.charAt(0).toUpperCase() + q.provider.slice(1),
+        providerSlug: q.provider.toLowerCase(),
+        exchangeRate: q.exchangeRate,
+        fee: Number(q.totalFees),
+        receiveAmount: q.recipientAmount,
+        deliveryTime: q.deliveryEstimate || '1-3 days',
+        badge: q.isBestValue ? 'best_rate' : null
+      }))
+    }));
+    
+    return { data, total, page: parseInt(page, 10), limit: take };
+  }
+
+  @Get(':id')
   @UseGuards(OptionalJwtGuard)
-  @ApiOperation({ summary: 'Get live comparison quotes' })
-  @ApiResponse({ status: 200, description: 'Comparison results' })
-  async getComparison(
-    @Query() dto: CreateComparisonDto,
+  @ApiOperation({ summary: 'Get a single comparison by ID' })
+  async getComparisonById(@Param('id') id: string) {
+    const c = await this.prisma.comparison.findUnique({
+      where: { id },
+      include: { quotes: true }
+    });
+    if (!c) return null;
+    return {
+      id: c.id,
+      sendAmount: c.sendAmount,
+      sendCurrency: c.fromCurrency,
+      receiveCurrency: c.toCurrency,
+      createdAt: c.createdAt.toISOString(),
+      results: c.quotes.map(q => ({
+        providerId: q.provider,
+        providerName: q.provider.charAt(0).toUpperCase() + q.provider.slice(1),
+        providerSlug: q.provider.toLowerCase(),
+        exchangeRate: q.exchangeRate,
+        fee: Number(q.totalFees),
+        receiveAmount: q.recipientAmount,
+        deliveryTime: q.deliveryEstimate || '1-3 days',
+        badge: q.isBestValue ? 'best_rate' : null
+      }))
+    };
+  }
+
+  @Post()
+  @UseGuards(OptionalJwtGuard)
+  @ApiOperation({ summary: 'Save a comparison' })
+  async saveComparison(
+    @Body() payload: any,
     @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
@@ -36,23 +105,43 @@ export class ComparisonController {
       });
     }
 
-    return this.comparisonService.compare(dto, user?.id, anonymousSessionId);
-  }
+    const expirationDate = new Date();
+    expirationDate.setHours(expirationDate.getHours() + 1);
 
-  @Get('history')
-  @UseGuards(JwtAuthGuard)
-  @ApiBearerAuth()
-  @ApiOperation({ summary: 'Get comparison history for logged in user' })
-  @ApiResponse({ status: 200, description: 'User history' })
-  async getHistory(@Req() req: Request) {
-    const user = req.user as any;
-    return this.prisma.comparison.findMany({
-      where: { userId: user.id },
-      include: {
-        quotes: true,
+    const comparison = await this.prisma.comparison.create({
+      data: {
+        userId: user?.id,
+        anonymousSessionId,
+        fromCurrency: payload.sendCurrency,
+        toCurrency: payload.receiveCurrency,
+        fromCountry: 'GB', // Mock for MVP
+        toCountry: 'NG',   // Mock for MVP
+        sendAmount: payload.sendAmount,
+        priority: 'MOST_RECEIVED',
+        staleAt: expirationDate,
+        quotes: {
+          create: payload.results.map((q: any) => ({
+            provider: q.providerId,
+            exchangeRate: q.exchangeRate,
+            totalFees: q.fee,
+            recipientAmount: q.receiveAmount,
+            deliveryEstimate: q.deliveryTime,
+            isBestValue: q.badge === 'best_rate',
+            status: 'SUCCESS',
+            quoteTimestamp: new Date(),
+          }))
+        }
       },
-      orderBy: { createdAt: 'desc' },
-      take: 20, // Limit to last 20 searches
+      include: { quotes: true }
     });
+
+    return {
+      id: comparison.id,
+      sendAmount: comparison.sendAmount,
+      sendCurrency: comparison.fromCurrency,
+      receiveCurrency: comparison.toCurrency,
+      createdAt: comparison.createdAt.toISOString(),
+      results: payload.results
+    };
   }
 }

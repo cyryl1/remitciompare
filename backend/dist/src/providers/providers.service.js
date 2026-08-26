@@ -17,14 +17,58 @@ let ProvidersService = class ProvidersService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async findAll(includeInactive = false) {
-        return this.prisma.provider.findMany({
-            where: includeInactive ? undefined : { isActive: true, status: 'INTEGRATED' },
-            include: {
-                routes: true,
-            },
-            orderBy: { name: 'asc' },
+    mapToFrontendProvider(provider) {
+        return {
+            id: provider.id,
+            slug: provider.slug,
+            name: provider.name,
+            logo: provider.logoUrl,
+            tagline: provider.tagline,
+            description: provider.description,
+            rating: provider.trustpilotRating || 0,
+            reviewCount: provider.trustpilotCount || 0,
+            supportedCurrencies: [],
+            deliveryMethods: provider.deliveryMethods || [],
+            countries: [],
+            features: provider.features || [],
+            pros: [],
+            cons: [],
+            affiliateUrl: provider.affiliateUrl,
+            isActive: provider.isActive,
+            isFeatured: provider.status === 'INTEGRATED',
+        };
+    }
+    async findAll(page = 1, limit = 20, search) {
+        const skip = (page - 1) * limit;
+        const where = search
+            ? {
+                isActive: true,
+                status: 'INTEGRATED',
+                name: { contains: search, mode: 'insensitive' }
+            }
+            : { isActive: true, status: 'INTEGRATED' };
+        const [providers, total] = await Promise.all([
+            this.prisma.provider.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { name: 'asc' },
+            }),
+            this.prisma.provider.count({ where }),
+        ]);
+        return {
+            data: providers.map(this.mapToFrontendProvider),
+            total,
+            page,
+            limit,
+        };
+    }
+    async findFeatured() {
+        const providers = await this.prisma.provider.findMany({
+            where: { isActive: true, status: 'INTEGRATED' },
+            take: 5,
         });
+        return providers.map(this.mapToFrontendProvider);
     }
     async findOne(slug) {
         const provider = await this.prisma.provider.findUnique({
@@ -34,7 +78,7 @@ let ProvidersService = class ProvidersService {
         if (!provider) {
             throw new common_1.NotFoundException(`Provider with slug '${slug}' not found`);
         }
-        return provider;
+        return this.mapToFrontendProvider(provider);
     }
     async create(createProviderDto) {
         return this.prisma.provider.create({

@@ -1,19 +1,49 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { EmailService } from '../email/email.service';
 export declare class AlertsService {
     private prisma;
+    private emailService;
     private readonly logger;
-    constructor(prisma: PrismaService);
+    constructor(prisma: PrismaService, emailService: EmailService);
     getAlerts(userId: string): Promise<{
+        id: string;
+        sendCurrency: string;
+        receiveCurrency: string;
+        sendAmount: number;
+        condition: string;
+        targetRate: number;
+        targetReceiveAmount: number;
+        currentRate: number;
+        status: string;
+        notifyEmail: boolean;
+        notifyPush: boolean;
+        createdAt: string;
+        triggeredAt: string | undefined;
+    }[]>;
+    createAlert(userId: string, data: any): Promise<{
+        id: string;
+        sendCurrency: string;
+        receiveCurrency: string;
+        sendAmount: number;
+        condition: string;
+        targetRate: number;
+        targetReceiveAmount: number;
+        status: string;
+        notifyEmail: any;
+        notifyPush: any;
+        createdAt: string;
+    }>;
+    updateAlert(userId: string, id: string, data: any): Promise<{
+        id: string;
         status: import("@prisma/client").$Enums.AlertStatus;
+        createdAt: Date;
+        updatedAt: Date;
         sendAmount: number;
         paymentMethod: string | null;
         fromCurrency: string;
         toCurrency: string;
         fromCountry: string | null;
         toCountry: string | null;
-        id: string;
-        createdAt: Date;
-        updatedAt: Date;
         priority: import("@prisma/client").$Enums.Priority;
         userId: string;
         targetRecipientAmount: number;
@@ -22,18 +52,38 @@ export declare class AlertsService {
         lastTriggeredAt: Date | null;
         triggeredValue: number | null;
         triggeredProvider: string | null;
-    }[]>;
-    createAlert(userId: string, data: any): Promise<{
+    }>;
+    deleteAlert(userId: string, id: string): Promise<{
+        id: string;
         status: import("@prisma/client").$Enums.AlertStatus;
+        createdAt: Date;
+        updatedAt: Date;
         sendAmount: number;
         paymentMethod: string | null;
         fromCurrency: string;
         toCurrency: string;
         fromCountry: string | null;
         toCountry: string | null;
+        priority: import("@prisma/client").$Enums.Priority;
+        userId: string;
+        targetRecipientAmount: number;
+        providerPreference: string | null;
+        lastCheckedAt: Date | null;
+        lastTriggeredAt: Date | null;
+        triggeredValue: number | null;
+        triggeredProvider: string | null;
+    }>;
+    toggleAlert(userId: string, id: string): Promise<{
+        status: string;
         id: string;
         createdAt: Date;
         updatedAt: Date;
+        sendAmount: number;
+        paymentMethod: string | null;
+        fromCurrency: string;
+        toCurrency: string;
+        fromCountry: string | null;
+        toCountry: string | null;
         priority: import("@prisma/client").$Enums.Priority;
         userId: string;
         targetRecipientAmount: number;

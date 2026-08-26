@@ -13,29 +13,91 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AlertsService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const email_service_1 = require("../email/email.service");
 let AlertsService = AlertsService_1 = class AlertsService {
     prisma;
+    emailService;
     logger = new common_1.Logger(AlertsService_1.name);
-    constructor(prisma) {
+    constructor(prisma, emailService) {
         this.prisma = prisma;
+        this.emailService = emailService;
     }
     async getAlerts(userId) {
-        return this.prisma.alert.findMany({
+        const alerts = await this.prisma.alert.findMany({
             where: { userId },
             orderBy: { createdAt: 'desc' }
         });
+        return alerts.map(a => ({
+            id: a.id,
+            sendCurrency: a.fromCurrency,
+            receiveCurrency: a.toCurrency,
+            sendAmount: a.sendAmount,
+            condition: 'above',
+            targetRate: 0,
+            targetReceiveAmount: a.targetRecipientAmount || 0,
+            currentRate: 0,
+            status: a.status.toLowerCase(),
+            notifyEmail: true,
+            notifyPush: false,
+            createdAt: a.createdAt.toISOString(),
+            triggeredAt: a.lastTriggeredAt?.toISOString(),
+        }));
     }
     async createAlert(userId, data) {
-        return this.prisma.alert.create({
+        const alert = await this.prisma.alert.create({
             data: {
                 userId,
-                fromCurrency: data.fromCurrency,
-                toCurrency: data.toCurrency,
-                targetRecipientAmount: data.targetRecipientAmount,
+                fromCurrency: data.sendCurrency,
+                toCurrency: data.receiveCurrency,
+                targetRecipientAmount: data.targetReceiveAmount,
                 sendAmount: data.sendAmount || 1000,
-                priority: data.priority || 'MOST_RECEIVED',
+                priority: 'MOST_RECEIVED',
+                status: 'ACTIVE',
             }
         });
+        return {
+            id: alert.id,
+            sendCurrency: alert.fromCurrency,
+            receiveCurrency: alert.toCurrency,
+            sendAmount: alert.sendAmount,
+            condition: 'above',
+            targetRate: 0,
+            targetReceiveAmount: alert.targetRecipientAmount,
+            status: alert.status.toLowerCase(),
+            notifyEmail: data.notifyEmail ?? true,
+            notifyPush: data.notifyPush ?? false,
+            createdAt: alert.createdAt.toISOString(),
+        };
+    }
+    async updateAlert(userId, id, data) {
+        const alert = await this.prisma.alert.update({
+            where: { id, userId },
+            data: {
+                targetRecipientAmount: data.targetReceiveAmount,
+                sendAmount: data.sendAmount,
+                status: data.status ? data.status.toUpperCase() : undefined,
+            }
+        });
+        return alert;
+    }
+    async deleteAlert(userId, id) {
+        return this.prisma.alert.delete({
+            where: { id, userId },
+        });
+    }
+    async toggleAlert(userId, id) {
+        const alert = await this.prisma.alert.findUnique({ where: { id, userId } });
+        if (!alert)
+            throw new Error('Alert not found');
+        const newStatus = alert.status === 'ACTIVE' ? 'PAUSED' : 'ACTIVE';
+        const updated = await this.prisma.alert.update({
+            where: { id },
+            data: { status: newStatus }
+        });
+        return {
+            ...updated,
+            status: updated.status.toLowerCase()
+        };
     }
     async processAlerts(provider, fromCurrency, toCurrency, amount, rate, recipientAmount) {
         this.logger.debug(`Checking alerts for ${fromCurrency}->${toCurrency}`);
@@ -44,11 +106,40 @@ let AlertsService = AlertsService_1 = class AlertsService {
                 status: 'ACTIVE',
                 fromCurrency,
                 toCurrency,
-            }
+            },
+            include: { user: { select: { email: true } } },
         });
         for (const alert of activeAlerts) {
             if (alert.targetRecipientAmount && recipientAmount >= alert.targetRecipientAmount) {
-                this.logger.log(`Alert triggered for user ${alert.userId}: Target ${alert.targetRecipientAmount}, Actual ${recipientAmount}`);
+                this.logger.log(`Alert ${alert.id} triggered for user ${alert.userId}: ` +
+                    `Target ${alert.targetRecipientAmount}, Actual ${recipientAmount} via ${provider}`);
+                await this.prisma.alert.update({
+                    where: { id: alert.id },
+                    data: {
+                        lastTriggeredAt: new Date(),
+                        lastCheckedAt: new Date(),
+                        triggeredValue: recipientAmount,
+                        triggeredProvider: provider,
+                        status: 'TRIGGERED',
+                    },
+                });
+                if (alert.user?.email) {
+                    await this.emailService.sendRateAlert({
+                        to: alert.user.email,
+                        sendAmount: alert.sendAmount,
+                        fromCurrency,
+                        toCurrency,
+                        recipientAmount,
+                        provider,
+                        targetRecipientAmount: alert.targetRecipientAmount,
+                    });
+                }
+            }
+            else {
+                await this.prisma.alert.update({
+                    where: { id: alert.id },
+                    data: { lastCheckedAt: new Date() },
+                });
             }
         }
     }
@@ -56,6 +147,7 @@ let AlertsService = AlertsService_1 = class AlertsService {
 exports.AlertsService = AlertsService;
 exports.AlertsService = AlertsService = AlertsService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        email_service_1.EmailService])
 ], AlertsService);
 //# sourceMappingURL=alerts.service.js.map

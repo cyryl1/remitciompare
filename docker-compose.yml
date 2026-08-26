@@ -23,6 +23,7 @@ services:
       - redis_data:/data
     restart: unless-stopped
 
+
 volumes:
   postgres_data:
   redis_data:
