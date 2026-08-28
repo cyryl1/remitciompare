@@ -55,7 +55,7 @@ export default function Signup() {
           </h1>
           <ul className="space-y-4">
             {[
-              'Compare real-time rates from 20+ top providers.',
+              'Compare real-time rates from top providers.',
               'Set alerts and never miss a target exchange rate.',
               'Track your transfer history and savings over time.',
             ].map((item) => (

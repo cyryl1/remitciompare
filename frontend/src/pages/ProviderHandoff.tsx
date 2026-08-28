@@ -118,7 +118,7 @@ export default function ProviderHandoff() {
               <span className="text-label-sm text-data-gray uppercase">TrustScore</span>
               <span className="text-body-md text-on-surface font-semibold flex items-center gap-1">
                 <ShieldCheck size={16} className="text-vibrant-green" />
-                9.5/10
+                4.5/5
               </span>
             </div>
           </div>

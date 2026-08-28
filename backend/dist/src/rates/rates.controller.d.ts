@@ -1,12 +1,14 @@
 import { ComparisonService } from '../comparison/comparison.service';
+import { PrismaService } from '../prisma/prisma.service';
 export declare class RatesController {
     private readonly comparisonService;
-    constructor(comparisonService: ComparisonService);
+    private readonly prisma;
+    constructor(comparisonService: ComparisonService, prisma: PrismaService);
     compare(sendAmount: string, sendCurrency: string, receiveCurrency: string): Promise<{
         providerId: string;
         providerName: string;
         providerSlug: string;
-        providerLogo: string;
+        providerLogo: string | null | undefined;
         exchangeRate: number;
         fee: number;
         feeType: string;

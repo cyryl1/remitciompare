@@ -6,7 +6,7 @@ export declare class ProvidersService {
     private prisma;
     constructor(prisma: PrismaService);
     private mapToFrontendProvider;
-    findAll(page?: number, limit?: number, search?: string): Promise<{
+    findAll(page?: number, limit?: number, search?: string, sendCurrency?: string, receiveCurrency?: string): Promise<{
         data: {
             id: string;
             slug: string;

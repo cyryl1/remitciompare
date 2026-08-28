@@ -10,12 +10,13 @@ exports.RatesModule = void 0;
 const common_1 = require("@nestjs/common");
 const rates_controller_1 = require("./rates.controller");
 const comparison_module_1 = require("../comparison/comparison.module");
+const prisma_module_1 = require("../prisma/prisma.module");
 let RatesModule = class RatesModule {
 };
 exports.RatesModule = RatesModule;
 exports.RatesModule = RatesModule = __decorate([
     (0, common_1.Module)({
-        imports: [comparison_module_1.ComparisonModule],
+        imports: [comparison_module_1.ComparisonModule, prisma_module_1.PrismaModule],
         controllers: [rates_controller_1.RatesController]
     })
 ], RatesModule);

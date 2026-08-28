@@ -16,7 +16,6 @@ exports.ComparisonController = void 0;
 const common_1 = require("@nestjs/common");
 const comparison_service_1 = require("./comparison.service");
 const optional_jwt_guard_1 = require("../auth/guards/optional-jwt.guard");
-const jwt_auth_guard_1 = require("../auth/guards/jwt-auth.guard");
 const uuid_1 = require("uuid");
 const swagger_1 = require("@nestjs/swagger");
 const prisma_service_1 = require("../prisma/prisma.service");
@@ -29,35 +28,47 @@ let ComparisonController = class ComparisonController {
     }
     async getHistory(req, page = '1', limit = '20') {
         const user = req.user;
+        const anonymousSessionId = req.cookies?.anonymous_session;
+        if (!user && !anonymousSessionId) {
+            return { data: [], total: 0, page: parseInt(page, 10), limit: parseInt(limit, 10) };
+        }
+        const whereClause = user ? { userId: user.id } : { anonymousSessionId };
         const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
         const take = parseInt(limit, 10);
         const [comparisons, total] = await Promise.all([
             this.prisma.comparison.findMany({
-                where: { userId: user.id },
+                where: whereClause,
                 include: { quotes: true },
                 orderBy: { createdAt: 'desc' },
                 skip,
                 take,
             }),
-            this.prisma.comparison.count({ where: { userId: user.id } })
+            this.prisma.comparison.count({ where: whereClause })
         ]);
-        const data = comparisons.map(c => ({
-            id: c.id,
-            sendAmount: c.sendAmount,
-            sendCurrency: c.fromCurrency,
-            receiveCurrency: c.toCurrency,
-            createdAt: c.createdAt.toISOString(),
-            results: c.quotes.map(q => ({
-                providerId: q.provider,
-                providerName: q.provider.charAt(0).toUpperCase() + q.provider.slice(1),
-                providerSlug: q.provider.toLowerCase(),
-                exchangeRate: q.exchangeRate,
-                fee: Number(q.totalFees),
-                receiveAmount: q.recipientAmount,
-                deliveryTime: q.deliveryEstimate || '1-3 days',
-                badge: q.isBestValue ? 'best_rate' : null
-            }))
-        }));
+        const data = comparisons.map(c => {
+            const bestQuote = c.quotes.length > 0
+                ? c.quotes.reduce((prev, curr) => (prev.recipientAmount > curr.recipientAmount) ? prev : curr)
+                : null;
+            return {
+                id: c.id,
+                sendAmount: c.sendAmount,
+                sendCurrency: c.fromCurrency,
+                receiveCurrency: c.toCurrency,
+                createdAt: c.createdAt.toISOString(),
+                bestProviderName: bestQuote ? bestQuote.provider.charAt(0).toUpperCase() + bestQuote.provider.slice(1) : 'Unknown',
+                bestReceiveAmount: bestQuote ? bestQuote.recipientAmount : 0,
+                results: c.quotes.map(q => ({
+                    providerId: q.provider,
+                    providerName: q.provider.charAt(0).toUpperCase() + q.provider.slice(1),
+                    providerSlug: q.provider.toLowerCase(),
+                    exchangeRate: q.exchangeRate,
+                    fee: Number(q.totalFees),
+                    receiveAmount: q.recipientAmount,
+                    deliveryTime: q.deliveryEstimate || '1-3 days',
+                    badge: q.isBestValue ? 'best_rate' : null
+                }))
+            };
+        });
         return { data, total, page: parseInt(page, 10), limit: take };
     }
     async getComparisonById(id) {
@@ -114,7 +125,10 @@ let ComparisonController = class ComparisonController {
                         exchangeRate: q.exchangeRate,
                         totalFees: q.fee,
                         recipientAmount: q.receiveAmount,
+                        grossRecipientAmount: q.receiveAmount,
                         deliveryEstimate: q.deliveryTime,
+                        paymentMethod: 'BANK_TRANSFER',
+                        fees: {},
                         isBestValue: q.badge === 'best_rate',
                         status: 'SUCCESS',
                         quoteTimestamp: new Date(),
@@ -136,9 +150,9 @@ let ComparisonController = class ComparisonController {
 exports.ComparisonController = ComparisonController;
 __decorate([
     (0, common_1.Get)('history'),
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.UseGuards)(optional_jwt_guard_1.OptionalJwtGuard),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Get comparison history for logged in user' }),
+    (0, swagger_1.ApiOperation)({ summary: 'Get comparison history for logged in or anonymous user' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'User history' }),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Query)('page')),

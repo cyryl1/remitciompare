@@ -16,17 +16,22 @@ export class ProvidersController {
   @ApiOperation({ summary: 'Get all active providers (public) or all providers (admin)' })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
-  @ApiQuery({ name: 'search', required: false, type: String })
+  @ApiQuery({ name: 'sendCurrency', required: false, type: String })
+  @ApiQuery({ name: 'receiveCurrency', required: false, type: String })
   @ApiResponse({ status: 200, description: 'List of providers' })
   findAll(
     @Query('page') page?: string,
     @Query('limit') limit?: string,
     @Query('search') search?: string,
+    @Query('sendCurrency') sendCurrency?: string,
+    @Query('receiveCurrency') receiveCurrency?: string,
   ) {
     return this.providersService.findAll(
       page ? parseInt(page, 10) : 1,
       limit ? parseInt(limit, 10) : 20,
-      search
+      search,
+      sendCurrency,
+      receiveCurrency
     );
   }
 

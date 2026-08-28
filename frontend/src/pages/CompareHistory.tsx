@@ -112,10 +112,20 @@ export default function CompareHistory() {
               <History size={48} className="mx-auto text-secondary opacity-20 mb-4" />
               <h3 className="font-display text-headline-sm text-primary mb-2">No history yet</h3>
               <p className="text-body-md text-on-surface-variant mb-6">Compare rates to see your history here.</p>
-              <Button onClick={() => navigate('/compare')}>Compare Rates</Button>
+              <Button className="text-white" onClick={() => navigate('/compare')}>Compare Rates</Button>
             </div>
           ) : (
-            history?.data?.map((item: any) => (
+            history?.data
+              ?.filter((item: any) => {
+                if (!search) return true;
+                const searchLower = search.toLowerCase();
+                return (
+                  item.sendCurrency.toLowerCase().includes(searchLower) ||
+                  item.receiveCurrency.toLowerCase().includes(searchLower) ||
+                  (item.bestProviderName && item.bestProviderName.toLowerCase().includes(searchLower))
+                );
+              })
+              .map((item: any) => (
               <div key={item.id} className="bg-surface-white border border-outline-variant rounded-2xl p-5 hover:shadow-card-hover transition-all flex flex-col md:flex-row items-start md:items-center justify-between gap-4 group relative overflow-hidden">
                 <div className="absolute left-0 top-0 bottom-0 w-1 bg-outline-variant group-hover:bg-vibrant-green transition-colors" />
                 

@@ -6,16 +6,16 @@ import { PageWrapper } from '@/components/layout/PageWrapper';
 import { useCompareStore } from '@/store/compareStore';
 
 const CURRENCIES = [
-  { code: 'GBP', flag: '🇬🇧', name: 'British Pound' },
-  { code: 'USD', flag: '🇺🇸', name: 'US Dollar' },
-  { code: 'EUR', flag: '🇪🇺', name: 'Euro' },
-  { code: 'NGN', flag: '🇳🇬', name: 'Nigerian Naira' },
-  { code: 'GHS', flag: '🇬🇭', name: 'Ghanaian Cedi' },
-  { code: 'KES', flag: '🇰🇪', name: 'Kenyan Shilling' },
-  { code: 'INR', flag: '🇮🇳', name: 'Indian Rupee' },
-  { code: 'PKR', flag: '🇵🇰', name: 'Pakistani Rupee' },
-  { code: 'ZAR', flag: '🇿🇦', name: 'South African Rand' },
-  { code: 'PHP', flag: '🇵🇭', name: 'Philippine Peso' },
+  { code: 'GBP', flag: '🇬🇧', country: 'gb', name: 'British Pound' },
+  { code: 'USD', flag: '🇺🇸', country: 'us', name: 'US Dollar' },
+  { code: 'EUR', flag: '🇪🇺', country: 'eu', name: 'Euro' },
+  { code: 'NGN', flag: '🇳🇬', country: 'ng', name: 'Nigerian Naira' },
+  { code: 'GHS', flag: '🇬🇭', country: 'gh', name: 'Ghanaian Cedi' },
+  { code: 'KES', flag: '🇰🇪', country: 'ke', name: 'Kenyan Shilling' },
+  { code: 'INR', flag: '🇮🇳', country: 'in', name: 'Indian Rupee' },
+  { code: 'PKR', flag: '🇵🇰', country: 'pk', name: 'Pakistani Rupee' },
+  { code: 'ZAR', flag: '🇿🇦', country: 'za', name: 'South African Rand' },
+  { code: 'PHP', flag: '🇵🇭', country: 'ph', name: 'Philippine Peso' },
 ];
 
 const QUICK_AMOUNTS: Record<string, number[]> = {
@@ -109,7 +109,7 @@ export default function Compare() {
                   onClick={() => setAmount(q)}
                   className={`px-3 py-1 text-label-sm rounded-full transition-colors ${
                     amount === q
-                      ? 'bg-primary-container text-primary font-semibold'
+                      ? 'bg-primary-container text-white font-semibold'
                       : 'bg-surface-container text-primary hover:bg-surface-variant'
                   }`}
                 >
@@ -131,14 +131,22 @@ export default function Compare() {
             <div>
               <label className="block text-label-sm text-on-surface-variant mb-2">Sending from</label>
               <div className="border border-outline-variant rounded-xl p-3 flex items-center gap-2 bg-surface-container-low">
-                <span className="text-xl">{fromData?.flag ?? '🌍'}</span>
+                {fromData?.country ? (
+                  <img src={`https://flagcdn.com/w40/${fromData.country}.png`} alt={fromData.name} className="w-6 h-4 object-cover rounded-[2px]" />
+                ) : (
+                  <span className="text-xl">{fromData?.flag ?? '🌍'}</span>
+                )}
                 <span className="text-body-md text-primary">{fromData?.name ?? fromCur}</span>
               </div>
             </div>
             <div>
               <label className="block text-label-sm text-on-surface-variant mb-2">Sending to</label>
               <div className="border border-outline-variant rounded-xl p-3 flex items-center gap-2 bg-surface-container-low">
-                <span className="text-xl">{toData?.flag ?? '🌍'}</span>
+                {toData?.country ? (
+                  <img src={`https://flagcdn.com/w40/${toData.country}.png`} alt={toData.name} className="w-6 h-4 object-cover rounded-[2px]" />
+                ) : (
+                  <span className="text-xl">{toData?.flag ?? '🌍'}</span>
+                )}
                 <select
                   value={toCur}
                   onChange={(e) => setToCur(e.target.value)}
@@ -164,7 +172,7 @@ export default function Compare() {
             <span className="text-label-sm font-medium">Swap currencies</span>
           </div>
 
-          <Button fullWidth size="lg" onClick={handleCompare}>
+          <Button fullWidth size="lg" className="text-white" onClick={handleCompare}>
             Compare Rates
           </Button>
         </div>

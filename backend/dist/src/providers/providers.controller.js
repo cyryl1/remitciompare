@@ -26,8 +26,8 @@ let ProvidersController = class ProvidersController {
     constructor(providersService) {
         this.providersService = providersService;
     }
-    findAll(page, limit, search) {
-        return this.providersService.findAll(page ? parseInt(page, 10) : 1, limit ? parseInt(limit, 10) : 20, search);
+    findAll(page, limit, search, sendCurrency, receiveCurrency) {
+        return this.providersService.findAll(page ? parseInt(page, 10) : 1, limit ? parseInt(limit, 10) : 20, search, sendCurrency, receiveCurrency);
     }
     findFeatured() {
         return this.providersService.findFeatured();
@@ -54,13 +54,16 @@ __decorate([
     (0, swagger_1.ApiOperation)({ summary: 'Get all active providers (public) or all providers (admin)' }),
     (0, swagger_1.ApiQuery)({ name: 'page', required: false, type: Number }),
     (0, swagger_1.ApiQuery)({ name: 'limit', required: false, type: Number }),
-    (0, swagger_1.ApiQuery)({ name: 'search', required: false, type: String }),
+    (0, swagger_1.ApiQuery)({ name: 'sendCurrency', required: false, type: String }),
+    (0, swagger_1.ApiQuery)({ name: 'receiveCurrency', required: false, type: String }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'List of providers' }),
     __param(0, (0, common_1.Query)('page')),
     __param(1, (0, common_1.Query)('limit')),
     __param(2, (0, common_1.Query)('search')),
+    __param(3, (0, common_1.Query)('sendCurrency')),
+    __param(4, (0, common_1.Query)('receiveCurrency')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String, String]),
     __metadata("design:returntype", void 0)
 ], ProvidersController.prototype, "findAll", null);
 __decorate([

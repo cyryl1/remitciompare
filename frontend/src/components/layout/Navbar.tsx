@@ -6,9 +6,9 @@ import { authApi } from '@/api/auth';
 import { cn } from '@/lib/utils';
 
 const NAV_LINKS = [
-  { to: '/compare',     label: 'Compare'      },
   { to: '/how-it-works', label: 'How It Works' },
-  { to: '/providers',  label: 'Providers'     },
+  { to: '/compare',      label: 'Compare'      },
+  { to: '/providers',    label: 'Providers'    },
 ];
 
 export function Navbar() {
@@ -84,7 +84,7 @@ export function Navbar() {
                 {userMenuOpen && (
                   <div className="absolute right-0 top-full mt-2 w-48 bg-surface-white border border-outline-variant rounded-xl shadow-modal py-1 animate-fade-in">
                     <Link
-                      to="/account"
+                      to="/settings"
                       onClick={() => setUserMenuOpen(false)}
                       className="flex items-center gap-2 px-4 py-2.5 text-body-sm hover:bg-surface-container-low transition-colors"
                     >
@@ -172,7 +172,7 @@ export function Navbar() {
             <hr className="my-2 border-outline-variant" />
             {isAuthenticated ? (
               <>
-                <Link to="/account" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-xl text-body-md hover:bg-surface-container-low">Account</Link>
+                <Link to="/settings" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-xl text-body-md hover:bg-surface-container-low">Account</Link>
                 <Link to="/history" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-xl text-body-md hover:bg-surface-container-low">History</Link>
                 <Link to="/alerts" onClick={() => setMobileOpen(false)} className="px-4 py-3 rounded-xl text-body-md hover:bg-surface-container-low">Alerts</Link>
                 <button onClick={handleLogout} className="px-4 py-3 rounded-xl text-body-md text-error text-left hover:bg-error-container">Sign Out</button>

@@ -49,10 +49,7 @@ export default function RateAlerts() {
         </div>
         
         <div className="flex flex-col gap-stack-sm min-w-[200px]">
-          <Button size="lg" className="bg-vibrant-green text-deep-navy shadow-sm w-full">
-            <Bell size={18} className="mr-2" />
-            Create Alert
-          </Button>
+
           <div className="flex items-center justify-between bg-surface-white rounded-lg p-3 border border-outline-variant shadow-sm">
             <div className="flex flex-col items-center">
               <span className="font-mono font-bold text-primary">{activeCount}</span>
@@ -220,7 +217,7 @@ export default function RateAlerts() {
                 hint="We'll email you when any provider offers this amount or more."
               />
 
-              <Button type="submit" fullWidth loading={createAlert.isPending}>
+              <Button type="submit" fullWidth loading={createAlert.isPending} className="text-white">
                 Set Alert
               </Button>
             </form>

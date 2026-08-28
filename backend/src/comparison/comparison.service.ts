@@ -43,13 +43,6 @@ export class ComparisonService {
       where: {
         isActive: true,
         status: 'INTEGRATED',
-        routes: {
-          some: {
-            fromCurrency: dto.sourceCurrency,
-            toCurrency: dto.targetCurrency,
-            isActive: true,
-          }
-        }
       },
       select: { slug: true }
     });

@@ -2,11 +2,15 @@ import { Controller, Get, Query } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ComparisonService, Priority } from '../comparison/comparison.service';
 import { CreateComparisonDto } from '../comparison/dto/create-comparison.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @ApiTags('rates')
 @Controller('api/rates')
 export class RatesController {
-  constructor(private readonly comparisonService: ComparisonService) {}
+  constructor(
+    private readonly comparisonService: ComparisonService,
+    private readonly prisma: PrismaService,
+  ) {}
 
   @Get('compare')
   @ApiOperation({ summary: 'Compare rates across providers' })
@@ -21,28 +25,63 @@ export class RatesController {
     dto.sourceCurrency = sendCurrency || 'GBP';
     dto.targetCurrency = receiveCurrency || 'NGN';
     dto.priority = Priority.MOST_RECEIVED;
-    dto.fromCountry = 'GB'; // Mocks
-    dto.toCountry = 'NG';   // Mocks
+    
+    // Simple mock mapping for from/to countries based on currency
+    const currencyToCountry: Record<string, string> = {
+      'GBP': 'GB',
+      'USD': 'US',
+      'EUR': 'FR', // or 'DE', etc
+      'CAD': 'CA',
+      'AUD': 'AU',
+      'NGN': 'NG',
+      'KES': 'KE',
+      'GHS': 'GH',
+      'INR': 'IN',
+    };
+    
+    dto.fromCountry = currencyToCountry[dto.sourceCurrency.toUpperCase()] || dto.sourceCurrency.substring(0, 2).toUpperCase();
+    dto.toCountry = currencyToCountry[dto.targetCurrency.toUpperCase()] || dto.targetCurrency.substring(0, 2).toUpperCase();
     
     // We don't save anonymous sessions automatically here to avoid duplicate comparisons
     // since the frontend calls POST /comparison to save.
-    const result = await this.comparisonService.compare(dto, undefined, undefined, false);
-    
-    return result.allQuotes.map(q => ({
-      providerId: q.provider, // We should map this properly, but slug acts as ID in frontend
-      providerName: q.provider.charAt(0).toUpperCase() + q.provider.slice(1),
-      providerSlug: q.provider.toLowerCase(),
-      providerLogo: `https://logo.clearbit.com/${q.provider.toLowerCase()}.com`, // Mock logo
-      exchangeRate: q.exchangeRate,
-      fee: q.totalFees,
-      feeType: 'flat', // Simplified for frontend
-      receiveAmount: q.recipientAmount,
-      deliveryTime: q.deliveryEstimate || '1-3 days',
-      deliveryMethods: [q.paymentMethod || 'Bank Transfer'],
-      transferLimit: { min: 10, max: 50000 }, // Mock
-      updatedAt: q.quoteTimestamp.toISOString(),
-      badge: result.recommended?.provider === q.provider ? 'best_rate' : null
-    }));
+    try {
+      const result = await this.comparisonService.compare(dto, undefined, undefined, false);
+      const providers = await this.prisma.provider.findMany();
+      const logoMap = new Map(providers.map(p => {
+        let logo = p.logoUrl;
+        try {
+          if (p.websiteUrl) {
+            const domain = new URL(p.websiteUrl).hostname;
+            logo = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+          }
+        } catch (e) {
+          // fallback to DB logo if URL parsing fails
+        }
+        return [p.name.toLowerCase(), logo];
+      }));
+      
+      return result.allQuotes.map(q => {
+        const slug = q.provider.toLowerCase().replace(/\s+/g, '');
+        return {
+          providerId: slug,
+          providerName: q.provider,
+          providerSlug: slug,
+          providerLogo: logoMap.get(q.provider.toLowerCase()),
+          exchangeRate: q.exchangeRate,
+          fee: q.totalFees,
+          feeType: 'flat', // Simplified for frontend
+          receiveAmount: q.recipientAmount,
+          deliveryTime: q.deliveryEstimate || '1-3 days',
+          deliveryMethods: [q.paymentMethod || 'Bank Transfer'],
+          transferLimit: { min: 10, max: 50000 }, // Mock
+          updatedAt: q.quoteTimestamp.toISOString(),
+          badge: result.recommended?.provider === q.provider ? 'best_rate' : null
+        };
+      });
+    } catch (error) {
+      console.error('ERROR in rates.controller.compare:', error);
+      throw new (require('@nestjs/common').HttpException)(error.message, 500);
+    }
   }
 
   @Get('history')

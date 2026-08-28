@@ -5,7 +5,7 @@ import { CreateRouteDto } from './dto/create-route.dto';
 export declare class ProvidersController {
     private readonly providersService;
     constructor(providersService: ProvidersService);
-    findAll(page?: string, limit?: string, search?: string): Promise<{
+    findAll(page?: string, limit?: string, search?: string, sendCurrency?: string, receiveCurrency?: string): Promise<{
         data: {
             id: string;
             slug: string;

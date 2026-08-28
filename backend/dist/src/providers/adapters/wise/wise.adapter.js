@@ -28,6 +28,7 @@ let WiseAdapter = WiseAdapter_1 = class WiseAdapter {
             }, {
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${process.env.WISE_API_KEY}`,
                 },
                 timeout: 4000
             });

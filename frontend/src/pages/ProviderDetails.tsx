@@ -51,8 +51,8 @@ export default function ProviderDetails() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary-fixed rounded-full blur-3xl opacity-20 -mr-20 -mt-20" />
         
         <div className="flex-shrink-0 bg-surface-container-low p-6 rounded-xl border border-surface-variant shadow-sm w-32 h-32 flex items-center justify-center z-10">
-          {provider.logo ? (
-            <img src={provider.logo} alt={provider.name} className="max-w-full max-h-full object-contain" />
+          {provider.logoUrl ? (
+            <img src={provider.logoUrl} alt={provider.name} className="max-w-full max-h-full object-contain" />
           ) : (
             <Building2 size={48} className="text-primary" />
           )}
@@ -76,7 +76,7 @@ export default function ProviderDetails() {
             </div>
             <div className="flex items-center gap-2">
               <Banknote className="text-primary" size={18} />
-              <span>TrustScore: {provider.rating}/10</span>
+              <span>TrustScore: {provider.rating}/5</span>
             </div>
             <div className="flex items-center gap-2">
               <Clock className="text-primary" size={18} />

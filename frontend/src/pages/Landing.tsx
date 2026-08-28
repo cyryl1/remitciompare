@@ -21,7 +21,7 @@ const CURRENCIES = [
 ];
 
 const TRUST_ITEMS = [
-  { icon: <Store size={20} />, label: 'Compare 20+ Providers' },
+  { icon: <Store size={20} />, label: 'Compare Top Providers' },
   { icon: <RefreshCw size={20} />, label: 'Real-time Exchange Rates' },
   { icon: <BadgeCheck size={20} />, label: '0% Hidden Fees' },
   { icon: <Shield size={20} />, label: 'Trustworthy & Secure' },
@@ -93,9 +93,9 @@ export default function Landing() {
             </p>
             <div className="flex flex-wrap gap-4 mt-8">
               {[
-                { icon: <CheckCircle size={18} />, label: '20+ Providers' },
+                { icon: <CheckCircle size={18} />, label: 'Top Providers' },
                 { icon: <Zap size={18} />, label: 'Real-time Rates' },
-                { icon: <Shield size={18} />, label: '0% Hidden Fees' },
+                { icon: <Shield size={18} />, label: 'No Hidden Fees' },
               ].map(({ icon, label }) => (
                 <div key={label} className="flex items-center gap-2 text-primary-fixed-dim">
                   {icon}

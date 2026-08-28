@@ -12,6 +12,8 @@ export declare class ComparisonController {
             sendCurrency: string;
             receiveCurrency: string;
             createdAt: string;
+            bestProviderName: string;
+            bestReceiveAmount: number;
             results: {
                 providerId: string;
                 providerName: string;

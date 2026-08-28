@@ -31,16 +31,24 @@ export class ProvidersService {
     };
   }
 
-  async findAll(page: number = 1, limit: number = 20, search?: string) {
+  async findAll(page: number = 1, limit: number = 20, search?: string, sendCurrency?: string, receiveCurrency?: string) {
     const skip = (page - 1) * limit;
     
-    const where = search 
-      ? { 
-          isActive: true, 
-          status: 'INTEGRATED' as const,
-          name: { contains: search, mode: 'insensitive' as const } 
-        } 
-      : { isActive: true, status: 'INTEGRATED' as const };
+    let where: any = { isActive: true, status: 'INTEGRATED' as const };
+    
+    if (search) {
+      where.name = { contains: search, mode: 'insensitive' as const };
+    }
+
+    if (sendCurrency || receiveCurrency) {
+      where.routes = {
+        some: {
+          ...(sendCurrency && { fromCurrency: sendCurrency }),
+          ...(receiveCurrency && { toCurrency: receiveCurrency }),
+          isActive: true
+        }
+      };
+    }
 
     const [providers, total] = await Promise.all([
       this.prisma.provider.findMany({

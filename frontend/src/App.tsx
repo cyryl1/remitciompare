@@ -31,7 +31,7 @@ export default function App() {
           <Route path="/compare" element={<Compare />} />
           <Route path="/compare/results" element={<CompareResult />} />
           <Route path="/providers" element={<ProviderDirectory />} />
-          <Route path="/providers/:id" element={<ProviderDetails />} />
+          <Route path="/providers/:slug" element={<ProviderDetails />} />
           <Route path="/handoff" element={<ProviderHandoff />} />
           <Route path="/how-it-works" element={<HowItWorks />} />
           <Route path="/history/rates" element={<RateHistory />} />

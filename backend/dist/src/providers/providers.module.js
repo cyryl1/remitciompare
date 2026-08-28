@@ -12,6 +12,10 @@ const wise_adapter_1 = require("./adapters/wise/wise.adapter");
 const lemfi_adapter_1 = require("./adapters/lemfi/lemfi.adapter");
 const remitly_adapter_1 = require("./adapters/remitly/remitly.adapter");
 const worldremit_adapter_1 = require("./adapters/worldremit/worldremit.adapter");
+const westernunion_adapter_1 = require("./adapters/westernunion/westernunion.adapter");
+const revolut_adapter_1 = require("./adapters/revolut/revolut.adapter");
+const sendwave_adapter_1 = require("./adapters/sendwave/sendwave.adapter");
+const ria_adapter_1 = require("./adapters/ria/ria.adapter");
 const providers_service_1 = require("./providers.service");
 const providers_controller_1 = require("./providers.controller");
 const prisma_module_1 = require("../prisma/prisma.module");
@@ -29,12 +33,19 @@ exports.ProvidersModule = ProvidersModule = __decorate([
             lemfi_adapter_1.LemFiAdapter,
             remitly_adapter_1.RemitlyAdapter,
             worldremit_adapter_1.WorldRemitAdapter,
+            westernunion_adapter_1.WesternUnionAdapter,
+            revolut_adapter_1.RevolutAdapter,
+            sendwave_adapter_1.SendwaveAdapter,
+            ria_adapter_1.RiaAdapter,
             {
                 provide: exports.PROVIDER_ADAPTERS,
-                useFactory: (wise, lemfi, remitly, worldremit) => {
-                    return [wise, lemfi, remitly, worldremit];
+                useFactory: (wise, lemfi, remitly, worldremit, wu, rev, sw, ria) => {
+                    return [wise, lemfi, remitly, worldremit, wu, rev, sw, ria];
                 },
-                inject: [wise_adapter_1.WiseAdapter, lemfi_adapter_1.LemFiAdapter, remitly_adapter_1.RemitlyAdapter, worldremit_adapter_1.WorldRemitAdapter],
+                inject: [
+                    wise_adapter_1.WiseAdapter, lemfi_adapter_1.LemFiAdapter, remitly_adapter_1.RemitlyAdapter, worldremit_adapter_1.WorldRemitAdapter,
+                    westernunion_adapter_1.WesternUnionAdapter, revolut_adapter_1.RevolutAdapter, sendwave_adapter_1.SendwaveAdapter, ria_adapter_1.RiaAdapter
+                ],
             },
         ],
         exports: [exports.PROVIDER_ADAPTERS],

@@ -103,7 +103,7 @@ export default function HowItWorks() {
               <span className="text-label-sm text-secondary uppercase tracking-widest font-bold block mb-2">Step 2</span>
               <h3 className="font-display text-headline-md text-primary mb-3">Compare your options</h3>
               <p className="text-body-md text-on-surface-variant">
-                We instantly query real-time data from over 20+ verified global money transfer providers. We show you the actual exchange rates, transfer fees, and the exact amount your recipient will receive.
+                We instantly query real-time data from top verified global money transfer providers. We show you the actual exchange rates, transfer fees, and the exact amount your recipient will receive.
               </p>
               <ul className="mt-4 space-y-2 text-body-sm text-on-surface text-left max-w-sm mx-auto md:mx-0">
                 <li className="flex items-center gap-2"><ArrowRight size={16} className="text-vibrant-green" /> Sort by best value</li>
@@ -145,7 +145,7 @@ export default function HowItWorks() {
           <div className="bg-surface-container rounded-2xl p-stack-lg border border-outline-variant text-center">
              <h3 className="font-display text-headline-sm text-primary mb-4">Start saving on your next transfer</h3>
              <Link to="/compare">
-               <Button size="lg" fullWidth>Compare Rates Now</Button>
+               <Button size="lg" fullWidth className="text-white">Compare Rates Now</Button>
              </Link>
           </div>
         </div>

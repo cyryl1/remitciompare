@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { RefreshCw, Filter, AlertCircle, Edit2 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
@@ -7,16 +7,52 @@ import { RateRow } from '@/components/providers/RateRow';
 import { PageWrapper } from '@/components/layout/PageWrapper';
 import { useCompareStore } from '@/store/compareStore';
 import { useCompareRates } from '@/hooks/useRates';
+import { useSaveComparison } from '@/hooks/useComparison';
 import { formatRate } from '@/lib/utils';
 
 type SortOption = 'value' | 'speed' | 'fee';
 
+const CURRENCY_TO_COUNTRY: Record<string, string> = {
+  GBP: 'gb',
+  USD: 'us',
+  EUR: 'eu',
+  NGN: 'ng',
+  GHS: 'gh',
+  KES: 'ke',
+  INR: 'in',
+  PKR: 'pk',
+  ZAR: 'za',
+  PHP: 'ph',
+};
+
 export default function CompareResult() {
   const navigate = useNavigate();
-  const params = useCompareStore();
+  const store = useCompareStore();
+  const params = {
+    sendAmount: store.sendAmount,
+    sendCurrency: store.sendCurrency,
+    receiveCurrency: store.receiveCurrency
+  };
   const { data: rates, isLoading, isError, refetch, isFetching } = useCompareRates(params);
+  const { mutate: saveComparison } = useSaveComparison();
+  const savedParamsRef = useRef<string | null>(null);
 
   const [sort, setSort] = useState<SortOption>('value');
+
+  useEffect(() => {
+    if (rates && rates.length > 0) {
+      const currentParamsKey = JSON.stringify(params);
+      if (savedParamsRef.current !== currentParamsKey) {
+        saveComparison({
+          sendAmount: params.sendAmount,
+          sendCurrency: params.sendCurrency,
+          receiveCurrency: params.receiveCurrency,
+          results: rates,
+        });
+        savedParamsRef.current = currentParamsKey;
+      }
+    }
+  }, [rates, params, saveComparison]);
 
   const sortedRates = useMemo(() => {
     if (!rates) return [];
@@ -28,7 +64,7 @@ export default function CompareResult() {
     });
   }, [rates, sort]);
 
-  if (!params.hasSearched) {
+  if (!store.hasSearched) {
     // If they landed here directly without searching, send them back
     navigate('/compare');
     return null;
@@ -41,12 +77,20 @@ export default function CompareResult() {
         <div className="max-w-container-max mx-auto px-gutter flex flex-col md:flex-row justify-between items-center gap-4">
           <div className="flex items-center gap-4 text-primary font-display font-semibold text-headline-sm">
             <span className="flex items-center gap-2">
-              <span className="text-2xl">🌍</span>
+              {CURRENCY_TO_COUNTRY[params.sendCurrency] ? (
+                <img src={`https://flagcdn.com/w40/${CURRENCY_TO_COUNTRY[params.sendCurrency]}.png`} alt={params.sendCurrency} className="w-6 h-4 object-cover rounded-[2px]" />
+              ) : (
+                <span className="text-2xl">🌍</span>
+              )}
               {params.sendAmount.toLocaleString('en-GB')} {params.sendCurrency}
             </span>
             <ArrowRightIcon className="text-secondary opacity-50" />
             <span className="flex items-center gap-2">
-              <span className="text-2xl">🌍</span>
+              {CURRENCY_TO_COUNTRY[params.receiveCurrency] ? (
+                <img src={`https://flagcdn.com/w40/${CURRENCY_TO_COUNTRY[params.receiveCurrency]}.png`} alt={params.receiveCurrency} className="w-6 h-4 object-cover rounded-[2px]" />
+              ) : (
+                <span className="text-2xl">🌍</span>
+              )}
               {params.receiveCurrency}
             </span>
           </div>

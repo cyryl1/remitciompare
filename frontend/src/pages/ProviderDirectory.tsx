@@ -7,8 +7,16 @@ import { PageSpinner } from '@/components/ui/Spinner';
 import { useProviders } from '@/hooks/useProviders';
 
 export default function ProviderDirectory() {
-  const { data: providers, isLoading } = useProviders();
   const [search, setSearch] = useState('');
+  const [sendCur, setSendCur] = useState('GBP');
+  const [recvCur, setRecvCur] = useState('NGN');
+  const [queryParams, setQueryParams] = useState<any>({});
+  
+  const { data: providers, isLoading } = useProviders(queryParams);
+
+  const handleCheckAvailability = () => {
+    setQueryParams({ sendCurrency: sendCur, receiveCurrency: recvCur });
+  };
 
   const filteredProviders = providers?.data?.filter(
     (p: any) =>
@@ -21,7 +29,7 @@ export default function ProviderDirectory() {
       {/* ── Hero ──────────────────────────────────────────────────────── */}
       <section className="bg-primary-container text-on-primary pt-section-gap pb-12 px-gutter relative overflow-hidden">
         <div className="absolute inset-0 opacity-10 pointer-events-none" style={{ backgroundImage: 'radial-gradient(#ffffff 1px, transparent 1px)', backgroundSize: '32px 32px' }} />
-        
+
         <div className="max-w-container-max mx-auto relative z-10 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="max-w-2xl">
             <h1 className="font-display text-display-lg mb-stack-md text-white">Money Transfer Providers</h1>
@@ -44,8 +52,14 @@ export default function ProviderDirectory() {
                 <div className="relative">
                   <PlaneTakeoff className="absolute left-3 top-1/2 -translate-y-1/2 text-data-gray" size={18} />
                   <select className="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant bg-surface-white text-primary focus-ring">
-                    <option>United Kingdom (GBP)</option>
-                    <option>United States (USD)</option>
+                    <option value="GBP">United Kingdom (GBP)</option>
+                    <option value="USD">United States (USD)</option>
+                    <option value="EUR">Germany (EUR)</option>
+                    <option value="EUR">France (EUR)</option>
+                    <option value="EUR">Spain (EUR)</option>
+                    <option value="EUR">Italy (EUR)</option>
+                    <option value="CAD">Canada (CAD)</option>
+                    <option value="AUD">Australia (AUD)</option>
                   </select>
                 </div>
               </div>
@@ -54,12 +68,17 @@ export default function ProviderDirectory() {
                 <div className="relative">
                   <PlaneLanding className="absolute left-3 top-1/2 -translate-y-1/2 text-data-gray" size={18} />
                   <select className="w-full pl-10 pr-4 py-3 rounded-lg border border-outline-variant bg-surface-white text-primary focus-ring">
-                    <option>Nigeria (NGN)</option>
-                    <option>India (INR)</option>
+                    <option value="NGN">Nigeria (NGN)</option>
+                    <option value="INR">India (INR)</option>
+                    <option value="GHS">Ghana (GHS)</option>
+                    <option value="KES">Kenya (KES)</option>
+                    <option value="PHP">Philippines (PHP)</option>
+                    <option value="PKR">Pakistan (PKR)</option>
+                    <option value="ZAR">South Africa (ZAR)</option>
                   </select>
                 </div>
               </div>
-              <Button fullWidth>Show Providers</Button>
+              <Button fullWidth className="text-white">Show Providers</Button>
             </div>
           </div>
         </div>
@@ -110,10 +129,10 @@ export default function ProviderDirectory() {
                       {provider.name}
                       {provider.isFeatured && <CheckCircle2 size={16} className="text-vibrant-green" />}
                     </h3>
-                    <p className="text-label-sm text-on-surface-variant">TrustScore: {provider.trustScore}/10</p>
+                    <p className="text-label-sm text-on-surface-variant">TrustScore: {provider.rating}/5</p>
                   </div>
                 </div>
-                
+
                 <p className="text-body-sm text-on-surface-variant line-clamp-2 mb-6 flex-grow">
                   {provider.description || `${provider.name} offers fast and secure international money transfers.`}
                 </p>
