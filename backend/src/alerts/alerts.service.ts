@@ -14,10 +14,10 @@ export class AlertsService {
   async getAlerts(userId: string) {
     const alerts = await this.prisma.alert.findMany({
       where: { userId },
-      orderBy: { createdAt: 'desc' }
+      orderBy: { createdAt: 'desc' },
     });
 
-    return alerts.map(a => ({
+    return alerts.map((a) => ({
       id: a.id,
       sendCurrency: a.fromCurrency,
       receiveCurrency: a.toCurrency,
@@ -25,7 +25,7 @@ export class AlertsService {
       condition: 'above', // Mocked or map properly
       targetRate: 0, // Mock or calculate
       targetReceiveAmount: a.targetRecipientAmount || 0,
-      currentRate: 0, 
+      currentRate: 0,
       status: a.status.toLowerCase(),
       notifyEmail: true,
       notifyPush: false,
@@ -44,9 +44,9 @@ export class AlertsService {
         sendAmount: data.sendAmount || 1000,
         priority: 'MOST_RECEIVED',
         status: 'ACTIVE',
-      }
+      },
     });
-    
+
     return {
       id: alert.id,
       sendCurrency: alert.fromCurrency,
@@ -69,7 +69,7 @@ export class AlertsService {
         targetRecipientAmount: data.targetReceiveAmount,
         sendAmount: data.sendAmount,
         status: data.status ? data.status.toUpperCase() : undefined,
-      }
+      },
     });
     return alert;
   }
@@ -83,16 +83,16 @@ export class AlertsService {
   async toggleAlert(userId: string, id: string) {
     const alert = await this.prisma.alert.findUnique({ where: { id, userId } });
     if (!alert) throw new Error('Alert not found');
-    
+
     const newStatus = alert.status === 'ACTIVE' ? 'PAUSED' : 'ACTIVE';
     const updated = await this.prisma.alert.update({
       where: { id },
-      data: { status: newStatus as any }
+      data: { status: newStatus as any },
     });
-    
+
     return {
       ...updated,
-      status: updated.status.toLowerCase()
+      status: updated.status.toLowerCase(),
     };
   }
 
@@ -116,10 +116,13 @@ export class AlertsService {
     });
 
     for (const alert of activeAlerts) {
-      if (alert.targetRecipientAmount && recipientAmount >= alert.targetRecipientAmount) {
+      if (
+        alert.targetRecipientAmount &&
+        recipientAmount >= alert.targetRecipientAmount
+      ) {
         this.logger.log(
           `Alert ${alert.id} triggered for user ${alert.userId}: ` +
-          `Target ${alert.targetRecipientAmount}, Actual ${recipientAmount} via ${provider}`,
+            `Target ${alert.targetRecipientAmount}, Actual ${recipientAmount} via ${provider}`,
         );
 
         // Update the alert record

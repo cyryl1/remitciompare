@@ -85,8 +85,26 @@ export default function ProviderDetails() {
           </div>
 
           <div className="flex flex-col sm:flex-row gap-4">
-            <Button size="lg" className="bg-vibrant-green text-deep-navy hover:brightness-110">
-              Compare with {provider.name}
+            <Button 
+              size="lg" 
+              className="bg-vibrant-green text-deep-navy hover:brightness-110" 
+              onClick={() => navigate(`/providers/${provider.slug}/send`, {
+                state: {
+                  result: {
+                    providerId: provider.id,
+                    providerName: provider.name,
+                    providerSlug: provider.slug,
+                    providerLogo: provider.logoUrl,
+                    exchangeRate: 0,
+                    fee: 0,
+                    receiveAmount: 0,
+                    deliveryTime: 'Varies',
+                    badge: null
+                  }
+                }
+              })}
+            >
+              Send with {provider.name}
             </Button>
             <Button variant="outline" size="lg" onClick={() => navigate('/compare')}>
               Compare All Rates

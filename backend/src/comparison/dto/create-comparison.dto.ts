@@ -1,4 +1,11 @@
-import { IsString, IsNotEmpty, IsNumber, IsOptional, Min, IsEnum } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  Min,
+  IsEnum,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { Priority } from '../comparison.service';
 
@@ -18,12 +25,18 @@ export class CreateComparisonDto {
   @IsOptional()
   fromCountry?: string = 'GB'; // Default to GB for MVP
 
-  @ApiPropertyOptional({ example: 'NG', description: 'Destination country code' })
+  @ApiPropertyOptional({
+    example: 'NG',
+    description: 'Destination country code',
+  })
   @IsString()
   @IsOptional()
   toCountry?: string = 'NG'; // Default to NG for MVP
 
-  @ApiProperty({ example: 1000, description: 'Amount to send in source currency' })
+  @ApiProperty({
+    example: 1000,
+    description: 'Amount to send in source currency',
+  })
   @IsNumber()
   @Min(1)
   sendAmount: number;

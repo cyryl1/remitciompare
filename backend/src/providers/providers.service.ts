@@ -31,11 +31,17 @@ export class ProvidersService {
     };
   }
 
-  async findAll(page: number = 1, limit: number = 20, search?: string, sendCurrency?: string, receiveCurrency?: string) {
+  async findAll(
+    page: number = 1,
+    limit: number = 20,
+    search?: string,
+    sendCurrency?: string,
+    receiveCurrency?: string,
+  ) {
     const skip = (page - 1) * limit;
-    
-    let where: any = { isActive: true, status: 'INTEGRATED' as const };
-    
+
+    const where: any = { isActive: true, status: 'INTEGRATED' as const };
+
     if (search) {
       where.name = { contains: search, mode: 'insensitive' as const };
     }
@@ -45,8 +51,8 @@ export class ProvidersService {
         some: {
           ...(sendCurrency && { fromCurrency: sendCurrency }),
           ...(receiveCurrency && { toCurrency: receiveCurrency }),
-          isActive: true
-        }
+          isActive: true,
+        },
       };
     }
 
@@ -81,11 +87,11 @@ export class ProvidersService {
       where: { slug },
       include: { routes: true },
     });
-    
+
     if (!provider) {
       throw new NotFoundException(`Provider with slug '${slug}' not found`);
     }
-    
+
     return this.mapToFrontendProvider(provider);
   }
 
@@ -118,9 +124,13 @@ export class ProvidersService {
 
   async addRoute(providerId: string, createRouteDto: CreateRouteDto) {
     // Verify provider exists
-    await this.prisma.provider.findUniqueOrThrow({ where: { id: providerId } }).catch(() => {
-      throw new NotFoundException(`Provider with ID '${providerId}' not found`);
-    });
+    await this.prisma.provider
+      .findUniqueOrThrow({ where: { id: providerId } })
+      .catch(() => {
+        throw new NotFoundException(
+          `Provider with ID '${providerId}' not found`,
+        );
+      });
 
     return this.prisma.providerRoute.create({
       data: {

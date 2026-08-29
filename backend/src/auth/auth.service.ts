@@ -1,4 +1,9 @@
-import { Injectable, UnauthorizedException, BadRequestException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  UnauthorizedException,
+  BadRequestException,
+  ConflictException,
+} from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
@@ -8,7 +13,8 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { EmailService } from '../email/email.service';
-
+import { FirebaseLoginDto } from './dto/firebase-login.dto';
+import { auth as firebaseAuthAdmin } from '../lib/firebase-admin';
 @Injectable()
 export class AuthService {
   constructor(
@@ -19,7 +25,9 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
-    const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const existing = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
     if (existing) {
       throw new ConflictException('Email already in use');
     }
@@ -36,13 +44,18 @@ export class AuthService {
       },
     });
 
-    await this.emailService.sendVerificationEmail(user.email, verificationToken);
+    await this.emailService.sendVerificationEmail(
+      user.email,
+      verificationToken,
+    );
 
     return this.generateTokens(user);
   }
 
   async login(dto: LoginDto) {
-    const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
+    const user = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
     if (!user || !user.passwordHash) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -53,6 +66,48 @@ export class AuthService {
     }
 
     return this.generateTokens(user);
+  }
+
+  async firebaseLogin(dto: FirebaseLoginDto) {
+    try {
+      const decodedToken = await firebaseAuthAdmin.verifyIdToken(dto.token);
+      const email = decodedToken.email;
+      if (!email) {
+        throw new UnauthorizedException('No email found in Firebase token');
+      }
+
+      let user = await this.prisma.user.findUnique({ where: { email } });
+
+      if (!user) {
+        // Create user
+        let fullName = decodedToken.name || '';
+        if (!fullName && (dto.firstName || dto.lastName)) {
+          fullName = `${dto.firstName || ''} ${dto.lastName || ''}`.trim();
+        }
+
+        user = await this.prisma.user.create({
+          data: {
+            email,
+            fullName,
+            emailVerified: decodedToken.email_verified || true,
+          },
+        });
+      } else {
+        // Optionally update emailVerified status based on Firebase
+        if (!user.emailVerified && decodedToken.email_verified) {
+          user = await this.prisma.user.update({
+            where: { id: user.id },
+            data: { emailVerified: true },
+          });
+        }
+      }
+
+      return this.generateTokens(user);
+    } catch (error: any) {
+      throw new UnauthorizedException(
+        error.message || 'Invalid Firebase token',
+      );
+    }
   }
 
   async refreshTokens(userId: string) {
@@ -135,7 +190,7 @@ export class AuthService {
 
   private async generateTokens(user: any) {
     const payload = { sub: user.id, email: user.email, role: user.role };
-    
+
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(payload, {
         secret: this.configService.get<string>('JWT_SECRET'),
@@ -151,6 +206,17 @@ export class AuthService {
     const firstName = nameParts[0];
     const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
 
-    return { accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, emailVerified: user.emailVerified, firstName, lastName } };
+    return {
+      accessToken,
+      refreshToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+        emailVerified: user.emailVerified,
+        firstName,
+        lastName,
+      },
+    };
   }
 }

@@ -1,13 +1,29 @@
-import { Controller, Post, Body, HttpCode, HttpStatus, UseGuards, Get, Req, Res } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  Get,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
+import { FirebaseLoginDto } from './dto/firebase-login.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+} from '@nestjs/swagger';
 import type { Request, Response } from 'express';
 
 @ApiTags('auth')
@@ -19,8 +35,12 @@ export class AuthController {
   @ApiOperation({ summary: 'Register a new user' })
   @ApiResponse({ status: 201, description: 'User successfully registered' })
   @ApiResponse({ status: 409, description: 'Email already in use' })
-  async register(@Body() registerDto: RegisterDto, @Res({ passthrough: true }) res: Response) {
-    const { accessToken, refreshToken, user } = await this.authService.register(registerDto);
+  async register(
+    @Body() registerDto: RegisterDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { accessToken, refreshToken, user } =
+      await this.authService.register(registerDto);
     this.setAuthCookies(res, accessToken, refreshToken);
     return { accessToken, user };
   }
@@ -30,8 +50,30 @@ export class AuthController {
   @ApiOperation({ summary: 'Login user' })
   @ApiResponse({ status: 200, description: 'User successfully logged in' })
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
-  async login(@Body() loginDto: LoginDto, @Res({ passthrough: true }) res: Response) {
-    const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
+  async login(
+    @Body() loginDto: LoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { accessToken, refreshToken, user } =
+      await this.authService.login(loginDto);
+    this.setAuthCookies(res, accessToken, refreshToken);
+    return { accessToken, user };
+  }
+
+  @Post('firebase-login')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Login/Register via Firebase ID Token' })
+  @ApiResponse({
+    status: 200,
+    description: 'User successfully authenticated via Firebase',
+  })
+  @ApiResponse({ status: 401, description: 'Invalid Firebase token' })
+  async firebaseLogin(
+    @Body() dto: FirebaseLoginDto,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const { accessToken, refreshToken, user } =
+      await this.authService.firebaseLogin(dto);
     this.setAuthCookies(res, accessToken, refreshToken);
     return { accessToken, user };
   }
@@ -39,11 +81,14 @@ export class AuthController {
   @Post('refresh')
   @UseGuards(JwtRefreshGuard)
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Refresh access token using refresh token in body or cookie' })
+  @ApiOperation({
+    summary: 'Refresh access token using refresh token in body or cookie',
+  })
   @ApiResponse({ status: 200, description: 'New tokens generated' })
   async refresh(@Req() req: any, @Res({ passthrough: true }) res: Response) {
     const userId = req.user.id;
-    const { accessToken, refreshToken, user } = await this.authService.refreshTokens(userId);
+    const { accessToken, refreshToken, user } =
+      await this.authService.refreshTokens(userId);
     this.setAuthCookies(res, accessToken, refreshToken);
     return { user };
   }
@@ -71,7 +116,10 @@ export class AuthController {
   @Post('forgot-password')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Request password reset email' })
-  @ApiResponse({ status: 200, description: 'Reset email sent (if account exists)' })
+  @ApiResponse({
+    status: 200,
+    description: 'Reset email sent (if account exists)',
+  })
   async forgotPassword(@Body() forgotPasswordDto: ForgotPasswordDto) {
     return this.authService.forgotPassword(forgotPasswordDto.email);
   }
@@ -103,7 +151,11 @@ export class AuthController {
     return req.user;
   }
 
-  private setAuthCookies(res: Response, accessToken: string, refreshToken: string) {
+  private setAuthCookies(
+    res: Response,
+    accessToken: string,
+    refreshToken: string,
+  ) {
     res.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',

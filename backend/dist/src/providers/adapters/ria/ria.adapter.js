@@ -17,7 +17,7 @@ let RiaAdapter = RiaAdapter_1 = class RiaAdapter {
         await new Promise((r) => setTimeout(r, 45 + Math.random() * 60));
         const baseRate = this.getMockRate(request.sourceCurrency, request.targetCurrency);
         const rate = baseRate * (1 - Math.random() * 0.015);
-        const totalFees = 3.00;
+        const totalFees = 3.0;
         const recipientAmount = (request.sendAmount - totalFees) * rate;
         return {
             provider: this.name,
@@ -38,7 +38,10 @@ let RiaAdapter = RiaAdapter_1 = class RiaAdapter {
     }
     getMockRate(from, to) {
         const rates = {
-            'GBP-NGN': 2050, 'USD-NGN': 1600, 'EUR-NGN': 1730, 'CAD-NGN': 1180,
+            'GBP-NGN': 2050,
+            'USD-NGN': 1600,
+            'EUR-NGN': 1730,
+            'CAD-NGN': 1180,
         };
         return rates[`${from}-${to}`] ?? 1590;
     }

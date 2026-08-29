@@ -50,6 +50,7 @@ const config_1 = require("@nestjs/config");
 const bcrypt = __importStar(require("bcryptjs"));
 const crypto = __importStar(require("crypto"));
 const email_service_1 = require("../email/email.service");
+const firebase_admin_1 = require("../lib/firebase-admin");
 let AuthService = class AuthService {
     prisma;
     jwtService;
@@ -62,7 +63,9 @@ let AuthService = class AuthService {
         this.emailService = emailService;
     }
     async register(dto) {
-        const existing = await this.prisma.user.findUnique({ where: { email: dto.email } });
+        const existing = await this.prisma.user.findUnique({
+            where: { email: dto.email },
+        });
         if (existing) {
             throw new common_1.ConflictException('Email already in use');
         }
@@ -80,7 +83,9 @@ let AuthService = class AuthService {
         return this.generateTokens(user);
     }
     async login(dto) {
-        const user = await this.prisma.user.findUnique({ where: { email: dto.email } });
+        const user = await this.prisma.user.findUnique({
+            where: { email: dto.email },
+        });
         if (!user || !user.passwordHash) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
@@ -89,6 +94,41 @@ let AuthService = class AuthService {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
         return this.generateTokens(user);
+    }
+    async firebaseLogin(dto) {
+        try {
+            const decodedToken = await firebase_admin_1.auth.verifyIdToken(dto.token);
+            const email = decodedToken.email;
+            if (!email) {
+                throw new common_1.UnauthorizedException('No email found in Firebase token');
+            }
+            let user = await this.prisma.user.findUnique({ where: { email } });
+            if (!user) {
+                let fullName = decodedToken.name || '';
+                if (!fullName && (dto.firstName || dto.lastName)) {
+                    fullName = `${dto.firstName || ''} ${dto.lastName || ''}`.trim();
+                }
+                user = await this.prisma.user.create({
+                    data: {
+                        email,
+                        fullName,
+                        emailVerified: decodedToken.email_verified || true,
+                    },
+                });
+            }
+            else {
+                if (!user.emailVerified && decodedToken.email_verified) {
+                    user = await this.prisma.user.update({
+                        where: { id: user.id },
+                        data: { emailVerified: true },
+                    });
+                }
+            }
+            return this.generateTokens(user);
+        }
+        catch (error) {
+            throw new common_1.UnauthorizedException(error.message || 'Invalid Firebase token');
+        }
     }
     async refreshTokens(userId) {
         const user = await this.prisma.user.findUnique({ where: { id: userId } });
@@ -167,7 +207,18 @@ let AuthService = class AuthService {
         const nameParts = user.fullName ? user.fullName.split(' ') : [''];
         const firstName = nameParts[0];
         const lastName = nameParts.length > 1 ? nameParts.slice(1).join(' ') : '';
-        return { accessToken, refreshToken, user: { id: user.id, email: user.email, role: user.role, emailVerified: user.emailVerified, firstName, lastName } };
+        return {
+            accessToken,
+            refreshToken,
+            user: {
+                id: user.id,
+                email: user.email,
+                role: user.role,
+                emailVerified: user.emailVerified,
+                firstName,
+                lastName,
+            },
+        };
     }
 };
 exports.AuthService = AuthService;

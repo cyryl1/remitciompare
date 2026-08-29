@@ -1,5 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { BaseProviderAdapter, ProviderQuote, QuoteRequest } from '../../interfaces/provider-adapter.interface';
+import {
+  BaseProviderAdapter,
+  ProviderQuote,
+  QuoteRequest,
+} from '../../interfaces/provider-adapter.interface';
 import axios from 'axios';
 
 @Injectable()
@@ -13,7 +17,9 @@ export class WiseAdapter implements BaseProviderAdapter {
 
   async getQuote(request: QuoteRequest): Promise<ProviderQuote> {
     try {
-      this.logger.debug(`Fetching Wise quote for ${request.sendAmount} ${request.sourceCurrency} to ${request.targetCurrency}`);
+      this.logger.debug(
+        `Fetching Wise quote for ${request.sendAmount} ${request.sourceCurrency} to ${request.targetCurrency}`,
+      );
 
       const response = await axios.post(
         this.apiUrl,
@@ -22,23 +28,26 @@ export class WiseAdapter implements BaseProviderAdapter {
           targetCurrency: request.targetCurrency,
           sourceAmount: request.sendAmount,
           // For MVP, we default to bank transfer payouts
-          payOut: 'BANK_TRANSFER'
+          payOut: 'BANK_TRANSFER',
         },
         {
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${process.env.WISE_API_KEY}`,
+            Authorization: `Bearer ${process.env.WISE_API_KEY}`,
           },
-          timeout: 4000 // Slightly under the 5s global timeout
-        }
+          timeout: 4000, // Slightly under the 5s global timeout
+        },
       );
 
       const data = response.data;
 
       // Wise usually returns an array of payment options in the quote response.
       // We will find the one corresponding to BANK_TRANSFER.
-      const paymentOption = data.paymentOptions.find((opt: any) => opt.payIn === 'BANK_TRANSFER' && opt.payOut === 'BANK_TRANSFER')
-        || data.paymentOptions[0];
+      const paymentOption =
+        data.paymentOptions.find(
+          (opt: any) =>
+            opt.payIn === 'BANK_TRANSFER' && opt.payOut === 'BANK_TRANSFER',
+        ) || data.paymentOptions[0];
 
       if (!paymentOption) {
         throw new Error('No valid payment options returned from Wise.');
@@ -50,7 +59,8 @@ export class WiseAdapter implements BaseProviderAdapter {
         sourceCurrency: request.sourceCurrency,
         targetCurrency: request.targetCurrency,
         exchangeRate: data.rate,
-        grossRecipientAmount: paymentOption.targetAmount + paymentOption.fee.total, // Rough gross calculation
+        grossRecipientAmount:
+          paymentOption.targetAmount + paymentOption.fee.total, // Rough gross calculation
         fees: {
           fixed: paymentOption.fee.transferwise, // Wise uses 'transferwise' or 'total' for fees
           percentage: 0,
@@ -64,7 +74,7 @@ export class WiseAdapter implements BaseProviderAdapter {
         paymentMethod: paymentOption.payIn,
         quoteTimestamp: new Date(),
         expiresAt: new Date(data.expirationTime),
-        status: 'SUCCESS'
+        status: 'SUCCESS',
       };
 
       return quote;
@@ -86,7 +96,7 @@ export class WiseAdapter implements BaseProviderAdapter {
         paymentMethod: '',
         quoteTimestamp: new Date(),
         expiresAt: null,
-        status: 'FAILED'
+        status: 'FAILED',
       };
     }
   }

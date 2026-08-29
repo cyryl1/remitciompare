@@ -51,7 +51,9 @@ let ProvidersController = class ProvidersController {
 exports.ProvidersController = ProvidersController;
 __decorate([
     (0, common_1.Get)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Get all active providers (public) or all providers (admin)' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get all active providers (public) or all providers (admin)',
+    }),
     (0, swagger_1.ApiQuery)({ name: 'page', required: false, type: Number }),
     (0, swagger_1.ApiQuery)({ name: 'limit', required: false, type: Number }),
     (0, swagger_1.ApiQuery)({ name: 'sendCurrency', required: false, type: String }),

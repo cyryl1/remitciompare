@@ -61,7 +61,9 @@ __decorate([
 ], AdminController.prototype, "getQuoteFailures", null);
 __decorate([
     (0, common_1.Get)('stats'),
-    (0, swagger_1.ApiOperation)({ summary: 'Get dashboard stats (users, providers, comparisons)' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get dashboard stats (users, providers, comparisons)',
+    }),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)

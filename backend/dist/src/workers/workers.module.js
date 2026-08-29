@@ -14,6 +14,9 @@ const snapshot_processor_1 = require("./snapshot.processor");
 const prisma_module_1 = require("../prisma/prisma.module");
 const providers_module_1 = require("../providers/providers.module");
 const alerts_module_1 = require("../alerts/alerts.module");
+const email_module_1 = require("../email/email.module");
+const comparison_module_1 = require("../comparison/comparison.module");
+const alerts_worker_1 = require("./alerts.worker");
 let WorkersModule = class WorkersModule {
 };
 exports.WorkersModule = WorkersModule;
@@ -26,8 +29,10 @@ exports.WorkersModule = WorkersModule = __decorate([
             prisma_module_1.PrismaModule,
             providers_module_1.ProvidersModule,
             alerts_module_1.AlertsModule,
+            email_module_1.EmailModule,
+            comparison_module_1.ComparisonModule,
         ],
-        providers: [snapshot_producer_1.SnapshotProducer, snapshot_processor_1.SnapshotProcessor],
+        providers: [snapshot_producer_1.SnapshotProducer, snapshot_processor_1.SnapshotProcessor, alerts_worker_1.AlertsWorkerService],
     })
 ], WorkersModule);
 //# sourceMappingURL=workers.module.js.map

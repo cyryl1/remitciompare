@@ -30,7 +30,12 @@ let ComparisonController = class ComparisonController {
         const user = req.user;
         const anonymousSessionId = req.cookies?.anonymous_session;
         if (!user && !anonymousSessionId) {
-            return { data: [], total: 0, page: parseInt(page, 10), limit: parseInt(limit, 10) };
+            return {
+                data: [],
+                total: 0,
+                page: parseInt(page, 10),
+                limit: parseInt(limit, 10),
+            };
         }
         const whereClause = user ? { userId: user.id } : { anonymousSessionId };
         const skip = (parseInt(page, 10) - 1) * parseInt(limit, 10);
@@ -43,11 +48,11 @@ let ComparisonController = class ComparisonController {
                 skip,
                 take,
             }),
-            this.prisma.comparison.count({ where: whereClause })
+            this.prisma.comparison.count({ where: whereClause }),
         ]);
-        const data = comparisons.map(c => {
+        const data = comparisons.map((c) => {
             const bestQuote = c.quotes.length > 0
-                ? c.quotes.reduce((prev, curr) => (prev.recipientAmount > curr.recipientAmount) ? prev : curr)
+                ? c.quotes.reduce((prev, curr) => prev.recipientAmount > curr.recipientAmount ? prev : curr)
                 : null;
             return {
                 id: c.id,
@@ -55,9 +60,12 @@ let ComparisonController = class ComparisonController {
                 sendCurrency: c.fromCurrency,
                 receiveCurrency: c.toCurrency,
                 createdAt: c.createdAt.toISOString(),
-                bestProviderName: bestQuote ? bestQuote.provider.charAt(0).toUpperCase() + bestQuote.provider.slice(1) : 'Unknown',
+                bestProviderName: bestQuote
+                    ? bestQuote.provider.charAt(0).toUpperCase() +
+                        bestQuote.provider.slice(1)
+                    : 'Unknown',
                 bestReceiveAmount: bestQuote ? bestQuote.recipientAmount : 0,
-                results: c.quotes.map(q => ({
+                results: c.quotes.map((q) => ({
                     providerId: q.provider,
                     providerName: q.provider.charAt(0).toUpperCase() + q.provider.slice(1),
                     providerSlug: q.provider.toLowerCase(),
@@ -65,8 +73,8 @@ let ComparisonController = class ComparisonController {
                     fee: Number(q.totalFees),
                     receiveAmount: q.recipientAmount,
                     deliveryTime: q.deliveryEstimate || '1-3 days',
-                    badge: q.isBestValue ? 'best_rate' : null
-                }))
+                    badge: q.isBestValue ? 'best_rate' : null,
+                })),
             };
         });
         return { data, total, page: parseInt(page, 10), limit: take };
@@ -74,7 +82,7 @@ let ComparisonController = class ComparisonController {
     async getComparisonById(id) {
         const c = await this.prisma.comparison.findUnique({
             where: { id },
-            include: { quotes: true }
+            include: { quotes: true },
         });
         if (!c)
             return null;
@@ -84,7 +92,7 @@ let ComparisonController = class ComparisonController {
             sendCurrency: c.fromCurrency,
             receiveCurrency: c.toCurrency,
             createdAt: c.createdAt.toISOString(),
-            results: c.quotes.map(q => ({
+            results: c.quotes.map((q) => ({
                 providerId: q.provider,
                 providerName: q.provider.charAt(0).toUpperCase() + q.provider.slice(1),
                 providerSlug: q.provider.toLowerCase(),
@@ -92,8 +100,8 @@ let ComparisonController = class ComparisonController {
                 fee: Number(q.totalFees),
                 receiveAmount: q.recipientAmount,
                 deliveryTime: q.deliveryEstimate || '1-3 days',
-                badge: q.isBestValue ? 'best_rate' : null
-            }))
+                badge: q.isBestValue ? 'best_rate' : null,
+            })),
         };
     }
     async saveComparison(payload, req, res) {
@@ -132,10 +140,10 @@ let ComparisonController = class ComparisonController {
                         isBestValue: q.badge === 'best_rate',
                         status: 'SUCCESS',
                         quoteTimestamp: new Date(),
-                    }))
-                }
+                    })),
+                },
             },
-            include: { quotes: true }
+            include: { quotes: true },
         });
         return {
             id: comparison.id,
@@ -143,7 +151,7 @@ let ComparisonController = class ComparisonController {
             sendCurrency: comparison.fromCurrency,
             receiveCurrency: comparison.toCurrency,
             createdAt: comparison.createdAt.toISOString(),
-            results: payload.results
+            results: payload.results,
         };
     }
 };
@@ -152,7 +160,9 @@ __decorate([
     (0, common_1.Get)('history'),
     (0, common_1.UseGuards)(optional_jwt_guard_1.OptionalJwtGuard),
     (0, swagger_1.ApiBearerAuth)(),
-    (0, swagger_1.ApiOperation)({ summary: 'Get comparison history for logged in or anonymous user' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Get comparison history for logged in or anonymous user',
+    }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'User history' }),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Query)('page')),

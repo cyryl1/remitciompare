@@ -21,25 +21,37 @@ class CreateRouteDto {
 }
 exports.CreateRouteDto = CreateRouteDto;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'GBP', description: 'Origin currency code (ISO 4217)' }),
+    (0, swagger_1.ApiProperty)({
+        example: 'GBP',
+        description: 'Origin currency code (ISO 4217)',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateRouteDto.prototype, "fromCurrency", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 'NGN', description: 'Destination currency code (ISO 4217)' }),
+    (0, swagger_1.ApiProperty)({
+        example: 'NGN',
+        description: 'Destination currency code (ISO 4217)',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsNotEmpty)(),
     __metadata("design:type", String)
 ], CreateRouteDto.prototype, "toCurrency", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'GB', description: 'Origin country code (ISO 3166-1 alpha-2)' }),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'GB',
+        description: 'Origin country code (ISO 3166-1 alpha-2)',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateRouteDto.prototype, "fromCountry", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'NG', description: 'Destination country code (ISO 3166-1 alpha-2)' }),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'NG',
+        description: 'Destination country code (ISO 3166-1 alpha-2)',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)

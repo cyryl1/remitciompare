@@ -1,4 +1,13 @@
-import { Controller, Get, Post, Patch, Body, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Patch,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AdminService } from './admin.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -23,7 +32,9 @@ export class AdminController {
   }
 
   @Get('stats')
-  @ApiOperation({ summary: 'Get dashboard stats (users, providers, comparisons)' })
+  @ApiOperation({
+    summary: 'Get dashboard stats (users, providers, comparisons)',
+  })
   async getStats() {
     return this.adminService.getDashboardStats();
   }
@@ -32,17 +43,17 @@ export class AdminController {
   @ApiOperation({ summary: 'Get providers list for admin' })
   async getProviders(
     @Query('page') page: string = '1',
-    @Query('limit') limit: string = '20'
+    @Query('limit') limit: string = '20',
   ) {
-    return this.adminService.getProviders(parseInt(page, 10), parseInt(limit, 10));
+    return this.adminService.getProviders(
+      parseInt(page, 10),
+      parseInt(limit, 10),
+    );
   }
 
   @Patch('providers/:id')
   @ApiOperation({ summary: 'Update provider settings' })
-  async updateProvider(
-    @Param('id') id: string,
-    @Body() body: any
-  ) {
+  async updateProvider(@Param('id') id: string, @Body() body: any) {
     return this.adminService.updateProvider(id, body);
   }
 
@@ -51,9 +62,13 @@ export class AdminController {
   async getUsers(
     @Query('page') page: string = '1',
     @Query('limit') limit: string = '20',
-    @Query('search') search?: string
+    @Query('search') search?: string,
   ) {
-    return this.adminService.getUsers(parseInt(page, 10), parseInt(limit, 10), search);
+    return this.adminService.getUsers(
+      parseInt(page, 10),
+      parseInt(limit, 10),
+      search,
+    );
   }
 
   @Post('rates/refresh')

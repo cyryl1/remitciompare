@@ -5,6 +5,7 @@ import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { EmailService } from '../email/email.service';
+import { FirebaseLoginDto } from './dto/firebase-login.dto';
 export declare class AuthService {
     private prisma;
     private jwtService;
@@ -24,6 +25,18 @@ export declare class AuthService {
         };
     }>;
     login(dto: LoginDto): Promise<{
+        accessToken: string;
+        refreshToken: string;
+        user: {
+            id: any;
+            email: any;
+            role: any;
+            emailVerified: any;
+            firstName: any;
+            lastName: any;
+        };
+    }>;
+    firebaseLogin(dto: FirebaseLoginDto): Promise<{
         accessToken: string;
         refreshToken: string;
         user: {

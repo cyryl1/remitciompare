@@ -25,9 +25,9 @@ let AlertsService = AlertsService_1 = class AlertsService {
     async getAlerts(userId) {
         const alerts = await this.prisma.alert.findMany({
             where: { userId },
-            orderBy: { createdAt: 'desc' }
+            orderBy: { createdAt: 'desc' },
         });
-        return alerts.map(a => ({
+        return alerts.map((a) => ({
             id: a.id,
             sendCurrency: a.fromCurrency,
             receiveCurrency: a.toCurrency,
@@ -53,7 +53,7 @@ let AlertsService = AlertsService_1 = class AlertsService {
                 sendAmount: data.sendAmount || 1000,
                 priority: 'MOST_RECEIVED',
                 status: 'ACTIVE',
-            }
+            },
         });
         return {
             id: alert.id,
@@ -76,7 +76,7 @@ let AlertsService = AlertsService_1 = class AlertsService {
                 targetRecipientAmount: data.targetReceiveAmount,
                 sendAmount: data.sendAmount,
                 status: data.status ? data.status.toUpperCase() : undefined,
-            }
+            },
         });
         return alert;
     }
@@ -92,11 +92,11 @@ let AlertsService = AlertsService_1 = class AlertsService {
         const newStatus = alert.status === 'ACTIVE' ? 'PAUSED' : 'ACTIVE';
         const updated = await this.prisma.alert.update({
             where: { id },
-            data: { status: newStatus }
+            data: { status: newStatus },
         });
         return {
             ...updated,
-            status: updated.status.toLowerCase()
+            status: updated.status.toLowerCase(),
         };
     }
     async processAlerts(provider, fromCurrency, toCurrency, amount, rate, recipientAmount) {
@@ -110,7 +110,8 @@ let AlertsService = AlertsService_1 = class AlertsService {
             include: { user: { select: { email: true } } },
         });
         for (const alert of activeAlerts) {
-            if (alert.targetRecipientAmount && recipientAmount >= alert.targetRecipientAmount) {
+            if (alert.targetRecipientAmount &&
+                recipientAmount >= alert.targetRecipientAmount) {
                 this.logger.log(`Alert ${alert.id} triggered for user ${alert.userId}: ` +
                     `Target ${alert.targetRecipientAmount}, Actual ${recipientAmount} via ${provider}`);
                 await this.prisma.alert.update({

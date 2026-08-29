@@ -39,7 +39,10 @@ let WesternUnionAdapter = WesternUnionAdapter_1 = class WesternUnionAdapter {
     }
     getMockRate(from, to) {
         const rates = {
-            'GBP-NGN': 2040, 'USD-NGN': 1590, 'EUR-NGN': 1720, 'CAD-NGN': 1170,
+            'GBP-NGN': 2040,
+            'USD-NGN': 1590,
+            'EUR-NGN': 1720,
+            'CAD-NGN': 1170,
         };
         return rates[`${from}-${to}`] ?? 1580;
     }

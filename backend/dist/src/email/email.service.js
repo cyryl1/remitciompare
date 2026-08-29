@@ -67,7 +67,8 @@ let EmailService = EmailService_1 = class EmailService {
         const frontendUrl = this.configService.get('FRONTEND_URL');
         const verificationLink = `${frontendUrl}/verify-email?token=${token}`;
         const mailOptions = {
-            from: this.configService.get('EMAIL_FROM') || '"RemitCompare" <noreply@remitcompare.com>',
+            from: this.configService.get('EMAIL_FROM') ||
+                '"RemitCompare" <noreply@remitcompare.com>',
             to,
             subject: 'Verify your email for RemitCompare',
             html: `
@@ -83,7 +84,8 @@ let EmailService = EmailService_1 = class EmailService {
         const frontendUrl = this.configService.get('FRONTEND_URL');
         const resetLink = `${frontendUrl}/reset-password?token=${token}`;
         const mailOptions = {
-            from: this.configService.get('EMAIL_FROM') || '"RemitCompare" <noreply@remitcompare.com>',
+            from: this.configService.get('EMAIL_FROM') ||
+                '"RemitCompare" <noreply@remitcompare.com>',
             to,
             subject: 'Reset your RemitCompare password',
             html: `
@@ -102,7 +104,8 @@ let EmailService = EmailService_1 = class EmailService {
         const formattedRecipient = new Intl.NumberFormat('en-NG').format(opts.recipientAmount);
         const formattedTarget = new Intl.NumberFormat('en-NG').format(opts.targetRecipientAmount);
         const mailOptions = {
-            from: this.configService.get('EMAIL_FROM') || '"RemitCompare" <noreply@remitcompare.com>',
+            from: this.configService.get('EMAIL_FROM') ||
+                '"RemitCompare" <noreply@remitcompare.com>',
             to: opts.to,
             subject: `🎯 Your rate alert has been triggered! ${opts.toCurrency} ${formattedRecipient} available`,
             html: `
@@ -119,6 +122,60 @@ let EmailService = EmailService_1 = class EmailService {
           Rates change frequently. This alert is based on our latest snapshot — lock in the rate quickly!
         </p>
       `,
+        };
+        return this.sendMail(mailOptions);
+    }
+    async sendWeeklyComparisonEmail(to, routes) {
+        const frontendUrl = this.configService.get('FRONTEND_URL');
+        const routesHtml = routes.map(r => `
+      <div style="margin-bottom: 16px; padding: 12px; border: 1px solid #e5e7eb; border-radius: 8px;">
+        <h3 style="margin: 0 0 8px 0; color: #111827;">${r.fromCurrency} ➔ ${r.toCurrency}</h3>
+        <p style="margin: 0; color: #4b5563;">
+          Best rate right now: <strong>${r.bestProvider}</strong> gives <strong>${r.bestRecipientAmount} ${r.toCurrency}</strong> for every ${r.sendAmount} ${r.fromCurrency}.
+        </p>
+        <a href="${frontendUrl}/compare?sendAmount=${r.sendAmount}&from=${r.fromCurrency}&to=${r.toCurrency}" style="color: #2563eb; text-decoration: none; font-weight: 500; display: inline-block; margin-top: 8px;">View Full Comparison →</a>
+      </div>
+    `).join('');
+        const mailOptions = {
+            from: this.configService.get('EMAIL_FROM') || '"RemitCompare" <noreply@remitcompare.com>',
+            to,
+            subject: '📊 Your Weekly RemitCompare Digest',
+            html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>Your Weekly Exchange Rate Digest</h2>
+          <p>Here are the best live rates for your saved routes right now:</p>
+          ${routesHtml}
+          <p style="margin-top: 24px; font-size: 12px; color: #9ca3af;">
+            You are receiving this because you enabled Weekly Comparison emails in your Account Settings. 
+            <a href="${frontendUrl}/account" style="color: #6b7280;">Manage Preferences</a>
+          </p>
+        </div>
+      `,
+        };
+        return this.sendMail(mailOptions);
+    }
+    async sendDataArchiveEmail(to, userData) {
+        const jsonString = JSON.stringify(userData, null, 2);
+        const mailOptions = {
+            from: this.configService.get('EMAIL_FROM') || '"RemitCompare" <noreply@remitcompare.com>',
+            to,
+            subject: '📦 Your RemitCompare Data Archive',
+            html: `
+        <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+          <h2>Your Data Archive Request</h2>
+          <p>Attached to this email is a copy of your personal data, saved routes, and alert history from RemitCompare in JSON format.</p>
+          <p style="margin-top: 24px; font-size: 12px; color: #9ca3af;">
+            For security reasons, this file does not contain your password hash or any payment details.
+          </p>
+        </div>
+      `,
+            attachments: [
+                {
+                    filename: 'remitcompare-data-archive.json',
+                    content: jsonString,
+                    contentType: 'application/json'
+                }
+            ]
         };
         return this.sendMail(mailOptions);
     }

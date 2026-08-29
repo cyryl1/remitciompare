@@ -39,28 +39,29 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
                 isActive: true,
                 status: 'INTEGRATED',
             },
-            select: { slug: true }
+            select: { slug: true },
         });
-        const activeSlugs = new Set(activeProviders.map(p => p.slug.toLowerCase()));
-        const activeAdapters = this.adapters.filter(adapter => activeSlugs.has(adapter.name.toLowerCase()));
+        const activeSlugs = new Set(activeProviders.map((p) => p.slug.toLowerCase()));
+        const activeAdapters = this.adapters.filter((adapter) => activeSlugs.has(adapter.name.toLowerCase()));
         const request = {
             sendAmount: dto.sendAmount,
             sourceCurrency: dto.sourceCurrency,
             targetCurrency: dto.targetCurrency,
         };
-        const promises = activeAdapters.map(adapter => this.executeWithTimeout(adapter.getQuote(request), this.TIMEOUT_MS)
-            .catch(err => {
+        const promises = activeAdapters.map((adapter) => this.executeWithTimeout(adapter.getQuote(request), this.TIMEOUT_MS).catch((err) => {
             this.logger.error(`Adapter ${adapter.name} failed or timed out: ${err.message}`);
             return this.buildFailedQuote(adapter.name, request, 'TIMEOUT');
         }));
         const results = await Promise.all(promises);
-        const successfulQuotes = results.filter(q => q.status === 'SUCCESS');
+        const successfulQuotes = results.filter((q) => q.status === 'SUCCESS');
         successfulQuotes.sort((a, b) => this.rankQuotes(a, b, dto.priority));
         const recommended = successfulQuotes.length > 0 ? successfulQuotes[0] : null;
         let moneyLeftOnTable = 0;
         if (successfulQuotes.length > 1) {
             const sortedByRecipient = [...successfulQuotes].sort((a, b) => b.recipientAmount - a.recipientAmount);
-            moneyLeftOnTable = sortedByRecipient[0].recipientAmount - sortedByRecipient[1].recipientAmount;
+            moneyLeftOnTable =
+                sortedByRecipient[0].recipientAmount -
+                    sortedByRecipient[1].recipientAmount;
         }
         if (persist) {
             await this.persistComparison(dto, results, recommended, userId, anonymousSessionId);
@@ -68,7 +69,7 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
         return {
             recommended,
             allQuotes: results,
-            moneyLeftOnTable
+            moneyLeftOnTable,
         };
     }
     async persistComparison(dto, results, recommended, userId, anonymousSessionId) {
@@ -89,7 +90,7 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
                     deliveryPreference: dto.deliveryPreference,
                     staleAt: expirationDate,
                     quotes: {
-                        create: results.map(q => ({
+                        create: results.map((q) => ({
                             provider: q.provider,
                             exchangeRate: q.exchangeRate,
                             fees: q.fees,
@@ -100,12 +101,16 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
                             paymentMethod: q.paymentMethod,
                             isBestValue: recommended?.provider === q.provider,
                             status: q.status,
-                            errorType: q.status === 'TIMEOUT' ? 'TIMEOUT' : (q.status === 'FAILED' ? 'API_ERROR' : null),
+                            errorType: q.status === 'TIMEOUT'
+                                ? 'TIMEOUT'
+                                : q.status === 'FAILED'
+                                    ? 'API_ERROR'
+                                    : null,
                             quoteTimestamp: q.quoteTimestamp,
                             expiresAt: q.expiresAt,
-                        }))
-                    }
-                }
+                        })),
+                    },
+                },
             });
         }
         catch (err) {
@@ -129,10 +134,7 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
         const timeoutPromise = new Promise((_, reject) => {
             timeoutHandle = setTimeout(() => reject(new Error(`Quote timeout exceeded ${timeoutMs}ms`)), timeoutMs);
         });
-        return Promise.race([
-            promise,
-            timeoutPromise
-        ]).finally(() => clearTimeout(timeoutHandle));
+        return Promise.race([promise, timeoutPromise]).finally(() => clearTimeout(timeoutHandle));
     }
     buildFailedQuote(providerName, request, status) {
         return {
@@ -149,7 +151,7 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
             paymentMethod: '',
             quoteTimestamp: new Date(),
             expiresAt: null,
-            status
+            status,
         };
     }
     async getSnapshots(fromCurrency, toCurrency, hours = 24) {
@@ -161,11 +163,11 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
                 toCurrency,
                 createdAt: {
                     gte: timeLimit,
-                }
+                },
             },
             orderBy: {
                 createdAt: 'asc',
-            }
+            },
         });
     }
 };

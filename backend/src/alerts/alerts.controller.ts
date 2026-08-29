@@ -1,4 +1,14 @@
-import { Controller, Get, Post, Body, UseGuards, Req, Param, Patch, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  UseGuards,
+  Req,
+  Param,
+  Patch,
+  Delete,
+} from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiBearerAuth } from '@nestjs/swagger';
 import { AlertsService } from './alerts.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
@@ -24,7 +34,11 @@ export class AlertsController {
 
   @Patch(':id')
   @ApiOperation({ summary: 'Update an alert' })
-  async updateAlert(@Req() req: any, @Param('id') id: string, @Body() body: any) {
+  async updateAlert(
+    @Req() req: any,
+    @Param('id') id: string,
+    @Body() body: any,
+  ) {
     return this.alertsService.updateAlert(req.user.id, id, body);
   }
 

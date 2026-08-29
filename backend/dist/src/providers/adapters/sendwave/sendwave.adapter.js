@@ -38,7 +38,10 @@ let SendwaveAdapter = SendwaveAdapter_1 = class SendwaveAdapter {
     }
     getMockRate(from, to) {
         const rates = {
-            'GBP-NGN': 2075, 'USD-NGN': 1615, 'EUR-NGN': 1740, 'CAD-NGN': 1185,
+            'GBP-NGN': 2075,
+            'USD-NGN': 1615,
+            'EUR-NGN': 1740,
+            'CAD-NGN': 1185,
         };
         return rates[`${from}-${to}`] ?? 1600;
     }

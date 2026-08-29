@@ -1,5 +1,9 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { BaseProviderAdapter, ProviderQuote, QuoteRequest } from '../../interfaces/provider-adapter.interface';
+import {
+  BaseProviderAdapter,
+  ProviderQuote,
+  QuoteRequest,
+} from '../../interfaces/provider-adapter.interface';
 
 @Injectable()
 export class SendwaveAdapter implements BaseProviderAdapter {
@@ -9,7 +13,10 @@ export class SendwaveAdapter implements BaseProviderAdapter {
   async getQuote(request: QuoteRequest): Promise<ProviderQuote> {
     this.logger.debug(`[MOCK] Fetching Sendwave quote...`);
     await new Promise((r) => setTimeout(r, 60 + Math.random() * 90));
-    const baseRate = this.getMockRate(request.sourceCurrency, request.targetCurrency);
+    const baseRate = this.getMockRate(
+      request.sourceCurrency,
+      request.targetCurrency,
+    );
     const rate = baseRate * 0.98; // Wider margin
     const totalFees = 0; // Zero fixed fees
     const recipientAmount = request.sendAmount * rate;
@@ -31,10 +38,13 @@ export class SendwaveAdapter implements BaseProviderAdapter {
       status: 'SUCCESS',
     };
   }
-  
+
   private getMockRate(from: string, to: string): number {
     const rates: Record<string, number> = {
-      'GBP-NGN': 2075, 'USD-NGN': 1615, 'EUR-NGN': 1740, 'CAD-NGN': 1185,
+      'GBP-NGN': 2075,
+      'USD-NGN': 1615,
+      'EUR-NGN': 1740,
+      'CAD-NGN': 1185,
     };
     return rates[`${from}-${to}`] ?? 1600;
   }

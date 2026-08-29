@@ -4,6 +4,7 @@ export interface CompareParams {
   sendAmount: number;
   sendCurrency: string;
   receiveCurrency: string;
+  priority?: string;
 }
 
 export interface RateResult {
@@ -11,6 +12,7 @@ export interface RateResult {
   providerName: string;
   providerSlug: string;
   providerLogo?: string;
+  handoffUrl?: string;
   exchangeRate: number;
   fee: number;
   feeType: 'flat' | 'percentage';
@@ -21,6 +23,7 @@ export interface RateResult {
   affiliateUrl?: string;
   badge?: 'best_rate' | 'fastest' | 'lowest_fee' | null;
   updatedAt: string;
+  status?: 'SUCCESS' | 'FAILED' | 'TIMEOUT';
 }
 
 export interface RateHistoryPoint {

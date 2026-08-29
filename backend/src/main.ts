@@ -14,9 +14,9 @@ async function bootstrap() {
   // ─── Global validation ──────────────────────────────────────────────────
   app.useGlobalPipes(
     new ValidationPipe({
-      whitelist: true,        // Strip unknown fields
+      whitelist: true, // Strip unknown fields
       forbidNonWhitelisted: true,
-      transform: true,        // Auto-transform query params to their DTO types
+      transform: true, // Auto-transform query params to their DTO types
       transformOptions: {
         enableImplicitConversion: true,
       },
@@ -34,7 +34,7 @@ async function bootstrap() {
     .setTitle('RemitCompare API')
     .setDescription(
       'RemitCompare is a personalized remittance decision platform. ' +
-      'This API powers the comparison engine, provider directory, alerts, and user accounts.',
+        'This API powers the comparison engine, provider directory, alerts, and user accounts.',
     )
     .setVersion('1.0')
     .addBearerAuth(

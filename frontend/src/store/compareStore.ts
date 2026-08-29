@@ -4,6 +4,7 @@ export interface CompareParams {
   sendAmount: number;
   sendCurrency: string;
   receiveCurrency: string;
+  priority: 'MOST_RECEIVED' | 'FASTEST' | 'LOWEST_COST';
 }
 
 interface CompareState extends CompareParams {
@@ -16,6 +17,7 @@ const DEFAULT_PARAMS: CompareParams = {
   sendAmount: 500,
   sendCurrency: 'GBP',
   receiveCurrency: 'NGN',
+  priority: 'MOST_RECEIVED',
 };
 
 export const useCompareStore = create<CompareState>((set) => ({

@@ -17,7 +17,7 @@ exports.RatesModule = RatesModule;
 exports.RatesModule = RatesModule = __decorate([
     (0, common_1.Module)({
         imports: [comparison_module_1.ComparisonModule, prisma_module_1.PrismaModule],
-        controllers: [rates_controller_1.RatesController]
+        controllers: [rates_controller_1.RatesController],
     })
 ], RatesModule);
 //# sourceMappingURL=rates.module.js.map

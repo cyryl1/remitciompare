@@ -8,3 +8,4 @@ node_modules
 .agents
 .claude
 .windsurf
+firebase-service-account.json

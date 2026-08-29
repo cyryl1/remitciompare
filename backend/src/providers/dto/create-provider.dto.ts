@@ -1,4 +1,13 @@
-import { IsString, IsNotEmpty, IsOptional, IsNumber, IsArray, IsEnum, IsBoolean, IsUrl } from 'class-validator';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsNumber,
+  IsArray,
+  IsEnum,
+  IsBoolean,
+  IsUrl,
+} from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { ProviderStatus } from '@prisma/client';
 
@@ -23,7 +32,9 @@ export class CreateProviderDto {
   @IsOptional()
   description?: string;
 
-  @ApiPropertyOptional({ example: 'Wise (formerly TransferWise) is a global technology company...' })
+  @ApiPropertyOptional({
+    example: 'Wise (formerly TransferWise) is a global technology company...',
+  })
   @IsString()
   @IsOptional()
   about?: string;
@@ -68,7 +79,10 @@ export class CreateProviderDto {
   @IsOptional()
   currenciesSupported?: number;
 
-  @ApiPropertyOptional({ type: [String], example: ['BANK_TRANSFER', 'DEBIT_CARD'] })
+  @ApiPropertyOptional({
+    type: [String],
+    example: ['BANK_TRANSFER', 'DEBIT_CARD'],
+  })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
@@ -80,19 +94,28 @@ export class CreateProviderDto {
   @IsOptional()
   payoutMethods?: string[];
 
-  @ApiPropertyOptional({ type: [String], example: ['Minutes', 'Within 2 hours'] })
+  @ApiPropertyOptional({
+    type: [String],
+    example: ['Minutes', 'Within 2 hours'],
+  })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
   deliveryMethods?: string[];
 
-  @ApiPropertyOptional({ type: [String], example: ['MOBILE_APP', 'RATE_NOTIFICATIONS'] })
+  @ApiPropertyOptional({
+    type: [String],
+    example: ['MOBILE_APP', 'RATE_NOTIFICATIONS'],
+  })
   @IsArray()
   @IsString({ each: true })
   @IsOptional()
   features?: string[];
 
-  @ApiPropertyOptional({ enum: ProviderStatus, example: ProviderStatus.PENDING })
+  @ApiPropertyOptional({
+    enum: ProviderStatus,
+    example: ProviderStatus.PENDING,
+  })
   @IsEnum(ProviderStatus)
   @IsOptional()
   status?: ProviderStatus;

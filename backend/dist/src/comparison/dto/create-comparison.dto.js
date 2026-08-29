@@ -43,13 +43,19 @@ __decorate([
     __metadata("design:type", String)
 ], CreateComparisonDto.prototype, "fromCountry", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'NG', description: 'Destination country code' }),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'NG',
+        description: 'Destination country code',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateComparisonDto.prototype, "toCountry", void 0);
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: 1000, description: 'Amount to send in source currency' }),
+    (0, swagger_1.ApiProperty)({
+        example: 1000,
+        description: 'Amount to send in source currency',
+    }),
     (0, class_validator_1.IsNumber)(),
     (0, class_validator_1.Min)(1),
     __metadata("design:type", Number)

@@ -40,7 +40,7 @@ let ProvidersService = class ProvidersService {
     }
     async findAll(page = 1, limit = 20, search, sendCurrency, receiveCurrency) {
         const skip = (page - 1) * limit;
-        let where = { isActive: true, status: 'INTEGRATED' };
+        const where = { isActive: true, status: 'INTEGRATED' };
         if (search) {
             where.name = { contains: search, mode: 'insensitive' };
         }
@@ -49,8 +49,8 @@ let ProvidersService = class ProvidersService {
                 some: {
                     ...(sendCurrency && { fromCurrency: sendCurrency }),
                     ...(receiveCurrency && { toCurrency: receiveCurrency }),
-                    isActive: true
-                }
+                    isActive: true,
+                },
             };
         }
         const [providers, total] = await Promise.all([
@@ -113,7 +113,9 @@ let ProvidersService = class ProvidersService {
         }
     }
     async addRoute(providerId, createRouteDto) {
-        await this.prisma.provider.findUniqueOrThrow({ where: { id: providerId } }).catch(() => {
+        await this.prisma.provider
+            .findUniqueOrThrow({ where: { id: providerId } })
+            .catch(() => {
             throw new common_1.NotFoundException(`Provider with ID '${providerId}' not found`);
         });
         return this.prisma.providerRoute.create({

@@ -28,6 +28,21 @@ let UsersController = class UsersController {
     async updatePreferences(req, body) {
         return this.usersService.updatePreferences(req.user.id, body);
     }
+    async deleteAccount(req) {
+        return this.usersService.deleteAccount(req.user.id);
+    }
+    async requestDataArchive(req) {
+        return this.usersService.requestDataArchive(req.user.id);
+    }
+    async getSavedRoutes(req) {
+        return this.usersService.getSavedRoutes(req.user.id);
+    }
+    async addSavedRoute(req, body) {
+        return this.usersService.addSavedRoute(req.user.id, body);
+    }
+    async removeSavedRoute(req, routeId) {
+        return this.usersService.removeSavedRoute(req.user.id, routeId);
+    }
 };
 exports.UsersController = UsersController;
 __decorate([
@@ -47,6 +62,48 @@ __decorate([
     __metadata("design:paramtypes", [Object, Object]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "updatePreferences", null);
+__decorate([
+    (0, common_1.Delete)('me'),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete user account' }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "deleteAccount", null);
+__decorate([
+    (0, common_1.Post)('me/request-data'),
+    (0, swagger_1.ApiOperation)({ summary: 'Request personal data archive' }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "requestDataArchive", null);
+__decorate([
+    (0, common_1.Get)('saved-routes'),
+    (0, swagger_1.ApiOperation)({ summary: 'Get user saved routes' }),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "getSavedRoutes", null);
+__decorate([
+    (0, common_1.Post)('saved-routes'),
+    (0, swagger_1.ApiOperation)({ summary: 'Add a saved route' }),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, Object]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "addSavedRoute", null);
+__decorate([
+    (0, common_1.Delete)('saved-routes/:id'),
+    (0, swagger_1.ApiOperation)({ summary: 'Delete a saved route' }),
+    __param(0, (0, common_1.Req)()),
+    __param(1, (0, common_1.Param)('id')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object, String]),
+    __metadata("design:returntype", Promise)
+], UsersController.prototype, "removeSavedRoute", null);
 exports.UsersController = UsersController = __decorate([
     (0, swagger_1.ApiTags)('users'),
     (0, swagger_1.ApiBearerAuth)(),

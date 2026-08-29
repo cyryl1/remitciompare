@@ -4,19 +4,7 @@ import { ArrowDown, ArrowUpDown } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { PageWrapper } from '@/components/layout/PageWrapper';
 import { useCompareStore } from '@/store/compareStore';
-
-const CURRENCIES = [
-  { code: 'GBP', flag: '🇬🇧', country: 'gb', name: 'British Pound' },
-  { code: 'USD', flag: '🇺🇸', country: 'us', name: 'US Dollar' },
-  { code: 'EUR', flag: '🇪🇺', country: 'eu', name: 'Euro' },
-  { code: 'NGN', flag: '🇳🇬', country: 'ng', name: 'Nigerian Naira' },
-  { code: 'GHS', flag: '🇬🇭', country: 'gh', name: 'Ghanaian Cedi' },
-  { code: 'KES', flag: '🇰🇪', country: 'ke', name: 'Kenyan Shilling' },
-  { code: 'INR', flag: '🇮🇳', country: 'in', name: 'Indian Rupee' },
-  { code: 'PKR', flag: '🇵🇰', country: 'pk', name: 'Pakistani Rupee' },
-  { code: 'ZAR', flag: '🇿🇦', country: 'za', name: 'South African Rand' },
-  { code: 'PHP', flag: '🇵🇭', country: 'ph', name: 'Philippine Peso' },
-];
+import { CURRENCIES } from '@/lib/currencies';
 
 const QUICK_AMOUNTS: Record<string, number[]> = {
   GBP: [100, 500, 1000, 2000],
@@ -26,12 +14,13 @@ const QUICK_AMOUNTS: Record<string, number[]> = {
 
 export default function Compare() {
   const navigate = useNavigate();
-  const { sendAmount: storeAmount, sendCurrency: storeSend, receiveCurrency: storeReceive, setParams } =
+  const { sendAmount: storeAmount, sendCurrency: storeSend, receiveCurrency: storeReceive, priority: storePriority, setParams } =
     useCompareStore();
 
   const [amount, setAmount]   = useState(storeAmount);
   const [fromCur, setFromCur] = useState(storeSend);
   const [toCur, setToCur]     = useState(storeReceive);
+  const [priority, setPriority] = useState(storePriority);
 
   const quickAmounts = QUICK_AMOUNTS[fromCur] ?? [100, 500, 1000, 2000];
   const fromData     = CURRENCIES.find((c) => c.code === fromCur);
@@ -43,7 +32,7 @@ export default function Compare() {
   };
 
   const handleCompare = () => {
-    setParams({ sendAmount: amount, sendCurrency: fromCur, receiveCurrency: toCur });
+    setParams({ sendAmount: amount, sendCurrency: fromCur, receiveCurrency: toCur, priority });
     navigate('/compare/results');
   };
 
@@ -170,6 +159,35 @@ export default function Compare() {
           <div className="flex items-center gap-2 mb-stack-lg cursor-pointer text-secondary hover:text-primary transition-colors w-fit" onClick={handleSwap}>
             <ArrowUpDown size={16} />
             <span className="text-label-sm font-medium">Swap currencies</span>
+          </div>
+
+          {/* Priority section */}
+          <div className="mb-stack-lg border-t border-surface-variant pt-stack-md">
+            <p className="text-label-sm text-on-surface-variant uppercase tracking-wider mb-3 font-semibold">
+              What matters most to you?
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3">
+              {[
+                { value: 'MOST_RECEIVED', label: 'Most money received', icon: '💰' },
+                { value: 'FASTEST', label: 'Fastest delivery', icon: '⚡' },
+                { value: 'LOWEST_COST', label: 'Lowest cost', icon: '📉' },
+              ].map((opt) => (
+                <button
+                  key={opt.value}
+                  onClick={() => setPriority(opt.value as any)}
+                  className={`flex-1 py-3 px-4 rounded-xl border flex flex-col items-center gap-2 transition-all ${
+                    priority === opt.value
+                      ? 'border-secondary bg-primary-container/10 shadow-sm'
+                      : 'border-outline-variant bg-surface-white hover:border-outline'
+                  }`}
+                >
+                  <span className="text-2xl">{opt.icon}</span>
+                  <span className={`text-label-sm font-semibold ${priority === opt.value ? 'text-primary' : 'text-on-surface-variant'}`}>
+                    {opt.label}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
 
           <Button fullWidth size="lg" className="text-white" onClick={handleCompare}>

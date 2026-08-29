@@ -19,6 +19,7 @@ const register_dto_1 = require("./dto/register.dto");
 const login_dto_1 = require("./dto/login.dto");
 const forgot_password_dto_1 = require("./dto/forgot-password.dto");
 const reset_password_dto_1 = require("./dto/reset-password.dto");
+const firebase_login_dto_1 = require("./dto/firebase-login.dto");
 const verify_email_dto_1 = require("./dto/verify-email.dto");
 const jwt_refresh_guard_1 = require("./guards/jwt-refresh.guard");
 const jwt_auth_guard_1 = require("./guards/jwt-auth.guard");
@@ -35,6 +36,11 @@ let AuthController = class AuthController {
     }
     async login(loginDto, res) {
         const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
+        this.setAuthCookies(res, accessToken, refreshToken);
+        return { accessToken, user };
+    }
+    async firebaseLogin(dto, res) {
+        const { accessToken, refreshToken, user } = await this.authService.firebaseLogin(dto);
         this.setAuthCookies(res, accessToken, refreshToken);
         return { accessToken, user };
     }
@@ -109,10 +115,27 @@ __decorate([
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
+    (0, common_1.Post)('firebase-login'),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, swagger_1.ApiOperation)({ summary: 'Login/Register via Firebase ID Token' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'User successfully authenticated via Firebase',
+    }),
+    (0, swagger_1.ApiResponse)({ status: 401, description: 'Invalid Firebase token' }),
+    __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Res)({ passthrough: true })),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [firebase_login_dto_1.FirebaseLoginDto, Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "firebaseLogin", null);
+__decorate([
     (0, common_1.Post)('refresh'),
     (0, common_1.UseGuards)(jwt_refresh_guard_1.JwtRefreshGuard),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
-    (0, swagger_1.ApiOperation)({ summary: 'Refresh access token using refresh token in body or cookie' }),
+    (0, swagger_1.ApiOperation)({
+        summary: 'Refresh access token using refresh token in body or cookie',
+    }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'New tokens generated' }),
     __param(0, (0, common_1.Req)()),
     __param(1, (0, common_1.Res)({ passthrough: true })),
@@ -136,7 +159,10 @@ __decorate([
     (0, common_1.Post)('forgot-password'),
     (0, common_1.HttpCode)(common_1.HttpStatus.OK),
     (0, swagger_1.ApiOperation)({ summary: 'Request password reset email' }),
-    (0, swagger_1.ApiResponse)({ status: 200, description: 'Reset email sent (if account exists)' }),
+    (0, swagger_1.ApiResponse)({
+        status: 200,
+        description: 'Reset email sent (if account exists)',
+    }),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [forgot_password_dto_1.ForgotPasswordDto]),

@@ -1,11 +1,27 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { ProvidersService } from './providers.service';
 import { CreateProviderDto } from './dto/create-provider.dto';
 import { UpdateProviderDto } from './dto/update-provider.dto';
 import { CreateRouteDto } from './dto/create-route.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AdminGuard } from '../auth/guards/admin.guard';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth, ApiQuery } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiQuery,
+} from '@nestjs/swagger';
 
 @ApiTags('providers')
 @Controller('api/providers')
@@ -13,7 +29,9 @@ export class ProvidersController {
   constructor(private readonly providersService: ProvidersService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all active providers (public) or all providers (admin)' })
+  @ApiOperation({
+    summary: 'Get all active providers (public) or all providers (admin)',
+  })
   @ApiQuery({ name: 'page', required: false, type: Number })
   @ApiQuery({ name: 'limit', required: false, type: Number })
   @ApiQuery({ name: 'sendCurrency', required: false, type: String })
@@ -31,7 +49,7 @@ export class ProvidersController {
       limit ? parseInt(limit, 10) : 20,
       search,
       sendCurrency,
-      receiveCurrency
+      receiveCurrency,
     );
   }
 
@@ -65,7 +83,10 @@ export class ProvidersController {
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update a provider (Admin only)' })
   @ApiResponse({ status: 200, description: 'Provider updated successfully' })
-  update(@Param('id') id: string, @Body() updateProviderDto: UpdateProviderDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateProviderDto: UpdateProviderDto,
+  ) {
     return this.providersService.update(id, updateProviderDto);
   }
 

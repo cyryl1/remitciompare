@@ -12,6 +12,6 @@ export function ProtectedRoute() {
 export function AdminRoute() {
   const { isAuthenticated, user } = useAuthStore();
   if (!isAuthenticated) return <Navigate to="/login" replace />;
-  if (user?.role !== 'admin') return <Navigate to="/" replace />;
+  if (user?.role?.toLowerCase() !== 'admin') return <Navigate to="/" replace />;
   return <Outlet />;
 }

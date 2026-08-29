@@ -20,7 +20,7 @@ exports.AlertsModule = AlertsModule = __decorate([
         imports: [prisma_module_1.PrismaModule, email_module_1.EmailModule],
         controllers: [alerts_controller_1.AlertsController],
         providers: [alerts_service_1.AlertsService],
-        exports: [alerts_service_1.AlertsService]
+        exports: [alerts_service_1.AlertsService],
     })
 ], AlertsModule);
 //# sourceMappingURL=alerts.module.js.map

@@ -5,6 +5,9 @@ import { SnapshotProcessor } from './snapshot.processor';
 import { PrismaModule } from '../prisma/prisma.module';
 import { ProvidersModule } from '../providers/providers.module';
 import { AlertsModule } from '../alerts/alerts.module';
+import { EmailModule } from '../email/email.module';
+import { ComparisonModule } from '../comparison/comparison.module';
+import { AlertsWorkerService } from './alerts.worker';
 
 @Module({
   imports: [
@@ -14,7 +17,9 @@ import { AlertsModule } from '../alerts/alerts.module';
     PrismaModule,
     ProvidersModule, // Need this to access PROVIDER_ADAPTERS
     AlertsModule,
+    EmailModule,
+    ComparisonModule,
   ],
-  providers: [SnapshotProducer, SnapshotProcessor],
+  providers: [SnapshotProducer, SnapshotProcessor, AlertsWorkerService],
 })
 export class WorkersModule {}

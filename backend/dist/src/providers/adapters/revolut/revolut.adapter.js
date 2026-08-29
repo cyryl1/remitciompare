@@ -27,7 +27,13 @@ let RevolutAdapter = RevolutAdapter_1 = class RevolutAdapter {
             targetCurrency: request.targetCurrency,
             exchangeRate: parseFloat(rate.toFixed(2)),
             grossRecipientAmount: parseFloat((request.sendAmount * rate).toFixed(2)),
-            fees: { fixed: fixedFee, percentage: parseFloat(percentageFee.toFixed(2)), tax: 0, discount: 0, other: 0 },
+            fees: {
+                fixed: fixedFee,
+                percentage: parseFloat(percentageFee.toFixed(2)),
+                tax: 0,
+                discount: 0,
+                other: 0,
+            },
             totalFees: parseFloat(totalFees.toFixed(2)),
             recipientAmount: parseFloat(recipientAmount.toFixed(2)),
             deliveryEstimate: 'Instant',
@@ -39,7 +45,10 @@ let RevolutAdapter = RevolutAdapter_1 = class RevolutAdapter {
     }
     getMockRate(from, to) {
         const rates = {
-            'GBP-NGN': 2085, 'USD-NGN': 1625, 'EUR-NGN': 1755, 'CAD-NGN': 1195,
+            'GBP-NGN': 2085,
+            'USD-NGN': 1625,
+            'EUR-NGN': 1755,
+            'CAD-NGN': 1195,
         };
         return rates[`${from}-${to}`] ?? 1600;
     }

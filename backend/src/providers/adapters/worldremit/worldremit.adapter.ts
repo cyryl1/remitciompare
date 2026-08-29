@@ -23,7 +23,10 @@ export class WorldRemitAdapter implements BaseProviderAdapter {
     await new Promise((r) => setTimeout(r, 60 + Math.random() * 100));
 
     // WorldRemit is typically mid-market on rates with a fixed transfer fee
-    const baseRate = this.getMockRate(request.sourceCurrency, request.targetCurrency);
+    const baseRate = this.getMockRate(
+      request.sourceCurrency,
+      request.targetCurrency,
+    );
     // Slight rate variation (±1.0%)
     const rate = baseRate * (1 + (Math.random() - 0.5) * 0.02);
 

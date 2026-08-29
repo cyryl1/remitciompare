@@ -5,6 +5,6 @@ import { PrismaModule } from '../prisma/prisma.module';
 
 @Module({
   imports: [ComparisonModule, PrismaModule],
-  controllers: [RatesController]
+  controllers: [RatesController],
 })
 export class RatesModule {}

@@ -43,8 +43,14 @@ exports.ProvidersModule = ProvidersModule = __decorate([
                     return [wise, lemfi, remitly, worldremit, wu, rev, sw, ria];
                 },
                 inject: [
-                    wise_adapter_1.WiseAdapter, lemfi_adapter_1.LemFiAdapter, remitly_adapter_1.RemitlyAdapter, worldremit_adapter_1.WorldRemitAdapter,
-                    westernunion_adapter_1.WesternUnionAdapter, revolut_adapter_1.RevolutAdapter, sendwave_adapter_1.SendwaveAdapter, ria_adapter_1.RiaAdapter
+                    wise_adapter_1.WiseAdapter,
+                    lemfi_adapter_1.LemFiAdapter,
+                    remitly_adapter_1.RemitlyAdapter,
+                    worldremit_adapter_1.WorldRemitAdapter,
+                    westernunion_adapter_1.WesternUnionAdapter,
+                    revolut_adapter_1.RevolutAdapter,
+                    sendwave_adapter_1.SendwaveAdapter,
+                    ria_adapter_1.RiaAdapter,
                 ],
             },
         ],

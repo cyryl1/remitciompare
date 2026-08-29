@@ -15,9 +15,12 @@ export class WesternUnionAdapter implements BaseProviderAdapter {
       `[MOCK] Fetching Western Union quote for ${request.sendAmount} ${request.sourceCurrency} → ${request.targetCurrency}`,
     );
     await new Promise((r) => setTimeout(r, 50 + Math.random() * 100));
-    const baseRate = this.getMockRate(request.sourceCurrency, request.targetCurrency);
+    const baseRate = this.getMockRate(
+      request.sourceCurrency,
+      request.targetCurrency,
+    );
     const rate = baseRate * (1 + (Math.random() - 0.5) * 0.02); // Western union has variable margins
-    const fixedFee = 4.99; 
+    const fixedFee = 4.99;
     const totalFees = fixedFee;
     const recipientAmount = (request.sendAmount - totalFees) * rate;
 
@@ -38,10 +41,13 @@ export class WesternUnionAdapter implements BaseProviderAdapter {
       status: 'SUCCESS',
     };
   }
-  
+
   private getMockRate(from: string, to: string): number {
     const rates: Record<string, number> = {
-      'GBP-NGN': 2040, 'USD-NGN': 1590, 'EUR-NGN': 1720, 'CAD-NGN': 1170,
+      'GBP-NGN': 2040,
+      'USD-NGN': 1590,
+      'EUR-NGN': 1720,
+      'CAD-NGN': 1170,
     };
     return rates[`${from}-${to}`] ?? 1580;
   }

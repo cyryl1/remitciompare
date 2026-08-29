@@ -33,7 +33,8 @@ export class SnapshotProducer {
       },
     });
 
-    const sendAmount = this.configService.get<number>('RATE_SNAPSHOT_AMOUNT') || 1000;
+    const sendAmount =
+      this.configService.get<number>('RATE_SNAPSHOT_AMOUNT') || 1000;
 
     let jobCount = 0;
     for (const provider of providers) {

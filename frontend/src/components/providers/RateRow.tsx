@@ -27,6 +27,7 @@ export function RateRow({ result, sendCurrency, rank, className }: RateRowProps)
         isBest
           ? 'border-2 border-vibrant-green shadow-card relative overflow-hidden'
           : 'border border-outline-variant shadow-card',
+        result.status !== 'SUCCESS' && 'opacity-60 bg-surface',
         className,
       )}
     >
@@ -56,50 +57,63 @@ export function RateRow({ result, sendCurrency, rank, className }: RateRowProps)
 
       {/* Amounts grid */}
       <div className="flex-grow flex flex-col justify-center">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
-          <div>
-            <p className="text-label-sm text-data-gray uppercase tracking-wide mb-1">Exchange Rate</p>
-            <p className="text-body-md font-semibold text-on-surface">
-              1 {sendCurrency} = {formatRate(result.exchangeRate)}
-            </p>
-          </div>
-          <div>
-            <p className="text-label-sm text-data-gray uppercase tracking-wide mb-1">Transfer Fee</p>
-            <p className="text-body-md font-semibold text-on-surface">
-              {formatCurrency(result.fee, sendCurrency)}
-            </p>
-          </div>
-          <div className="col-span-2">
-            <p className="text-label-sm text-data-gray uppercase tracking-wide mb-1">Delivery</p>
-            <p className="text-body-md font-semibold text-on-surface flex items-center gap-1">
-              <Zap size={14} className="text-vibrant-green" />
-              {result.deliveryTime}
-            </p>
-          </div>
-        </div>
+        {result.status === 'SUCCESS' ? (
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4">
+              <div>
+                <p className="text-label-sm text-data-gray uppercase tracking-wide mb-1">Exchange Rate</p>
+                <p className="text-body-md font-semibold text-on-surface">
+                  1 {sendCurrency} = {formatRate(result.exchangeRate)}
+                </p>
+              </div>
+              <div>
+                <p className="text-label-sm text-data-gray uppercase tracking-wide mb-1">Transfer Fee</p>
+                <p className="text-body-md font-semibold text-on-surface">
+                  {formatCurrency(result.fee, sendCurrency)}
+                </p>
+              </div>
+              <div className="col-span-2">
+                <p className="text-label-sm text-data-gray uppercase tracking-wide mb-1">Delivery</p>
+                <p className="text-body-md font-semibold text-on-surface flex items-center gap-1">
+                  <Zap size={14} className="text-vibrant-green" />
+                  {result.deliveryTime}
+                </p>
+              </div>
+            </div>
 
-        {/* Recipient gets + CTA */}
-        <div className="flex flex-col md:flex-row items-start md:items-end justify-between border-t border-surface-variant pt-4 gap-4">
-          <div>
-            <p className="text-label-sm text-data-gray uppercase tracking-wide mb-1">Recipient Gets</p>
-            <p className="text-headline-sm font-bold text-primary">
-              {result.receiveAmount.toLocaleString('en-GB', { minimumFractionDigits: 0 })}
-            </p>
+            {/* Recipient gets + CTA */}
+            <div className="flex flex-col md:flex-row items-start md:items-end justify-between border-t border-surface-variant pt-4 gap-4">
+              <div>
+                <p className="text-label-sm text-data-gray uppercase tracking-wide mb-1">Recipient Gets</p>
+                <p className="text-headline-sm font-bold text-primary">
+                  {result.receiveAmount.toLocaleString('en-GB', { minimumFractionDigits: 0 })}
+                </p>
+              </div>
+              <Link
+                to={`/providers/${result.providerSlug}/send`}
+                state={{ result }}
+                className={cn(
+                  'flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-label-lg shadow-sm transition-colors',
+                  isBest
+                    ? 'bg-vibrant-green text-deep-navy hover:brightness-110'
+                    : 'bg-primary text-on-primary hover:bg-primary-container',
+                )}
+              >
+                Continue with {result.providerName}
+                <ArrowRight size={15} />
+              </Link>
+            </div>
+          </>
+        ) : (
+          <div className="flex flex-col md:flex-row items-center justify-between h-full py-4 md:py-0">
+            <div className="text-on-surface-variant text-body-md mb-4 md:mb-0">
+              <span className="font-semibold">{result.providerName}</span> does not currently support transfers from <span className="font-semibold">{sendCurrency}</span>.
+            </div>
+            <div className="px-6 py-3 rounded-lg font-semibold text-label-lg bg-surface-container text-data-gray cursor-not-allowed">
+              Route Unavailable
+            </div>
           </div>
-          <Link
-            to={`/providers/${result.providerSlug}/send`}
-            state={{ result }}
-            className={cn(
-              'flex items-center gap-2 px-6 py-3 rounded-lg font-semibold text-label-lg shadow-sm transition-colors',
-              isBest
-                ? 'bg-vibrant-green text-deep-navy hover:brightness-110'
-                : 'bg-primary text-on-primary hover:bg-primary-container',
-            )}
-          >
-            Continue with {result.providerName}
-            <ArrowRight size={15} />
-          </Link>
-        </div>
+        )}
       </div>
     </div>
   );

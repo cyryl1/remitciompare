@@ -28,6 +28,9 @@ export const authApi = {
   login: (dto: LoginDto) =>
     apiClient.post<AuthResponse>('/auth/login', dto).then((r) => r.data),
 
+  firebaseLogin: (token: string, firstName?: string, lastName?: string) =>
+    apiClient.post<AuthResponse>('/auth/firebase-login', { token, firstName, lastName }).then((r) => r.data),
+
   register: (dto: RegisterDto) =>
     apiClient.post<AuthResponse>('/auth/register', dto).then((r) => r.data),
 

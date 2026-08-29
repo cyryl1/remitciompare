@@ -41,8 +41,14 @@ export const PROVIDER_ADAPTERS = 'PROVIDER_ADAPTERS';
         return [wise, lemfi, remitly, worldremit, wu, rev, sw, ria];
       },
       inject: [
-        WiseAdapter, LemFiAdapter, RemitlyAdapter, WorldRemitAdapter,
-        WesternUnionAdapter, RevolutAdapter, SendwaveAdapter, RiaAdapter
+        WiseAdapter,
+        LemFiAdapter,
+        RemitlyAdapter,
+        WorldRemitAdapter,
+        WesternUnionAdapter,
+        RevolutAdapter,
+        SendwaveAdapter,
+        RiaAdapter,
       ],
     },
   ],

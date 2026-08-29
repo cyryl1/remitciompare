@@ -18,6 +18,7 @@ const swagger_1 = require("@nestjs/swagger");
 const comparison_service_1 = require("../comparison/comparison.service");
 const create_comparison_dto_1 = require("../comparison/dto/create-comparison.dto");
 const prisma_service_1 = require("../prisma/prisma.service");
+const currencies_1 = require("../utils/currencies");
 let RatesController = class RatesController {
     comparisonService;
     prisma;
@@ -25,29 +26,24 @@ let RatesController = class RatesController {
         this.comparisonService = comparisonService;
         this.prisma = prisma;
     }
-    async compare(sendAmount, sendCurrency, receiveCurrency) {
+    async compare(amount, sendCurrency, receiveCurrency, priority = comparison_service_1.Priority.MOST_RECEIVED) {
         const dto = new create_comparison_dto_1.CreateComparisonDto();
-        dto.sendAmount = parseFloat(sendAmount) || 1000;
+        dto.sendAmount = amount ? parseFloat(amount) : 500;
         dto.sourceCurrency = sendCurrency || 'GBP';
         dto.targetCurrency = receiveCurrency || 'NGN';
-        dto.priority = comparison_service_1.Priority.MOST_RECEIVED;
-        const currencyToCountry = {
-            'GBP': 'GB',
-            'USD': 'US',
-            'EUR': 'FR',
-            'CAD': 'CA',
-            'AUD': 'AU',
-            'NGN': 'NG',
-            'KES': 'KE',
-            'GHS': 'GH',
-            'INR': 'IN',
-        };
-        dto.fromCountry = currencyToCountry[dto.sourceCurrency.toUpperCase()] || dto.sourceCurrency.substring(0, 2).toUpperCase();
-        dto.toCountry = currencyToCountry[dto.targetCurrency.toUpperCase()] || dto.targetCurrency.substring(0, 2).toUpperCase();
+        dto.priority = priority;
+        dto.fromCountry =
+            currencies_1.CURRENCY_TO_COUNTRY[dto.sourceCurrency.toUpperCase()]?.toUpperCase() ||
+                dto.sourceCurrency.substring(0, 2).toUpperCase();
+        dto.toCountry =
+            currencies_1.CURRENCY_TO_COUNTRY[dto.targetCurrency.toUpperCase()]?.toUpperCase() ||
+                dto.targetCurrency.substring(0, 2).toUpperCase();
         try {
             const result = await this.comparisonService.compare(dto, undefined, undefined, false);
             const providers = await this.prisma.provider.findMany();
-            const logoMap = new Map(providers.map(p => {
+            const logoMap = new Map();
+            const urlMap = new Map();
+            providers.forEach((p) => {
                 let logo = p.logoUrl;
                 try {
                     if (p.websiteUrl) {
@@ -57,15 +53,17 @@ let RatesController = class RatesController {
                 }
                 catch (e) {
                 }
-                return [p.name.toLowerCase(), logo];
-            }));
-            return result.allQuotes.map(q => {
+                logoMap.set(p.name.toLowerCase(), logo);
+                urlMap.set(p.name.toLowerCase(), p.affiliateUrl || p.websiteUrl || `https://${p.name.toLowerCase().replace(/\s+/g, '')}.com`);
+            });
+            return result.allQuotes.map((q) => {
                 const slug = q.provider.toLowerCase().replace(/\s+/g, '');
                 return {
                     providerId: slug,
                     providerName: q.provider,
                     providerSlug: slug,
                     providerLogo: logoMap.get(q.provider.toLowerCase()),
+                    handoffUrl: urlMap.get(q.provider.toLowerCase()),
                     exchangeRate: q.exchangeRate,
                     fee: q.totalFees,
                     feeType: 'flat',
@@ -74,7 +72,8 @@ let RatesController = class RatesController {
                     deliveryMethods: [q.paymentMethod || 'Bank Transfer'],
                     transferLimit: { min: 10, max: 50000 },
                     updatedAt: q.quoteTimestamp.toISOString(),
-                    badge: result.recommended?.provider === q.provider ? 'best_rate' : null
+                    status: q.status,
+                    badge: result.recommended?.provider === q.provider ? 'best_rate' : null,
                 };
             });
         }
@@ -86,10 +85,10 @@ let RatesController = class RatesController {
     async getHistory(sendCurrency = 'GBP', receiveCurrency = 'NGN', days = '30') {
         const hoursNum = (parseInt(days, 10) || 30) * 24;
         const snapshots = await this.comparisonService.getSnapshots(sendCurrency.toUpperCase(), receiveCurrency.toUpperCase(), hoursNum);
-        return snapshots.map(s => ({
+        return snapshots.map((s) => ({
             date: s.createdAt.toISOString(),
             rate: s.exchangeRate,
-            provider: s.provider
+            provider: s.provider,
         }));
     }
     async getLatest(sendCurrency = 'GBP', receiveCurrency = 'NGN') {
@@ -112,11 +111,12 @@ __decorate([
     (0, common_1.Get)('compare'),
     (0, swagger_1.ApiOperation)({ summary: 'Compare rates across providers' }),
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Comparison rates' }),
-    __param(0, (0, common_1.Query)('sendAmount')),
+    __param(0, (0, common_1.Query)('amount')),
     __param(1, (0, common_1.Query)('sendCurrency')),
     __param(2, (0, common_1.Query)('receiveCurrency')),
+    __param(3, (0, common_1.Query)('priority')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String]),
     __metadata("design:returntype", Promise)
 ], RatesController.prototype, "compare", null);
 __decorate([

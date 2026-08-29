@@ -24,7 +24,10 @@ export class LemFiAdapter implements BaseProviderAdapter {
     await new Promise((r) => setTimeout(r, 50 + Math.random() * 100));
 
     // LemFi is known for very competitive rates and low flat fees
-    const baseRate = this.getMockRate(request.sourceCurrency, request.targetCurrency);
+    const baseRate = this.getMockRate(
+      request.sourceCurrency,
+      request.targetCurrency,
+    );
     // Slight rate variation (±0.5%) to simulate live market spread
     const rate = baseRate * (1 + (Math.random() - 0.5) * 0.01);
 

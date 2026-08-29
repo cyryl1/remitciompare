@@ -60,7 +60,9 @@ __decorate([
     __metadata("design:type", String)
 ], CreateProviderDto.prototype, "description", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 'Wise (formerly TransferWise) is a global technology company...' }),
+    (0, swagger_1.ApiPropertyOptional)({
+        example: 'Wise (formerly TransferWise) is a global technology company...',
+    }),
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
@@ -114,7 +116,10 @@ __decorate([
     __metadata("design:type", Number)
 ], CreateProviderDto.prototype, "currenciesSupported", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: [String], example: ['BANK_TRANSFER', 'DEBIT_CARD'] }),
+    (0, swagger_1.ApiPropertyOptional)({
+        type: [String],
+        example: ['BANK_TRANSFER', 'DEBIT_CARD'],
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),
@@ -128,21 +133,30 @@ __decorate([
     __metadata("design:type", Array)
 ], CreateProviderDto.prototype, "payoutMethods", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: [String], example: ['Minutes', 'Within 2 hours'] }),
+    (0, swagger_1.ApiPropertyOptional)({
+        type: [String],
+        example: ['Minutes', 'Within 2 hours'],
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Array)
 ], CreateProviderDto.prototype, "deliveryMethods", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: [String], example: ['MOBILE_APP', 'RATE_NOTIFICATIONS'] }),
+    (0, swagger_1.ApiPropertyOptional)({
+        type: [String],
+        example: ['MOBILE_APP', 'RATE_NOTIFICATIONS'],
+    }),
     (0, class_validator_1.IsArray)(),
     (0, class_validator_1.IsString)({ each: true }),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Array)
 ], CreateProviderDto.prototype, "features", void 0);
 __decorate([
-    (0, swagger_1.ApiPropertyOptional)({ enum: client_1.ProviderStatus, example: client_1.ProviderStatus.PENDING }),
+    (0, swagger_1.ApiPropertyOptional)({
+        enum: client_1.ProviderStatus,
+        example: client_1.ProviderStatus.PENDING,
+    }),
     (0, class_validator_1.IsEnum)(client_1.ProviderStatus),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)

@@ -33,7 +33,7 @@ let SnapshotProcessor = SnapshotProcessor_1 = class SnapshotProcessor extends bu
     async process(job) {
         const { providerSlug, fromCurrency, toCurrency, sendAmount } = job.data;
         this.logger.debug(`Processing snapshot for ${providerSlug} ${fromCurrency}->${toCurrency}`);
-        const adapter = this.adapters.find(a => a.name.toLowerCase() === providerSlug.toLowerCase());
+        const adapter = this.adapters.find((a) => a.name.toLowerCase() === providerSlug.toLowerCase());
         if (!adapter) {
             this.logger.warn(`No adapter found for provider: ${providerSlug}`);
             return;
@@ -57,7 +57,7 @@ let SnapshotProcessor = SnapshotProcessor_1 = class SnapshotProcessor extends bu
                         totalFees: quote.totalFees,
                         paymentMethod: quote.paymentMethod,
                         dataType: 'LIVE',
-                    }
+                    },
                 });
                 this.logger.log(`Snapshot saved for ${providerSlug}: ${quote.recipientAmount} ${toCurrency}`);
                 await this.alertsService.processAlerts(providerSlug, fromCurrency, toCurrency, sendAmount, quote.exchangeRate, quote.recipientAmount);

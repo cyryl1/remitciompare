@@ -24,17 +24,16 @@ let WiseAdapter = WiseAdapter_1 = class WiseAdapter {
                 sourceCurrency: request.sourceCurrency,
                 targetCurrency: request.targetCurrency,
                 sourceAmount: request.sendAmount,
-                payOut: 'BANK_TRANSFER'
+                payOut: 'BANK_TRANSFER',
             }, {
                 headers: {
                     'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${process.env.WISE_API_KEY}`,
+                    Authorization: `Bearer ${process.env.WISE_API_KEY}`,
                 },
-                timeout: 4000
+                timeout: 4000,
             });
             const data = response.data;
-            const paymentOption = data.paymentOptions.find((opt) => opt.payIn === 'BANK_TRANSFER' && opt.payOut === 'BANK_TRANSFER')
-                || data.paymentOptions[0];
+            const paymentOption = data.paymentOptions.find((opt) => opt.payIn === 'BANK_TRANSFER' && opt.payOut === 'BANK_TRANSFER') || data.paymentOptions[0];
             if (!paymentOption) {
                 throw new Error('No valid payment options returned from Wise.');
             }
@@ -58,7 +57,7 @@ let WiseAdapter = WiseAdapter_1 = class WiseAdapter {
                 paymentMethod: paymentOption.payIn,
                 quoteTimestamp: new Date(),
                 expiresAt: new Date(data.expirationTime),
-                status: 'SUCCESS'
+                status: 'SUCCESS',
             };
             return quote;
         }
@@ -78,7 +77,7 @@ let WiseAdapter = WiseAdapter_1 = class WiseAdapter {
                 paymentMethod: '',
                 quoteTimestamp: new Date(),
                 expiresAt: null,
-                status: 'FAILED'
+                status: 'FAILED',
             };
         }
     }

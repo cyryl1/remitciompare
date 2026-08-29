@@ -23,14 +23,19 @@ export class RemitlyAdapter implements BaseProviderAdapter {
     await new Promise((r) => setTimeout(r, 80 + Math.random() * 120));
 
     // Remitly typically offers slightly lower rates but with promotional discounts
-    const baseRate = this.getMockRate(request.sourceCurrency, request.targetCurrency);
+    const baseRate = this.getMockRate(
+      request.sourceCurrency,
+      request.targetCurrency,
+    );
     // Slight rate variation (±0.8%)
     const rate = baseRate * (1 + (Math.random() - 0.5) * 0.016);
 
     // Remitly charges a percentage fee + fixed fee (Economy tier)
     const percentageFeeRate = 0.019; // 1.9%
     const fixedFee = 1.99;
-    const percentageFee = parseFloat((request.sendAmount * percentageFeeRate).toFixed(2));
+    const percentageFee = parseFloat(
+      (request.sendAmount * percentageFeeRate).toFixed(2),
+    );
     const totalFees = parseFloat((fixedFee + percentageFee).toFixed(2));
     const recipientAmount = (request.sendAmount - totalFees) * rate;
 

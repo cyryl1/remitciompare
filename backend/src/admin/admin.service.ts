@@ -33,7 +33,7 @@ export class AdminService {
       totalAlerts,
       activeAlerts,
       totalProviders,
-      activeProviders
+      activeProviders,
     ] = await Promise.all([
       this.prisma.user.count(),
       this.prisma.user.count({ where: { createdAt: { gte: today } } }),
@@ -77,7 +77,7 @@ export class AdminService {
       this.prisma.provider.count(),
     ]);
 
-    const data = providers.map(p => ({
+    const data = providers.map((p) => ({
       id: p.id,
       name: p.name,
       slug: p.slug,
@@ -95,10 +95,10 @@ export class AdminService {
       where: { id },
       data: {
         isActive: data.isActive,
-        status: data.isFeatured ? 'INTEGRATED' : 'UNAVAILABLE'
-      }
+        status: data.isFeatured ? 'INTEGRATED' : 'UNAVAILABLE',
+      },
     });
-    
+
     return {
       id: updated.id,
       name: updated.name,
@@ -112,12 +112,14 @@ export class AdminService {
 
   async getUsers(page: number, limit: number, search?: string) {
     const skip = (page - 1) * limit;
-    const where = search ? {
-      OR: [
-        { email: { contains: search, mode: 'insensitive' as any } },
-        { fullName: { contains: search, mode: 'insensitive' as any } }
-      ]
-    } : {};
+    const where = search
+      ? {
+          OR: [
+            { email: { contains: search, mode: 'insensitive' as any } },
+            { fullName: { contains: search, mode: 'insensitive' as any } },
+          ],
+        }
+      : {};
 
     const [users, total] = await Promise.all([
       this.prisma.user.findMany({
@@ -129,7 +131,7 @@ export class AdminService {
       this.prisma.user.count({ where }),
     ]);
 
-    const data = users.map(u => {
+    const data = users.map((u) => {
       const nameParts = u.fullName ? u.fullName.split(' ') : [''];
       return {
         id: u.id,

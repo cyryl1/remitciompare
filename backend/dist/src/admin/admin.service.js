@@ -34,7 +34,7 @@ let AdminService = AdminService_1 = class AdminService {
     async getDashboardStats() {
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const [totalUsers, recentSignups, totalComparisons, comparisonsToday, totalAlerts, activeAlerts, totalProviders, activeProviders] = await Promise.all([
+        const [totalUsers, recentSignups, totalComparisons, comparisonsToday, totalAlerts, activeAlerts, totalProviders, activeProviders,] = await Promise.all([
             this.prisma.user.count(),
             this.prisma.user.count({ where: { createdAt: { gte: today } } }),
             this.prisma.comparison.count(),
@@ -72,7 +72,7 @@ let AdminService = AdminService_1 = class AdminService {
             }),
             this.prisma.provider.count(),
         ]);
-        const data = providers.map(p => ({
+        const data = providers.map((p) => ({
             id: p.id,
             name: p.name,
             slug: p.slug,
@@ -88,8 +88,8 @@ let AdminService = AdminService_1 = class AdminService {
             where: { id },
             data: {
                 isActive: data.isActive,
-                status: data.isFeatured ? 'INTEGRATED' : 'UNAVAILABLE'
-            }
+                status: data.isFeatured ? 'INTEGRATED' : 'UNAVAILABLE',
+            },
         });
         return {
             id: updated.id,
@@ -103,12 +103,14 @@ let AdminService = AdminService_1 = class AdminService {
     }
     async getUsers(page, limit, search) {
         const skip = (page - 1) * limit;
-        const where = search ? {
-            OR: [
-                { email: { contains: search, mode: 'insensitive' } },
-                { fullName: { contains: search, mode: 'insensitive' } }
-            ]
-        } : {};
+        const where = search
+            ? {
+                OR: [
+                    { email: { contains: search, mode: 'insensitive' } },
+                    { fullName: { contains: search, mode: 'insensitive' } },
+                ],
+            }
+            : {};
         const [users, total] = await Promise.all([
             this.prisma.user.findMany({
                 where,
@@ -118,7 +120,7 @@ let AdminService = AdminService_1 = class AdminService {
             }),
             this.prisma.user.count({ where }),
         ]);
-        const data = users.map(u => {
+        const data = users.map((u) => {
             const nameParts = u.fullName ? u.fullName.split(' ') : [''];
             return {
                 id: u.id,

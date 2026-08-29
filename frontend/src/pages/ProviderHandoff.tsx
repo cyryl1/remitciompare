@@ -20,8 +20,7 @@ export default function ProviderHandoff() {
       const timer = setTimeout(() => setCountdown(c => c - 1), 1000);
       return () => clearTimeout(timer);
     } else {
-      // Actually redirect here in a real app, e.g. window.location.href = result.providerLink
-      console.log('Redirecting to:', result.providerName);
+      window.location.href = result.handoffUrl || '/';
     }
   }, [countdown, result]);
 
@@ -92,7 +91,7 @@ export default function ProviderHandoff() {
             <div className="flex-1 flex flex-col gap-2 p-4 bg-primary-container rounded-xl border border-primary relative shadow-inner">
               <span className="text-label-sm text-primary-fixed uppercase">Recipient Gets ({recCur})</span>
               <span className="font-mono text-headline-md text-surface-white font-bold">
-                {result.receiveAmount.toLocaleString('en-GB', { minimumFractionDigits: 0 })}
+                {result.receiveAmount > 0 ? result.receiveAmount.toLocaleString('en-GB', { minimumFractionDigits: 0 }) : '—'}
               </span>
             </div>
           </div>
@@ -101,13 +100,13 @@ export default function ProviderHandoff() {
             <div className="flex flex-col gap-1">
               <span className="text-label-sm text-data-gray uppercase">Exchange Rate</span>
               <span className="font-mono text-body-md text-on-surface font-semibold">
-                1 {sendCur} = {formatRate(result.exchangeRate)}
+                {result.exchangeRate > 0 ? `1 ${sendCur} = ${formatRate(result.exchangeRate)}` : 'Calculated at checkout'}
               </span>
             </div>
             <div className="flex flex-col gap-1">
               <span className="text-label-sm text-data-gray uppercase">Transfer Fee</span>
               <span className="font-mono text-body-md text-on-surface font-semibold">
-                {formatCurrency(result.fee, sendCur)}
+                {result.exchangeRate > 0 ? formatCurrency(result.fee, sendCur) : 'Varies'}
               </span>
             </div>
             <div className="flex flex-col gap-1">
@@ -136,7 +135,7 @@ export default function ProviderHandoff() {
             You are being securely redirected to complete your transfer on the provider's official platform.
           </p>
           <div className="flex gap-4">
-            <Button variant="secondary" className="bg-surface-white text-primary hover:bg-surface-container" onClick={() => setCountdown(0)}>
+            <Button variant="secondary" className="bg-surface-white text-primary hover:bg-surface-container" onClick={() => window.location.href = result.handoffUrl || '/'}>
               Go now <ExternalLink size={16} className="ml-2" />
             </Button>
             <Button variant="outline" className="text-surface-white border-white/20 hover:bg-white/10" onClick={() => navigate(-1)}>

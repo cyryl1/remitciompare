@@ -12,18 +12,7 @@ import { formatRate } from '@/lib/utils';
 
 type SortOption = 'value' | 'speed' | 'fee';
 
-const CURRENCY_TO_COUNTRY: Record<string, string> = {
-  GBP: 'gb',
-  USD: 'us',
-  EUR: 'eu',
-  NGN: 'ng',
-  GHS: 'gh',
-  KES: 'ke',
-  INR: 'in',
-  PKR: 'pk',
-  ZAR: 'za',
-  PHP: 'ph',
-};
+import { CURRENCY_TO_COUNTRY } from '@/lib/currencies';
 
 export default function CompareResult() {
   const navigate = useNavigate();
@@ -31,13 +20,18 @@ export default function CompareResult() {
   const params = {
     sendAmount: store.sendAmount,
     sendCurrency: store.sendCurrency,
-    receiveCurrency: store.receiveCurrency
+    receiveCurrency: store.receiveCurrency,
+    priority: store.priority,
   };
   const { data: rates, isLoading, isError, refetch, isFetching } = useCompareRates(params);
   const { mutate: saveComparison } = useSaveComparison();
   const savedParamsRef = useRef<string | null>(null);
 
-  const [sort, setSort] = useState<SortOption>('value');
+  const [sort, setSort] = useState<SortOption>(() => {
+    if (store.priority === 'FASTEST') return 'speed';
+    if (store.priority === 'LOWEST_COST') return 'fee';
+    return 'value';
+  });
 
   useEffect(() => {
     if (rates && rates.length > 0) {
@@ -57,6 +51,10 @@ export default function CompareResult() {
   const sortedRates = useMemo(() => {
     if (!rates) return [];
     return [...rates].sort((a, b) => {
+      // Always put FAILED / TIMEOUT at the bottom
+      if (a.status !== 'SUCCESS' && b.status === 'SUCCESS') return 1;
+      if (a.status === 'SUCCESS' && b.status !== 'SUCCESS') return -1;
+      
       if (sort === 'value') return b.receiveAmount - a.receiveAmount;
       if (sort === 'fee') return a.fee - b.fee;
       // speed sort is complex, let's just leave it basic for MVP

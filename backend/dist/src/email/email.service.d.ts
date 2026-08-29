@@ -15,5 +15,13 @@ export declare class EmailService {
         provider: string;
         targetRecipientAmount: number;
     }): Promise<boolean>;
+    sendWeeklyComparisonEmail(to: string, routes: Array<{
+        fromCurrency: string;
+        toCurrency: string;
+        sendAmount: number;
+        bestProvider: string;
+        bestRecipientAmount: string;
+    }>): Promise<boolean>;
+    sendDataArchiveEmail(to: string, userData: any): Promise<boolean>;
     private sendMail;
 }
