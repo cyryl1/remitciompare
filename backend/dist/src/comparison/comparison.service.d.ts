@@ -19,20 +19,21 @@ export declare class ComparisonService {
     constructor(adapters: BaseProviderAdapter[], prisma: PrismaService);
     compare(dto: CreateComparisonDto, userId?: string, anonymousSessionId?: string, persist?: boolean): Promise<ComparisonResult>;
     private persistComparison;
+    private parseDeliverySpeed;
     private rankQuotes;
     private executeWithTimeout;
     private buildFailedQuote;
     getSnapshots(fromCurrency: string, toCurrency: string, hours?: number): Promise<{
         id: string;
-        createdAt: Date;
         provider: string;
-        sendAmount: number;
-        exchangeRate: number;
-        totalFees: number;
-        recipientAmount: number;
-        paymentMethod: string;
         fromCurrency: string;
         toCurrency: string;
+        sendAmount: number;
+        exchangeRate: number;
+        recipientAmount: number;
+        totalFees: number;
+        paymentMethod: string;
         dataType: import("@prisma/client").$Enums.DataType;
+        createdAt: Date;
     }[]>;
 }

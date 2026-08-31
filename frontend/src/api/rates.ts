@@ -21,7 +21,7 @@ export interface RateResult {
   deliveryMethods: string[];
   transferLimit?: { min: number; max: number };
   affiliateUrl?: string;
-  badge?: 'best_rate' | 'fastest' | 'lowest_fee' | null;
+  badges?: ('recommended' | 'best_rate' | 'fastest' | 'lowest_fee')[];
   updatedAt: string;
   status?: 'SUCCESS' | 'FAILED' | 'TIMEOUT';
 }

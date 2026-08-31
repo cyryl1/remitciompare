@@ -12,13 +12,15 @@ interface RateRowProps {
 }
 
 const BADGE_MAP: Record<string, { label: string; variant: 'success' | 'info' | 'default' }> = {
+  recommended: { label: 'Recommended', variant: 'success' },
   best_rate:  { label: 'Best Rate',    variant: 'success' },
   fastest:    { label: 'Fastest',      variant: 'info'    },
   lowest_fee: { label: 'Lowest Fee',   variant: 'success' },
 };
 
 export function RateRow({ result, sendCurrency, rank, className }: RateRowProps) {
-  const isBest = result.badge === 'best_rate';
+  const badges = result.badges || [];
+  const isBest = badges.includes('recommended') || badges.includes('best_rate');
 
   return (
     <div
@@ -32,9 +34,16 @@ export function RateRow({ result, sendCurrency, rank, className }: RateRowProps)
       )}
     >
       {/* Best badge ribbon */}
-      {result.badge && BADGE_MAP[result.badge] && (
-        <div className="absolute top-0 left-0 bg-vibrant-green text-deep-navy text-label-sm font-bold uppercase tracking-widest px-3 py-1 rounded-br-lg">
-          {BADGE_MAP[result.badge].label}
+      {badges.length > 0 && (
+        <div className="absolute top-0 left-0 flex gap-1">
+          {badges.map(b => BADGE_MAP[b] && (
+            <div key={b} className={cn(
+              "text-label-sm font-bold uppercase tracking-widest px-3 py-1 rounded-br-lg",
+              b === 'recommended' ? "bg-vibrant-green text-deep-navy" : "bg-primary text-on-primary"
+            )}>
+              {BADGE_MAP[b].label}
+            </div>
+          ))}
         </div>
       )}
 

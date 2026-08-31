@@ -42,7 +42,10 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
             select: { slug: true },
         });
         const activeSlugs = new Set(activeProviders.map((p) => p.slug.toLowerCase()));
-        const activeAdapters = this.adapters.filter((adapter) => activeSlugs.has(adapter.name.toLowerCase()));
+        const activeAdapters = this.adapters.filter((adapter) => {
+            const adapterSlug = adapter.name.toLowerCase().replace(/\s+/g, '');
+            return activeSlugs.has(adapterSlug);
+        });
         const request = {
             sendAmount: dto.sendAmount,
             sourceCurrency: dto.sourceCurrency,
@@ -117,6 +120,30 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
             this.logger.error(`Failed to persist comparison to DB: ${err.message}`);
         }
     }
+    parseDeliverySpeed(estimate) {
+        if (!estimate)
+            return 99999;
+        const text = estimate.toLowerCase();
+        if (text.includes('instant'))
+            return 0;
+        if (text.includes('minute')) {
+            const match = text.match(/(\d+)/);
+            return match ? parseInt(match[1], 10) : 30;
+        }
+        if (text.includes('hour')) {
+            const match = text.match(/(\d+)/);
+            return match ? parseInt(match[1], 10) * 60 : 120;
+        }
+        if (text.includes('same day') || text.includes('today'))
+            return 12 * 60;
+        if (text.includes('next day') || text.includes('tomorrow'))
+            return 24 * 60;
+        if (text.includes('day')) {
+            const match = text.match(/(\d+)/);
+            return match ? parseInt(match[1], 10) * 24 * 60 : 48 * 60;
+        }
+        return 99999;
+    }
     rankQuotes(a, b, priority) {
         if (priority === Priority.MOST_RECEIVED) {
             return b.recipientAmount - a.recipientAmount;
@@ -125,7 +152,12 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
             return a.totalFees - b.totalFees;
         }
         else if (priority === Priority.FASTEST) {
-            return b.recipientAmount - a.recipientAmount;
+            const aSpeed = this.parseDeliverySpeed(a.deliveryEstimate);
+            const bSpeed = this.parseDeliverySpeed(b.deliveryEstimate);
+            if (aSpeed === bSpeed) {
+                return b.recipientAmount - a.recipientAmount;
+            }
+            return aSpeed - bSpeed;
         }
         return 0;
     }

@@ -58,9 +58,10 @@ export class ComparisonService {
     );
 
     // Filter adapters
-    const activeAdapters = this.adapters.filter((adapter) =>
-      activeSlugs.has(adapter.name.toLowerCase()),
-    );
+    const activeAdapters = this.adapters.filter((adapter) => {
+      const adapterSlug = adapter.name.toLowerCase().replace(/\s+/g, '');
+      return activeSlugs.has(adapterSlug);
+    });
 
     const request: QuoteRequest = {
       sendAmount: dto.sendAmount,
@@ -172,6 +173,27 @@ export class ComparisonService {
     }
   }
 
+  private parseDeliverySpeed(estimate: string): number {
+    if (!estimate) return 99999;
+    const text = estimate.toLowerCase();
+    if (text.includes('instant')) return 0;
+    if (text.includes('minute')) {
+      const match = text.match(/(\d+)/);
+      return match ? parseInt(match[1], 10) : 30;
+    }
+    if (text.includes('hour')) {
+      const match = text.match(/(\d+)/);
+      return match ? parseInt(match[1], 10) * 60 : 120;
+    }
+    if (text.includes('same day') || text.includes('today')) return 12 * 60;
+    if (text.includes('next day') || text.includes('tomorrow')) return 24 * 60;
+    if (text.includes('day')) {
+      const match = text.match(/(\d+)/);
+      return match ? parseInt(match[1], 10) * 24 * 60 : 48 * 60;
+    }
+    return 99999;
+  }
+
   private rankQuotes(
     a: ProviderQuote,
     b: ProviderQuote,
@@ -182,9 +204,12 @@ export class ComparisonService {
     } else if (priority === Priority.LOWEST_COST) {
       return a.totalFees - b.totalFees; // Lowest first
     } else if (priority === Priority.FASTEST) {
-      // MVP fallback: we would need a normalized delivery time mapping for real sort.
-      // Defaulting to Most Received if delivery times are unparseable strings.
-      return b.recipientAmount - a.recipientAmount;
+      const aSpeed = this.parseDeliverySpeed(a.deliveryEstimate);
+      const bSpeed = this.parseDeliverySpeed(b.deliveryEstimate);
+      if (aSpeed === bSpeed) {
+        return b.recipientAmount - a.recipientAmount; // Tie breaker
+      }
+      return aSpeed - bSpeed;
     }
     return 0;
   }

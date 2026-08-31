@@ -62,8 +62,23 @@ export class RatesController {
         urlMap.set(p.name.toLowerCase(), p.affiliateUrl || p.websiteUrl || `https://${p.name.toLowerCase().replace(/\s+/g, '')}.com`);
       });
 
+      const successfulQuotes = result.allQuotes.filter(q => q.status === 'SUCCESS');
+      let bestRateProvider = null;
+      if (successfulQuotes.length > 0) {
+        bestRateProvider = [...successfulQuotes].sort((a, b) => b.recipientAmount - a.recipientAmount)[0].provider;
+      }
+
       return result.allQuotes.map((q) => {
         const slug = q.provider.toLowerCase().replace(/\s+/g, '');
+        
+        const badges: string[] = [];
+        if (result.recommended?.provider === q.provider) {
+          badges.push('recommended');
+        }
+        if (q.provider === bestRateProvider) {
+          badges.push('best_rate');
+        }
+
         return {
           providerId: slug,
           providerName: q.provider,
@@ -79,8 +94,7 @@ export class RatesController {
           transferLimit: { min: 10, max: 50000 }, // Mock
           updatedAt: q.quoteTimestamp.toISOString(),
           status: q.status,
-          badge:
-            result.recommended?.provider === q.provider ? 'best_rate' : null,
+          badges,
         };
       });
     } catch (error) {

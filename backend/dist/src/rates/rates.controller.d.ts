@@ -21,8 +21,8 @@ export declare class RatesController {
             max: number;
         };
         updatedAt: string;
-        status: "SUCCESS" | "FAILED" | "TIMEOUT";
-        badge: string | null;
+        status: "FAILED" | "TIMEOUT" | "SUCCESS";
+        badges: string[];
     }[]>;
     getHistory(sendCurrency?: string, receiveCurrency?: string, days?: string): Promise<{
         date: string;

@@ -52,9 +52,138 @@ export class AdminController {
   }
 
   @Patch('providers/:id')
-  @ApiOperation({ summary: 'Update provider settings' })
-  async updateProvider(@Param('id') id: string, @Body() body: any) {
-    return this.adminService.updateProvider(id, body);
+  @ApiOperation({ summary: 'Update provider status' })
+  async updateProvider(
+    @Param('id') id: string,
+    @Body() updateData: { isActive?: boolean; isFeatured?: boolean },
+  ) {
+    return this.adminService.updateProvider(id, updateData);
+  }
+
+  @Post('providers')
+  @ApiOperation({ summary: 'Create new provider' })
+  async createProvider(@Body() data: { name: string; slug: string; websiteUrl?: string; isActive?: boolean; isFeatured?: boolean }) {
+    return this.adminService.createProvider(data);
+  }
+
+  @Get('quotes')
+  @ApiOperation({ summary: 'Get quotes/comparisons list' })
+  async getQuotes(
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '20',
+    @Query('search') search?: string,
+  ) {
+    return this.adminService.getQuotes(
+      parseInt(page, 10),
+      parseInt(limit, 10),
+      search,
+    );
+  }
+
+  @Get('routes')
+  @ApiOperation({ summary: 'Get provider routes' })
+  async getRoutes(
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '20',
+    @Query('search') search?: string,
+  ) {
+    return this.adminService.getRoutes(
+      parseInt(page, 10),
+      parseInt(limit, 10),
+      search,
+    );
+  }
+
+  @Patch('routes/:id')
+  @ApiOperation({ summary: 'Update route status' })
+  async updateRoute(
+    @Param('id') id: string,
+    @Body() updateData: { isActive: boolean },
+  ) {
+    return this.adminService.updateRoute(id, updateData.isActive);
+  }
+
+  @Post('routes')
+  @ApiOperation({ summary: 'Create new route' })
+  async createRoute(@Body() data: { providerId: string; fromCurrency: string; toCurrency: string; fromCountry?: string; toCountry?: string; isActive?: boolean }) {
+    return this.adminService.createRoute(data);
+  }
+
+  @Get('referrals')
+  @ApiOperation({ summary: 'Get referral links' })
+  async getReferralLinks(
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '20',
+    @Query('search') search?: string,
+  ) {
+    return this.adminService.getReferralLinks(
+      parseInt(page, 10),
+      parseInt(limit, 10),
+      search,
+    );
+  }
+
+  @Patch('referrals/:id')
+  @ApiOperation({ summary: 'Update referral link status' })
+  async updateReferralLink(
+    @Param('id') id: string,
+    @Body() updateData: { isActive?: boolean; url?: string; utmSource?: string; utmCampaign?: string; utmMedium?: string },
+  ) {
+    return this.adminService.updateReferralLink(id, updateData);
+  }
+
+  @Post('referrals')
+  @ApiOperation({ summary: 'Create new referral link' })
+  async createReferralLink(@Body() data: { providerId: string; url: string; utmSource?: string; utmCampaign?: string; utmMedium?: string; isActive?: boolean }) {
+    return this.adminService.createReferralLink(data);
+  }
+
+  @Get('alerts')
+  @ApiOperation({ summary: 'Get all user alerts' })
+  async getAlerts(
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '20',
+    @Query('search') search?: string,
+  ) {
+    return this.adminService.getAlerts(
+      parseInt(page, 10),
+      parseInt(limit, 10),
+      search,
+    );
+  }
+
+  @Post('alerts/check')
+  @ApiOperation({ summary: 'Force check alerts against live rates' })
+  async triggerAlertCheck() {
+    return this.adminService.triggerAlertCheck();
+  }
+
+  @Get('health')
+  @ApiOperation({ summary: 'Get system health logs' })
+  async getHealthLogs(
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '20',
+    @Query('search') search?: string,
+  ) {
+    return this.adminService.getHealthLogs(
+      parseInt(page, 10),
+      parseInt(limit, 10),
+      search,
+    );
+  }
+
+  @Get('logs')
+  @ApiOperation({ summary: 'Get activity logs' })
+  async getActivityLogs(
+    @Query('page') page: string = '1',
+    @Query('limit') limit: string = '20',
+    @Query('search') search?: string,
+  ) {
+    return this.adminService.getActivityLogs(
+      parseInt(page, 10),
+      parseInt(limit, 10),
+      search,
+    );
   }
 
   @Get('users')

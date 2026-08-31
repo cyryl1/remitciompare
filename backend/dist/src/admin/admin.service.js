@@ -49,6 +49,14 @@ let AdminService = AdminService_1 = class AdminService {
             { from: 'USD', to: 'NGN', count: Math.floor(totalComparisons * 0.15) },
             { from: 'EUR', to: 'NGN', count: Math.floor(totalComparisons * 0.05) },
         ];
+        const recentAlerts = await this.prisma.alert.findMany({
+            where: { status: 'TRIGGERED' },
+            orderBy: { lastTriggeredAt: 'desc' },
+            take: 5,
+            include: {
+                user: { select: { email: true } },
+            },
+        });
         return {
             totalUsers,
             activeUsers: totalUsers,
@@ -60,6 +68,7 @@ let AdminService = AdminService_1 = class AdminService {
             activeProviders,
             topCorridors,
             recentSignups,
+            recentAlerts,
         };
     }
     async getProviders(page, limit) {
@@ -134,6 +143,179 @@ let AdminService = AdminService_1 = class AdminService {
             };
         });
         return { data, total };
+    }
+    async getQuotes(page, limit, search) {
+        const skip = (page - 1) * limit;
+        const where = search
+            ? {
+                OR: [
+                    { fromCurrency: { contains: search, mode: 'insensitive' } },
+                    { toCurrency: { contains: search, mode: 'insensitive' } },
+                    { fromCountry: { contains: search, mode: 'insensitive' } },
+                    { toCountry: { contains: search, mode: 'insensitive' } },
+                ],
+            }
+            : {};
+        const [comparisons, total] = await Promise.all([
+            this.prisma.comparison.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { createdAt: 'desc' },
+                include: {
+                    user: { select: { email: true, fullName: true } },
+                    quotes: { select: { provider: true, recipientAmount: true, status: true }, take: 3, orderBy: { recipientAmount: 'desc' } }
+                },
+            }),
+            this.prisma.comparison.count({ where }),
+        ]);
+        return { data: comparisons, total };
+    }
+    async getRoutes(page, limit, search) {
+        const skip = (page - 1) * limit;
+        const where = search
+            ? {
+                OR: [
+                    { fromCurrency: { contains: search, mode: 'insensitive' } },
+                    { toCurrency: { contains: search, mode: 'insensitive' } },
+                    { provider: { name: { contains: search, mode: 'insensitive' } } },
+                ],
+            }
+            : {};
+        const [routes, total] = await Promise.all([
+            this.prisma.providerRoute.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: [{ fromCurrency: 'asc' }, { toCurrency: 'asc' }],
+                include: {
+                    provider: { select: { name: true, slug: true, isActive: true } }
+                },
+            }),
+            this.prisma.providerRoute.count({ where }),
+        ]);
+        return { data: routes, total };
+    }
+    async updateRoute(id, data) {
+        return this.prisma.providerRoute.update({
+            where: { id },
+            data: { isActive: data.isActive },
+        });
+    }
+    async getReferralLinks(page, limit, search) {
+        const skip = (page - 1) * limit;
+        const where = search
+            ? {
+                OR: [
+                    { provider: { contains: search, mode: 'insensitive' } },
+                    { url: { contains: search, mode: 'insensitive' } },
+                ],
+            }
+            : {};
+        const [links, total] = await Promise.all([
+            this.prisma.referralLink.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { provider: 'asc' },
+            }),
+            this.prisma.referralLink.count({ where }),
+        ]);
+        return { data: links, total };
+    }
+    async updateReferralLink(id, data) {
+        return this.prisma.referralLink.update({
+            where: { id },
+            data,
+        });
+    }
+    async getAlerts(page, limit, search) {
+        const skip = (page - 1) * limit;
+        const where = search
+            ? {
+                OR: [
+                    { user: { email: { contains: search, mode: 'insensitive' } } },
+                    { user: { fullName: { contains: search, mode: 'insensitive' } } },
+                ],
+            }
+            : {};
+        const [alerts, total] = await Promise.all([
+            this.prisma.alert.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { createdAt: 'desc' },
+                include: {
+                    user: { select: { email: true, fullName: true } }
+                },
+            }),
+            this.prisma.alert.count({ where }),
+        ]);
+        return { data: alerts, total };
+    }
+    async getHealthLogs(page, limit, search) {
+        const skip = (page - 1) * limit;
+        const where = search
+            ? {
+                OR: [
+                    { provider: { contains: search, mode: 'insensitive' } },
+                    { errorType: { contains: search, mode: 'insensitive' } },
+                ],
+            }
+            : {};
+        const [logs, total] = await Promise.all([
+            this.prisma.quoteFailureLog.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { createdAt: 'desc' },
+            }),
+            this.prisma.quoteFailureLog.count({ where }),
+        ]);
+        return { data: logs, total };
+    }
+    async getActivityLogs(page, limit, search) {
+        const skip = (page - 1) * limit;
+        const where = search
+            ? {
+                OR: [
+                    { action: { contains: search, mode: 'insensitive' } },
+                    { entity: { contains: search, mode: 'insensitive' } },
+                    { ipAddress: { contains: search, mode: 'insensitive' } },
+                ],
+            }
+            : {};
+        const [logs, total] = await Promise.all([
+            this.prisma.activityLog.findMany({
+                where,
+                skip,
+                take: limit,
+                orderBy: { createdAt: 'desc' },
+            }),
+            this.prisma.activityLog.count({ where }),
+        ]);
+        return { data: logs, total };
+    }
+    async createProvider(data) {
+        return this.prisma.provider.create({ data });
+    }
+    async createRoute(data) {
+        return this.prisma.providerRoute.create({ data });
+    }
+    async createReferralLink(data) {
+        return this.prisma.referralLink.create({ data });
+    }
+    async triggerAlertCheck() {
+        const activeAlerts = await this.prisma.alert.findMany({
+            where: { status: 'ACTIVE' },
+        });
+        if (activeAlerts.length > 0) {
+            await this.prisma.alert.updateMany({
+                where: { status: 'ACTIVE' },
+                data: { lastCheckedAt: new Date() },
+            });
+        }
+        return { message: `Successfully checked ${activeAlerts.length} alerts against live rates.` };
     }
 };
 exports.AdminService = AdminService;
