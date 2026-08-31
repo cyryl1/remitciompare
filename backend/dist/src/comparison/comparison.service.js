@@ -51,8 +51,16 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
             sourceCurrency: dto.sourceCurrency,
             targetCurrency: dto.targetCurrency,
         };
-        const promises = activeAdapters.map((adapter) => this.executeWithTimeout(adapter.getQuote(request), this.TIMEOUT_MS).catch((err) => {
+        const promises = activeAdapters.map((adapter) => this.executeWithTimeout(adapter.getQuote(request), this.TIMEOUT_MS).catch(async (err) => {
             this.logger.error(`Adapter ${adapter.name} failed or timed out: ${err.message}`);
+            await this.prisma.quoteFailureLog.create({
+                data: {
+                    provider: adapter.name.toLowerCase(),
+                    errorType: err.message.includes('timeout') ? 'TIMEOUT' : 'API_ERROR',
+                    errorDetail: err.message,
+                    route: `${request.sourceCurrency}-${request.targetCurrency}`
+                }
+            });
             return this.buildFailedQuote(adapter.name, request, 'TIMEOUT');
         }));
         const results = await Promise.all(promises);

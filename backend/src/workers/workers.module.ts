@@ -21,5 +21,6 @@ import { AlertsWorkerService } from './alerts.worker';
     ComparisonModule,
   ],
   providers: [SnapshotProducer, SnapshotProcessor, AlertsWorkerService],
+  exports: [AlertsWorkerService],
 })
 export class WorkersModule {}

@@ -23,7 +23,7 @@ let AdminController = class AdminController {
         this.adminService = adminService;
     }
     async getActivity() {
-        return this.adminService.getActivityLogs();
+        return this.adminService.getActivityLogs(1, 50);
     }
     async getQuoteFailures() {
         return this.adminService.getQuoteFailures();
@@ -47,7 +47,7 @@ let AdminController = class AdminController {
         return this.adminService.getRoutes(parseInt(page, 10), parseInt(limit, 10), search);
     }
     async updateRoute(id, updateData) {
-        return this.adminService.updateRoute(id, updateData.isActive);
+        return this.adminService.updateRoute(id, { isActive: updateData.isActive });
     }
     async createRoute(data) {
         return this.adminService.createRoute(data);

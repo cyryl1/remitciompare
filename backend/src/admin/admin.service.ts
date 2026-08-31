@@ -1,18 +1,15 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { AlertsWorkerService } from '../workers/alerts.worker';
 
 @Injectable()
 export class AdminService {
   private readonly logger = new Logger(AdminService.name);
 
-  constructor(private prisma: PrismaService) {}
-
-  async getActivityLogs(limit = 50) {
-    return this.prisma.activityLog.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: limit,
-    });
-  }
+  constructor(
+    private prisma: PrismaService,
+    private alertsWorker: AlertsWorkerService,
+  ) {}
 
   async getQuoteFailures(limit = 50) {
     return this.prisma.quoteFailureLog.findMany({
@@ -45,12 +42,18 @@ export class AdminService {
       this.prisma.provider.count({ where: { isActive: true } }),
     ]);
 
-    // Mock top corridors for MVP
-    const topCorridors = [
-      { from: 'GBP', to: 'NGN', count: Math.floor(totalComparisons * 0.8) },
-      { from: 'USD', to: 'NGN', count: Math.floor(totalComparisons * 0.15) },
-      { from: 'EUR', to: 'NGN', count: Math.floor(totalComparisons * 0.05) },
-    ];
+    const topCorridorsData = await this.prisma.comparison.groupBy({
+      by: ['fromCurrency', 'toCurrency'],
+      _count: { _all: true },
+      orderBy: { _count: { fromCurrency: 'desc' } },
+      take: 3,
+    });
+
+    const topCorridors = topCorridorsData.map(c => ({
+      from: c.fromCurrency,
+      to: c.toCurrency,
+      count: c._count._all,
+    }));
 
     const recentAlerts = await this.prisma.alert.findMany({
       where: { status: 'TRIGGERED' },
@@ -61,9 +64,15 @@ export class AdminService {
       },
     });
 
+    const activeUsers = await this.prisma.user.count({
+      where: {
+        comparisons: { some: { createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } } }
+      }
+    });
+
     return {
       totalUsers,
-      activeUsers: totalUsers, // Mock
+      activeUsers,
       totalComparisons,
       comparisonsToday,
       totalAlerts,
@@ -87,6 +96,12 @@ export class AdminService {
       this.prisma.provider.count(),
     ]);
 
+    const quoteCounts = await this.prisma.comparisonQuote.groupBy({
+      by: ['provider'],
+      _count: { _all: true },
+    });
+    const quoteMap = new Map(quoteCounts.map(c => [c.provider, c._count._all]));
+
     const data = providers.map((p) => ({
       id: p.id,
       name: p.name,
@@ -94,7 +109,7 @@ export class AdminService {
       isActive: p.isActive,
       isFeatured: p.status === 'INTEGRATED',
       lastRateUpdate: p.updatedAt.toISOString(),
-      totalComparisons: 0, // Mock
+      totalComparisons: quoteMap.get(p.slug) || 0,
     }));
 
     return { data, total };
@@ -137,6 +152,7 @@ export class AdminService {
         skip,
         take: limit,
         orderBy: { createdAt: 'desc' },
+        include: { _count: { select: { comparisons: true, alerts: true } } },
       }),
       this.prisma.user.count({ where }),
     ]);
@@ -150,8 +166,8 @@ export class AdminService {
         lastName: nameParts.length > 1 ? nameParts.slice(1).join(' ') : '',
         role: u.role,
         createdAt: u.createdAt.toISOString(),
-        comparisonCount: 0, // Mock
-        alertCount: 0, // Mock
+        comparisonCount: u._count.comparisons,
+        alertCount: u._count.alerts,
       };
     });
 
@@ -330,32 +346,27 @@ export class AdminService {
     return { data: logs, total };
   }
 
-  async createProvider(data: { name: string; slug: string; websiteUrl?: string; isActive?: boolean; isFeatured?: boolean }) {
-    return this.prisma.provider.create({ data });
+  async createProvider(data: { name: string; slug: string; websiteUrl: string; isActive?: boolean; isFeatured?: boolean }) {
+    const { isFeatured, ...rest } = data;
+    return this.prisma.provider.create({
+      data: {
+        ...rest,
+        status: isFeatured ? 'INTEGRATED' : 'UNAVAILABLE',
+      },
+    });
   }
 
   async createRoute(data: { providerId: string; fromCurrency: string; toCurrency: string; fromCountry?: string; toCountry?: string; isActive?: boolean }) {
     return this.prisma.providerRoute.create({ data });
   }
 
-  async createReferralLink(data: { providerId: string; url: string; utmSource?: string; utmCampaign?: string; utmMedium?: string; isActive?: boolean }) {
+  async createReferralLink(data: { provider: string; url: string; utmSource?: string; utmCampaign?: string; utmMedium?: string; isActive?: boolean }) {
     return this.prisma.referralLink.create({ data });
   }
 
   async triggerAlertCheck() {
-    // Mock triggering the active alerts
-    const activeAlerts = await this.prisma.alert.findMany({
-      where: { status: 'ACTIVE' },
-    });
-    
-    // Update their lastCheckedAt
-    if (activeAlerts.length > 0) {
-      await this.prisma.alert.updateMany({
-        where: { status: 'ACTIVE' },
-        data: { lastCheckedAt: new Date() },
-      });
-    }
-
-    return { message: `Successfully checked ${activeAlerts.length} alerts against live rates.` };
+    // Manually trigger the cron job logic
+    await this.alertsWorker.processRateAlerts();
+    return { message: `Successfully triggered the background worker to check all active alerts against live rates.` };
   }
 }

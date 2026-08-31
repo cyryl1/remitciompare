@@ -22,7 +22,7 @@ export class AdminController {
   @Get('activity')
   @ApiOperation({ summary: 'Get recent user activity' })
   async getActivity() {
-    return this.adminService.getActivityLogs();
+    return this.adminService.getActivityLogs(1, 50);
   }
 
   @Get('quote-failures')
@@ -62,7 +62,7 @@ export class AdminController {
 
   @Post('providers')
   @ApiOperation({ summary: 'Create new provider' })
-  async createProvider(@Body() data: { name: string; slug: string; websiteUrl?: string; isActive?: boolean; isFeatured?: boolean }) {
+  async createProvider(@Body() data: { name: string; slug: string; websiteUrl: string; isActive?: boolean; isFeatured?: boolean }) {
     return this.adminService.createProvider(data);
   }
 
@@ -100,7 +100,7 @@ export class AdminController {
     @Param('id') id: string,
     @Body() updateData: { isActive: boolean },
   ) {
-    return this.adminService.updateRoute(id, updateData.isActive);
+    return this.adminService.updateRoute(id, { isActive: updateData.isActive });
   }
 
   @Post('routes')
@@ -134,7 +134,7 @@ export class AdminController {
 
   @Post('referrals')
   @ApiOperation({ summary: 'Create new referral link' })
-  async createReferralLink(@Body() data: { providerId: string; url: string; utmSource?: string; utmCampaign?: string; utmMedium?: string; isActive?: boolean }) {
+  async createReferralLink(@Body() data: { provider: string; url: string; utmSource?: string; utmCampaign?: string; utmMedium?: string; isActive?: boolean }) {
     return this.adminService.createReferralLink(data);
   }
 

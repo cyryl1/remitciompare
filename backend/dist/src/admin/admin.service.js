@@ -13,17 +13,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AdminService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const alerts_worker_1 = require("../workers/alerts.worker");
 let AdminService = AdminService_1 = class AdminService {
     prisma;
+    alertsWorker;
     logger = new common_1.Logger(AdminService_1.name);
-    constructor(prisma) {
+    constructor(prisma, alertsWorker) {
         this.prisma = prisma;
-    }
-    async getActivityLogs(limit = 50) {
-        return this.prisma.activityLog.findMany({
-            orderBy: { createdAt: 'desc' },
-            take: limit,
-        });
+        this.alertsWorker = alertsWorker;
     }
     async getQuoteFailures(limit = 50) {
         return this.prisma.quoteFailureLog.findMany({
@@ -44,11 +41,17 @@ let AdminService = AdminService_1 = class AdminService {
             this.prisma.provider.count(),
             this.prisma.provider.count({ where: { isActive: true } }),
         ]);
-        const topCorridors = [
-            { from: 'GBP', to: 'NGN', count: Math.floor(totalComparisons * 0.8) },
-            { from: 'USD', to: 'NGN', count: Math.floor(totalComparisons * 0.15) },
-            { from: 'EUR', to: 'NGN', count: Math.floor(totalComparisons * 0.05) },
-        ];
+        const topCorridorsData = await this.prisma.comparison.groupBy({
+            by: ['fromCurrency', 'toCurrency'],
+            _count: { _all: true },
+            orderBy: { _count: { fromCurrency: 'desc' } },
+            take: 3,
+        });
+        const topCorridors = topCorridorsData.map(c => ({
+            from: c.fromCurrency,
+            to: c.toCurrency,
+            count: c._count._all,
+        }));
         const recentAlerts = await this.prisma.alert.findMany({
             where: { status: 'TRIGGERED' },
             orderBy: { lastTriggeredAt: 'desc' },
@@ -57,9 +60,14 @@ let AdminService = AdminService_1 = class AdminService {
                 user: { select: { email: true } },
             },
         });
+        const activeUsers = await this.prisma.user.count({
+            where: {
+                comparisons: { some: { createdAt: { gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) } } }
+            }
+        });
         return {
             totalUsers,
-            activeUsers: totalUsers,
+            activeUsers,
             totalComparisons,
             comparisonsToday,
             totalAlerts,
@@ -81,6 +89,11 @@ let AdminService = AdminService_1 = class AdminService {
             }),
             this.prisma.provider.count(),
         ]);
+        const quoteCounts = await this.prisma.comparisonQuote.groupBy({
+            by: ['provider'],
+            _count: { _all: true },
+        });
+        const quoteMap = new Map(quoteCounts.map(c => [c.provider, c._count._all]));
         const data = providers.map((p) => ({
             id: p.id,
             name: p.name,
@@ -88,7 +101,7 @@ let AdminService = AdminService_1 = class AdminService {
             isActive: p.isActive,
             isFeatured: p.status === 'INTEGRATED',
             lastRateUpdate: p.updatedAt.toISOString(),
-            totalComparisons: 0,
+            totalComparisons: quoteMap.get(p.slug) || 0,
         }));
         return { data, total };
     }
@@ -126,6 +139,7 @@ let AdminService = AdminService_1 = class AdminService {
                 skip,
                 take: limit,
                 orderBy: { createdAt: 'desc' },
+                include: { _count: { select: { comparisons: true, alerts: true } } },
             }),
             this.prisma.user.count({ where }),
         ]);
@@ -138,8 +152,8 @@ let AdminService = AdminService_1 = class AdminService {
                 lastName: nameParts.length > 1 ? nameParts.slice(1).join(' ') : '',
                 role: u.role,
                 createdAt: u.createdAt.toISOString(),
-                comparisonCount: 0,
-                alertCount: 0,
+                comparisonCount: u._count.comparisons,
+                alertCount: u._count.alerts,
             };
         });
         return { data, total };
@@ -297,7 +311,13 @@ let AdminService = AdminService_1 = class AdminService {
         return { data: logs, total };
     }
     async createProvider(data) {
-        return this.prisma.provider.create({ data });
+        const { isFeatured, ...rest } = data;
+        return this.prisma.provider.create({
+            data: {
+                ...rest,
+                status: isFeatured ? 'INTEGRATED' : 'UNAVAILABLE',
+            },
+        });
     }
     async createRoute(data) {
         return this.prisma.providerRoute.create({ data });
@@ -306,21 +326,14 @@ let AdminService = AdminService_1 = class AdminService {
         return this.prisma.referralLink.create({ data });
     }
     async triggerAlertCheck() {
-        const activeAlerts = await this.prisma.alert.findMany({
-            where: { status: 'ACTIVE' },
-        });
-        if (activeAlerts.length > 0) {
-            await this.prisma.alert.updateMany({
-                where: { status: 'ACTIVE' },
-                data: { lastCheckedAt: new Date() },
-            });
-        }
-        return { message: `Successfully checked ${activeAlerts.length} alerts against live rates.` };
+        await this.alertsWorker.processRateAlerts();
+        return { message: `Successfully triggered the background worker to check all active alerts against live rates.` };
     }
 };
 exports.AdminService = AdminService;
 exports.AdminService = AdminService = AdminService_1 = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        alerts_worker_1.AlertsWorkerService])
 ], AdminService);
 //# sourceMappingURL=admin.service.js.map

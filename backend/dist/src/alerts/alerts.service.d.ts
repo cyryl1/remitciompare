@@ -20,7 +20,7 @@ export declare class AlertsService {
         createdAt: string;
         triggeredAt: string | undefined;
     }[]>;
-    createAlert(userId: string, data: any): Promise<{
+    createAlert(userId: string, data: any, ipAddress?: string): Promise<{
         id: string;
         sendCurrency: string;
         receiveCurrency: string;
@@ -33,7 +33,7 @@ export declare class AlertsService {
         notifyPush: any;
         createdAt: string;
     }>;
-    updateAlert(userId: string, id: string, data: any): Promise<{
+    updateAlert(userId: string, id: string, data: any, ipAddress?: string): Promise<{
         id: string;
         status: import("@prisma/client").$Enums.AlertStatus;
         createdAt: Date;
@@ -53,7 +53,7 @@ export declare class AlertsService {
         triggeredValue: number | null;
         triggeredProvider: string | null;
     }>;
-    deleteAlert(userId: string, id: string): Promise<{
+    deleteAlert(userId: string, id: string, ipAddress?: string): Promise<{
         id: string;
         status: import("@prisma/client").$Enums.AlertStatus;
         createdAt: Date;
@@ -73,7 +73,7 @@ export declare class AlertsService {
         triggeredValue: number | null;
         triggeredProvider: string | null;
     }>;
-    toggleAlert(userId: string, id: string): Promise<{
+    toggleAlert(userId: string, id: string, ipAddress?: string): Promise<{
         status: string;
         id: string;
         createdAt: Date;

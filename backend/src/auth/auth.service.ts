@@ -24,7 +24,7 @@ export class AuthService {
     private emailService: EmailService,
   ) {}
 
-  async register(dto: RegisterDto) {
+  async register(dto: RegisterDto, ipAddress?: string) {
     const existing = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -48,11 +48,18 @@ export class AuthService {
       user.email,
       verificationToken,
     );
+    await this.prisma.activityLog.create({
+      data: {
+        userId: user.id,
+        action: 'USER_SIGNUP',
+        ipAddress,
+      },
+    });
 
     return this.generateTokens(user);
   }
 
-  async login(dto: LoginDto) {
+  async login(dto: LoginDto, ipAddress?: string) {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -64,11 +71,18 @@ export class AuthService {
     if (!isMatch) {
       throw new UnauthorizedException('Invalid credentials');
     }
+    await this.prisma.activityLog.create({
+      data: {
+        userId: user.id,
+        action: 'USER_LOGIN',
+        ipAddress,
+      },
+    });
 
     return this.generateTokens(user);
   }
 
-  async firebaseLogin(dto: FirebaseLoginDto) {
+  async firebaseLogin(dto: FirebaseLoginDto, ipAddress?: string) {
     try {
       const decodedToken = await firebaseAuthAdmin.verifyIdToken(dto.token);
       const email = decodedToken.email;
@@ -101,6 +115,14 @@ export class AuthService {
           });
         }
       }
+      await this.prisma.activityLog.create({
+        data: {
+          userId: user.id,
+          action: 'USER_LOGIN',
+          metadata: { provider: 'firebase' },
+          ipAddress,
+        },
+      });
 
       return this.generateTokens(user);
     } catch (error: any) {
@@ -142,7 +164,7 @@ export class AuthService {
     return { message: 'If an account exists, a reset link has been sent.' };
   }
 
-  async resetPassword(dto: ResetPasswordDto) {
+  async resetPassword(dto: ResetPasswordDto, ipAddress?: string) {
     const user = await this.prisma.user.findFirst({
       where: {
         passwordResetToken: dto.token,
@@ -162,6 +184,13 @@ export class AuthService {
         passwordHash,
         passwordResetToken: null,
         passwordResetExpiry: null,
+      },
+    });
+    await this.prisma.activityLog.create({
+      data: {
+        userId: user.id,
+        action: 'PASSWORD_RESET',
+        ipAddress,
       },
     });
 

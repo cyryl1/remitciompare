@@ -9,7 +9,7 @@ export declare class RatesController {
         providerName: string;
         providerSlug: string;
         providerLogo: any;
-        handoffUrl: any;
+        handoffUrl: string;
         exchangeRate: number;
         fee: number;
         feeType: string;
@@ -21,7 +21,7 @@ export declare class RatesController {
             max: number;
         };
         updatedAt: string;
-        status: "FAILED" | "TIMEOUT" | "SUCCESS";
+        status: "SUCCESS" | "FAILED" | "TIMEOUT";
         badges: string[];
     }[]>;
     getHistory(sendCurrency?: string, receiveCurrency?: string, days?: string): Promise<{
@@ -32,5 +32,9 @@ export declare class RatesController {
     getLatest(sendCurrency?: string, receiveCurrency?: string): Promise<{
         rate: number;
         updatedAt: string;
+    }>;
+    handleReferralRedirect(slug: string): Promise<{
+        url: string;
+        statusCode: number;
     }>;
 }

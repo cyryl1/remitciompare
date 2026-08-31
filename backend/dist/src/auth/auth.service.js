@@ -62,7 +62,7 @@ let AuthService = class AuthService {
         this.configService = configService;
         this.emailService = emailService;
     }
-    async register(dto) {
+    async register(dto, ipAddress) {
         const existing = await this.prisma.user.findUnique({
             where: { email: dto.email },
         });
@@ -80,9 +80,16 @@ let AuthService = class AuthService {
             },
         });
         await this.emailService.sendVerificationEmail(user.email, verificationToken);
+        await this.prisma.activityLog.create({
+            data: {
+                userId: user.id,
+                action: 'USER_SIGNUP',
+                ipAddress,
+            },
+        });
         return this.generateTokens(user);
     }
-    async login(dto) {
+    async login(dto, ipAddress) {
         const user = await this.prisma.user.findUnique({
             where: { email: dto.email },
         });
@@ -93,9 +100,16 @@ let AuthService = class AuthService {
         if (!isMatch) {
             throw new common_1.UnauthorizedException('Invalid credentials');
         }
+        await this.prisma.activityLog.create({
+            data: {
+                userId: user.id,
+                action: 'USER_LOGIN',
+                ipAddress,
+            },
+        });
         return this.generateTokens(user);
     }
-    async firebaseLogin(dto) {
+    async firebaseLogin(dto, ipAddress) {
         try {
             const decodedToken = await firebase_admin_1.auth.verifyIdToken(dto.token);
             const email = decodedToken.email;
@@ -124,6 +138,14 @@ let AuthService = class AuthService {
                     });
                 }
             }
+            await this.prisma.activityLog.create({
+                data: {
+                    userId: user.id,
+                    action: 'USER_LOGIN',
+                    metadata: { provider: 'firebase' },
+                    ipAddress,
+                },
+            });
             return this.generateTokens(user);
         }
         catch (error) {
@@ -155,7 +177,7 @@ let AuthService = class AuthService {
         await this.emailService.sendPasswordResetEmail(user.email, resetToken);
         return { message: 'If an account exists, a reset link has been sent.' };
     }
-    async resetPassword(dto) {
+    async resetPassword(dto, ipAddress) {
         const user = await this.prisma.user.findFirst({
             where: {
                 passwordResetToken: dto.token,
@@ -172,6 +194,13 @@ let AuthService = class AuthService {
                 passwordHash,
                 passwordResetToken: null,
                 passwordResetExpiry: null,
+            },
+        });
+        await this.prisma.activityLog.create({
+            data: {
+                userId: user.id,
+                action: 'PASSWORD_RESET',
+                ipAddress,
             },
         });
         return { message: 'Password has been reset successfully' };

@@ -29,18 +29,18 @@ let AuthController = class AuthController {
     constructor(authService) {
         this.authService = authService;
     }
-    async register(registerDto, res) {
-        const { accessToken, refreshToken, user } = await this.authService.register(registerDto);
+    async register(registerDto, req, res) {
+        const { accessToken, refreshToken, user } = await this.authService.register(registerDto, req.ip);
         this.setAuthCookies(res, accessToken, refreshToken);
         return { accessToken, user };
     }
-    async login(loginDto, res) {
-        const { accessToken, refreshToken, user } = await this.authService.login(loginDto);
+    async login(loginDto, req, res) {
+        const { accessToken, refreshToken, user } = await this.authService.login(loginDto, req.ip);
         this.setAuthCookies(res, accessToken, refreshToken);
         return { accessToken, user };
     }
-    async firebaseLogin(dto, res) {
-        const { accessToken, refreshToken, user } = await this.authService.firebaseLogin(dto);
+    async firebaseLogin(dto, req, res) {
+        const { accessToken, refreshToken, user } = await this.authService.firebaseLogin(dto, req.ip);
         this.setAuthCookies(res, accessToken, refreshToken);
         return { accessToken, user };
     }
@@ -66,8 +66,8 @@ let AuthController = class AuthController {
     async forgotPassword(forgotPasswordDto) {
         return this.authService.forgotPassword(forgotPasswordDto.email);
     }
-    async resetPassword(resetPasswordDto) {
-        return this.authService.resetPassword(resetPasswordDto);
+    async resetPassword(resetPasswordDto, req) {
+        return this.authService.resetPassword(resetPasswordDto, req.ip);
     }
     async verifyEmail(verifyEmailDto) {
         return this.authService.verifyEmail(verifyEmailDto.token);
@@ -97,9 +97,10 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 201, description: 'User successfully registered' }),
     (0, swagger_1.ApiResponse)({ status: 409, description: 'Email already in use' }),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Res)({ passthrough: true })),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [register_dto_1.RegisterDto, Object]),
+    __metadata("design:paramtypes", [register_dto_1.RegisterDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
 __decorate([
@@ -109,9 +110,10 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'User successfully logged in' }),
     (0, swagger_1.ApiResponse)({ status: 401, description: 'Invalid credentials' }),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Res)({ passthrough: true })),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [login_dto_1.LoginDto, Object]),
+    __metadata("design:paramtypes", [login_dto_1.LoginDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
@@ -124,9 +126,10 @@ __decorate([
     }),
     (0, swagger_1.ApiResponse)({ status: 401, description: 'Invalid Firebase token' }),
     __param(0, (0, common_1.Body)()),
-    __param(1, (0, common_1.Res)({ passthrough: true })),
+    __param(1, (0, common_1.Req)()),
+    __param(2, (0, common_1.Res)({ passthrough: true })),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [firebase_login_dto_1.FirebaseLoginDto, Object]),
+    __metadata("design:paramtypes", [firebase_login_dto_1.FirebaseLoginDto, Object, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "firebaseLogin", null);
 __decorate([
@@ -175,8 +178,9 @@ __decorate([
     (0, swagger_1.ApiResponse)({ status: 200, description: 'Password successfully reset' }),
     (0, swagger_1.ApiResponse)({ status: 400, description: 'Invalid or expired token' }),
     __param(0, (0, common_1.Body)()),
+    __param(1, (0, common_1.Req)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [reset_password_dto_1.ResetPasswordDto]),
+    __metadata("design:paramtypes", [reset_password_dto_1.ResetPasswordDto, Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "resetPassword", null);
 __decorate([

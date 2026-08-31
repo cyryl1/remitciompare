@@ -12,7 +12,7 @@ export declare class AuthService {
     private configService;
     private emailService;
     constructor(prisma: PrismaService, jwtService: JwtService, configService: ConfigService, emailService: EmailService);
-    register(dto: RegisterDto): Promise<{
+    register(dto: RegisterDto, ipAddress?: string): Promise<{
         accessToken: string;
         refreshToken: string;
         user: {
@@ -24,7 +24,7 @@ export declare class AuthService {
             lastName: any;
         };
     }>;
-    login(dto: LoginDto): Promise<{
+    login(dto: LoginDto, ipAddress?: string): Promise<{
         accessToken: string;
         refreshToken: string;
         user: {
@@ -36,7 +36,7 @@ export declare class AuthService {
             lastName: any;
         };
     }>;
-    firebaseLogin(dto: FirebaseLoginDto): Promise<{
+    firebaseLogin(dto: FirebaseLoginDto, ipAddress?: string): Promise<{
         accessToken: string;
         refreshToken: string;
         user: {
@@ -63,7 +63,7 @@ export declare class AuthService {
     forgotPassword(email: string): Promise<{
         message: string;
     }>;
-    resetPassword(dto: ResetPasswordDto): Promise<{
+    resetPassword(dto: ResetPasswordDto, ipAddress?: string): Promise<{
         message: string;
     }>;
     verifyEmail(token: string): Promise<{

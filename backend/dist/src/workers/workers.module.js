@@ -33,6 +33,7 @@ exports.WorkersModule = WorkersModule = __decorate([
             comparison_module_1.ComparisonModule,
         ],
         providers: [snapshot_producer_1.SnapshotProducer, snapshot_processor_1.SnapshotProcessor, alerts_worker_1.AlertsWorkerService],
+        exports: [alerts_worker_1.AlertsWorkerService],
     })
 ], WorkersModule);
 //# sourceMappingURL=workers.module.js.map

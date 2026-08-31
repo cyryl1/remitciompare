@@ -29,7 +29,7 @@ export class AlertsController {
   @Post()
   @ApiOperation({ summary: 'Create a new rate alert' })
   async createAlert(@Req() req: any, @Body() body: any) {
-    return this.alertsService.createAlert(req.user.id, body);
+    return this.alertsService.createAlert(req.user.id, body, req.ip);
   }
 
   @Patch(':id')
@@ -39,18 +39,18 @@ export class AlertsController {
     @Param('id') id: string,
     @Body() body: any,
   ) {
-    return this.alertsService.updateAlert(req.user.id, id, body);
+    return this.alertsService.updateAlert(req.user.id, id, body, req.ip);
   }
 
   @Delete(':id')
   @ApiOperation({ summary: 'Delete an alert' })
   async deleteAlert(@Req() req: any, @Param('id') id: string) {
-    return this.alertsService.deleteAlert(req.user.id, id);
+    return this.alertsService.deleteAlert(req.user.id, id, req.ip);
   }
 
   @Patch(':id/toggle')
   @ApiOperation({ summary: 'Toggle an alert status' })
   async toggleAlert(@Req() req: any, @Param('id') id: string) {
-    return this.alertsService.toggleAlert(req.user.id, id);
+    return this.alertsService.toggleAlert(req.user.id, id, req.ip);
   }
 }

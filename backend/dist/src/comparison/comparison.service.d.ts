@@ -25,15 +25,15 @@ export declare class ComparisonService {
     private buildFailedQuote;
     getSnapshots(fromCurrency: string, toCurrency: string, hours?: number): Promise<{
         id: string;
+        createdAt: Date;
         provider: string;
-        fromCurrency: string;
-        toCurrency: string;
         sendAmount: number;
         exchangeRate: number;
-        recipientAmount: number;
         totalFees: number;
+        recipientAmount: number;
         paymentMethod: string;
+        fromCurrency: string;
+        toCurrency: string;
         dataType: import("@prisma/client").$Enums.DataType;
-        createdAt: Date;
     }[]>;
 }

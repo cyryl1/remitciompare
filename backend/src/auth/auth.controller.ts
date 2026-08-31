@@ -37,10 +37,11 @@ export class AuthController {
   @ApiResponse({ status: 409, description: 'Email already in use' })
   async register(
     @Body() registerDto: RegisterDto,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken, refreshToken, user } =
-      await this.authService.register(registerDto);
+      await this.authService.register(registerDto, req.ip);
     this.setAuthCookies(res, accessToken, refreshToken);
     return { accessToken, user };
   }
@@ -52,10 +53,11 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid credentials' })
   async login(
     @Body() loginDto: LoginDto,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken, refreshToken, user } =
-      await this.authService.login(loginDto);
+      await this.authService.login(loginDto, req.ip);
     this.setAuthCookies(res, accessToken, refreshToken);
     return { accessToken, user };
   }
@@ -70,10 +72,11 @@ export class AuthController {
   @ApiResponse({ status: 401, description: 'Invalid Firebase token' })
   async firebaseLogin(
     @Body() dto: FirebaseLoginDto,
+    @Req() req: Request,
     @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken, refreshToken, user } =
-      await this.authService.firebaseLogin(dto);
+      await this.authService.firebaseLogin(dto, req.ip);
     this.setAuthCookies(res, accessToken, refreshToken);
     return { accessToken, user };
   }
@@ -129,8 +132,11 @@ export class AuthController {
   @ApiOperation({ summary: 'Reset password using token' })
   @ApiResponse({ status: 200, description: 'Password successfully reset' })
   @ApiResponse({ status: 400, description: 'Invalid or expired token' })
-  async resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
-    return this.authService.resetPassword(resetPasswordDto);
+  async resetPassword(
+    @Body() resetPasswordDto: ResetPasswordDto,
+    @Req() req: Request,
+  ) {
+    return this.authService.resetPassword(resetPasswordDto, req.ip);
   }
 
   @Post('verify-email')

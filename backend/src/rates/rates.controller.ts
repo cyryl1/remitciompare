@@ -1,4 +1,4 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get, Param, Query, Redirect } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ComparisonService, Priority } from '../comparison/comparison.service';
 import { CreateComparisonDto } from '../comparison/dto/create-comparison.dto';
@@ -47,7 +47,7 @@ export class RatesController {
       const providers = await this.prisma.provider.findMany();
       const logoMap = new Map();
       const urlMap = new Map();
-      
+      const slugMap = new Map();
       providers.forEach((p) => {
         let logo = p.logoUrl;
         try {
@@ -59,7 +59,7 @@ export class RatesController {
           // fallback to DB logo if URL parsing fails
         }
         logoMap.set(p.name.toLowerCase(), logo);
-        urlMap.set(p.name.toLowerCase(), p.affiliateUrl || p.websiteUrl || `https://${p.name.toLowerCase().replace(/\s+/g, '')}.com`);
+        slugMap.set(p.name.toLowerCase(), p.slug);
       });
 
       const successfulQuotes = result.allQuotes.filter(q => q.status === 'SUCCESS');
@@ -84,7 +84,7 @@ export class RatesController {
           providerName: q.provider,
           providerSlug: slug,
           providerLogo: logoMap.get(q.provider.toLowerCase()),
-          handoffUrl: urlMap.get(q.provider.toLowerCase()),
+          handoffUrl: `/api/rates/referral/${slugMap.get(q.provider.toLowerCase()) || slug}`,
           exchangeRate: q.exchangeRate,
           fee: q.totalFees,
           feeType: 'flat', // Simplified for frontend
@@ -147,5 +147,47 @@ export class RatesController {
       rate: 1.0,
       updatedAt: new Date().toISOString(),
     };
+  }
+
+  @Get('referral/:slug')
+  @ApiOperation({ summary: 'Redirect to provider via referral link' })
+  @Redirect()
+  async handleReferralRedirect(@Param('slug') slug: string) {
+    // 1. Find the provider
+    const provider = await this.prisma.provider.findUnique({
+      where: { slug }
+    });
+
+    if (!provider) {
+      return { url: '/', statusCode: 302 }; // fallback to home
+    }
+
+    // 2. Find an active referral link for this provider
+    const referralLink = await this.prisma.referralLink.findFirst({
+      where: {
+        provider: provider.name,
+        isActive: true,
+      }
+    });
+
+    if (referralLink) {
+      // Increment click count
+      await this.prisma.referralLink.update({
+        where: { id: referralLink.id },
+        data: { clickCount: { increment: 1 } }
+      });
+
+      // Construct URL with UTM params
+      let finalUrl = referralLink.url;
+      const urlObj = new URL(finalUrl);
+      if (referralLink.utmSource) urlObj.searchParams.set('utm_source', referralLink.utmSource);
+      if (referralLink.utmCampaign) urlObj.searchParams.set('utm_campaign', referralLink.utmCampaign);
+      
+      return { url: urlObj.toString(), statusCode: 302 };
+    }
+
+    // 3. Fallback to basic affiliate URL or website URL
+    const fallbackUrl = provider.affiliateUrl || provider.websiteUrl || `https://${provider.name.toLowerCase().replace(/\s+/g, '')}.com`;
+    return { url: fallbackUrl, statusCode: 302 };
   }
 }

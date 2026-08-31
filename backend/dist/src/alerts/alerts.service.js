@@ -43,7 +43,7 @@ let AlertsService = AlertsService_1 = class AlertsService {
             triggeredAt: a.lastTriggeredAt?.toISOString(),
         }));
     }
-    async createAlert(userId, data) {
+    async createAlert(userId, data, ipAddress) {
         const alert = await this.prisma.alert.create({
             data: {
                 userId,
@@ -53,6 +53,15 @@ let AlertsService = AlertsService_1 = class AlertsService {
                 sendAmount: data.sendAmount || 1000,
                 priority: 'MOST_RECEIVED',
                 status: 'ACTIVE',
+            },
+        });
+        await this.prisma.activityLog.create({
+            data: {
+                userId,
+                action: 'ALERT_CREATED',
+                entity: 'Alert',
+                entityId: alert.id,
+                ipAddress,
             },
         });
         return {
@@ -69,7 +78,7 @@ let AlertsService = AlertsService_1 = class AlertsService {
             createdAt: alert.createdAt.toISOString(),
         };
     }
-    async updateAlert(userId, id, data) {
+    async updateAlert(userId, id, data, ipAddress) {
         const alert = await this.prisma.alert.update({
             where: { id, userId },
             data: {
@@ -78,14 +87,33 @@ let AlertsService = AlertsService_1 = class AlertsService {
                 status: data.status ? data.status.toUpperCase() : undefined,
             },
         });
+        await this.prisma.activityLog.create({
+            data: {
+                userId,
+                action: 'ALERT_UPDATED',
+                entity: 'Alert',
+                entityId: id,
+                ipAddress,
+            },
+        });
         return alert;
     }
-    async deleteAlert(userId, id) {
-        return this.prisma.alert.delete({
+    async deleteAlert(userId, id, ipAddress) {
+        const deleted = await this.prisma.alert.delete({
             where: { id, userId },
         });
+        await this.prisma.activityLog.create({
+            data: {
+                userId,
+                action: 'ALERT_DELETED',
+                entity: 'Alert',
+                entityId: id,
+                ipAddress,
+            },
+        });
+        return deleted;
     }
-    async toggleAlert(userId, id) {
+    async toggleAlert(userId, id, ipAddress) {
         const alert = await this.prisma.alert.findUnique({ where: { id, userId } });
         if (!alert)
             throw new Error('Alert not found');
@@ -93,6 +121,16 @@ let AlertsService = AlertsService_1 = class AlertsService {
         const updated = await this.prisma.alert.update({
             where: { id },
             data: { status: newStatus },
+        });
+        await this.prisma.activityLog.create({
+            data: {
+                userId,
+                action: 'ALERT_TOGGLED',
+                entity: 'Alert',
+                entityId: id,
+                metadata: { newStatus },
+                ipAddress,
+            },
         });
         return {
             ...updated,
@@ -122,6 +160,19 @@ let AlertsService = AlertsService_1 = class AlertsService {
                         triggeredValue: recipientAmount,
                         triggeredProvider: provider,
                         status: 'TRIGGERED',
+                    },
+                });
+                await this.prisma.activityLog.create({
+                    data: {
+                        userId: alert.userId,
+                        action: 'ALERT_TRIGGERED',
+                        entity: 'Alert',
+                        entityId: alert.id,
+                        metadata: {
+                            provider,
+                            recipientAmount,
+                            targetAmount: alert.targetRecipientAmount,
+                        },
                     },
                 });
                 if (alert.user?.email) {

@@ -64,10 +64,26 @@ let SnapshotProcessor = SnapshotProcessor_1 = class SnapshotProcessor extends bu
             }
             else {
                 this.logger.warn(`Quote for ${providerSlug} returned non-success status: ${quote.status}`);
+                await this.prisma.quoteFailureLog.create({
+                    data: {
+                        provider: providerSlug,
+                        errorType: 'API_ERROR',
+                        errorDetail: `Provider returned non-success status: ${quote.status}`,
+                        route: `${fromCurrency}-${toCurrency}`
+                    }
+                });
             }
         }
         catch (error) {
             this.logger.error(`Failed to process snapshot for ${providerSlug}: ${error.message}`);
+            await this.prisma.quoteFailureLog.create({
+                data: {
+                    provider: providerSlug,
+                    errorType: error.message.includes('timeout') ? 'TIMEOUT' : 'API_ERROR',
+                    errorDetail: error.message,
+                    route: `${fromCurrency}-${toCurrency}`
+                }
+            });
             throw error;
         }
     }

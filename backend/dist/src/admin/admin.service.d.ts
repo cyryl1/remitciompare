@@ -1,15 +1,17 @@
 import { PrismaService } from '../prisma/prisma.service';
+import { AlertsWorkerService } from '../workers/alerts.worker';
 export declare class AdminService {
     private prisma;
+    private alertsWorker;
     private readonly logger;
-    constructor(prisma: PrismaService);
+    constructor(prisma: PrismaService, alertsWorker: AlertsWorkerService);
     getQuoteFailures(limit?: number): Promise<{
         id: string;
-        provider: string;
-        route: string;
-        errorType: string;
-        errorDetail: string | null;
         createdAt: Date;
+        provider: string;
+        errorType: string;
+        route: string;
+        errorDetail: string | null;
     }[]>;
     getDashboardStats(): Promise<{
         totalUsers: number;
@@ -32,23 +34,23 @@ export declare class AdminService {
             };
         } & {
             id: string;
-            createdAt: Date;
             status: import("@prisma/client").$Enums.AlertStatus;
-            userId: string;
+            createdAt: Date;
+            updatedAt: Date;
+            sendAmount: number;
+            paymentMethod: string | null;
             fromCurrency: string;
             toCurrency: string;
             fromCountry: string | null;
             toCountry: string | null;
-            sendAmount: number;
-            targetRecipientAmount: number;
             priority: import("@prisma/client").$Enums.Priority;
+            userId: string;
+            targetRecipientAmount: number;
             providerPreference: string | null;
-            paymentMethod: string | null;
             lastCheckedAt: Date | null;
             lastTriggeredAt: Date | null;
             triggeredValue: number | null;
             triggeredProvider: string | null;
-            updatedAt: Date;
         })[];
     }>;
     getProviders(page: number, limit: number): Promise<{
@@ -92,38 +94,38 @@ export declare class AdminService {
                 fullName: string | null;
             } | null;
             quotes: {
-                provider: string;
                 status: import("@prisma/client").$Enums.QuoteStatus;
+                provider: string;
                 recipientAmount: number;
             }[];
         } & {
             id: string;
             createdAt: Date;
-            userId: string | null;
+            sendAmount: number;
+            paymentMethod: string | null;
             fromCurrency: string;
             toCurrency: string;
             fromCountry: string;
             toCountry: string;
-            sendAmount: number;
             priority: import("@prisma/client").$Enums.Priority;
-            paymentMethod: string | null;
-            anonymousSessionId: string | null;
             deliveryPreference: string | null;
+            anonymousSessionId: string | null;
             staleAt: Date;
+            userId: string | null;
         })[];
         total: number;
     }>;
     getRoutes(page: number, limit: number, search?: string): Promise<{
         data: ({
             provider: {
+                slug: string;
                 name: string;
                 isActive: boolean;
-                slug: string;
             };
         } & {
             id: string;
-            createdAt: Date;
             isActive: boolean;
+            createdAt: Date;
             fromCurrency: string;
             toCurrency: string;
             fromCountry: string | null;
@@ -136,8 +138,8 @@ export declare class AdminService {
         isActive: boolean;
     }): Promise<{
         id: string;
-        createdAt: Date;
         isActive: boolean;
+        createdAt: Date;
         fromCurrency: string;
         toCurrency: string;
         fromCountry: string | null;
@@ -146,12 +148,12 @@ export declare class AdminService {
     }>;
     getReferralLinks(page: number, limit: number, search?: string): Promise<{
         data: {
-            id: string;
-            provider: string;
-            createdAt: Date;
-            isActive: boolean;
-            updatedAt: Date;
             url: string;
+            id: string;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            provider: string;
             utmSource: string | null;
             utmCampaign: string | null;
             clickCount: number;
@@ -162,12 +164,12 @@ export declare class AdminService {
         isActive?: boolean;
         url?: string;
     }): Promise<{
-        id: string;
-        provider: string;
-        createdAt: Date;
-        isActive: boolean;
-        updatedAt: Date;
         url: string;
+        id: string;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        provider: string;
         utmSource: string | null;
         utmCampaign: string | null;
         clickCount: number;
@@ -180,51 +182,60 @@ export declare class AdminService {
             };
         } & {
             id: string;
-            createdAt: Date;
             status: import("@prisma/client").$Enums.AlertStatus;
-            userId: string;
+            createdAt: Date;
+            updatedAt: Date;
+            sendAmount: number;
+            paymentMethod: string | null;
             fromCurrency: string;
             toCurrency: string;
             fromCountry: string | null;
             toCountry: string | null;
-            sendAmount: number;
-            targetRecipientAmount: number;
             priority: import("@prisma/client").$Enums.Priority;
+            userId: string;
+            targetRecipientAmount: number;
             providerPreference: string | null;
-            paymentMethod: string | null;
             lastCheckedAt: Date | null;
             lastTriggeredAt: Date | null;
             triggeredValue: number | null;
             triggeredProvider: string | null;
-            updatedAt: Date;
         })[];
         total: number;
     }>;
     getHealthLogs(page: number, limit: number, search?: string): Promise<{
         data: {
             id: string;
-            provider: string;
-            route: string;
-            errorType: string;
-            errorDetail: string | null;
             createdAt: Date;
+            provider: string;
+            errorType: string;
+            route: string;
+            errorDetail: string | null;
+        }[];
+        total: number;
+    }>;
+    getActivityLogs(page: number, limit: number, search?: string): Promise<{
+        data: {
+            id: string;
+            createdAt: Date;
+            userId: string | null;
+            action: string;
+            entity: string | null;
+            entityId: string | null;
+            metadata: import(".prisma/client/runtime/client").JsonValue | null;
+            ipAddress: string | null;
         }[];
         total: number;
     }>;
     createProvider(data: {
         name: string;
         slug: string;
-        websiteUrl?: string;
+        websiteUrl: string;
         isActive?: boolean;
         isFeatured?: boolean;
     }): Promise<{
         id: string;
-        createdAt: Date;
-        name: string;
-        status: import("@prisma/client").$Enums.ProviderStatus;
-        isActive: boolean;
-        updatedAt: Date;
         slug: string;
+        name: string;
         logoUrl: string | null;
         description: string | null;
         about: string | null;
@@ -240,6 +251,10 @@ export declare class AdminService {
         payoutMethods: string[];
         deliveryMethods: string[];
         features: string[];
+        status: import("@prisma/client").$Enums.ProviderStatus;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
     }>;
     createRoute(data: {
         providerId: string;
@@ -250,8 +265,8 @@ export declare class AdminService {
         isActive?: boolean;
     }): Promise<{
         id: string;
-        createdAt: Date;
         isActive: boolean;
+        createdAt: Date;
         fromCurrency: string;
         toCurrency: string;
         fromCountry: string | null;
@@ -259,19 +274,19 @@ export declare class AdminService {
         providerId: string;
     }>;
     createReferralLink(data: {
-        providerId: string;
+        provider: string;
         url: string;
         utmSource?: string;
         utmCampaign?: string;
         utmMedium?: string;
         isActive?: boolean;
     }): Promise<{
-        id: string;
-        provider: string;
-        createdAt: Date;
-        isActive: boolean;
-        updatedAt: Date;
         url: string;
+        id: string;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        provider: string;
         utmSource: string | null;
         utmCampaign: string | null;
         clickCount: number;

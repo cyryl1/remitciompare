@@ -145,6 +145,20 @@ let ComparisonController = class ComparisonController {
             },
             include: { quotes: true },
         });
+        await this.prisma.activityLog.create({
+            data: {
+                userId: user?.id || null,
+                action: 'QUOTE_SEARCH',
+                entity: 'Comparison',
+                entityId: comparison.id,
+                metadata: {
+                    fromCurrency: payload.sendCurrency,
+                    toCurrency: payload.receiveCurrency,
+                    sendAmount: payload.sendAmount,
+                },
+                ipAddress: req.ip,
+            },
+        });
         return {
             id: comparison.id,
             sendAmount: comparison.sendAmount,

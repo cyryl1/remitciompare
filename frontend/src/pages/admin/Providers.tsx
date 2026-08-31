@@ -71,7 +71,7 @@ export default function Providers() {
                 onChange={(e) => setSearch(e.target.value)}
               />
             </div>
-            <Button variant="primary" onClick={() => setShowCreateModal(true)}>
+            <Button variant="primary" className="text-white" onClick={() => setShowCreateModal(true)}>
               <Plus size={16} className="mr-2" />
               Add Provider
             </Button>

@@ -79,11 +79,30 @@ export class SnapshotProcessor extends WorkerHost {
         this.logger.warn(
           `Quote for ${providerSlug} returned non-success status: ${quote.status}`,
         );
+
+        await this.prisma.quoteFailureLog.create({
+          data: {
+            provider: providerSlug,
+            errorType: 'API_ERROR',
+            errorDetail: `Provider returned non-success status: ${quote.status}`,
+            route: `${fromCurrency}-${toCurrency}`
+          }
+        });
       }
     } catch (error: any) {
       this.logger.error(
         `Failed to process snapshot for ${providerSlug}: ${error.message}`,
       );
+
+      await this.prisma.quoteFailureLog.create({
+        data: {
+          provider: providerSlug,
+          errorType: error.message.includes('timeout') ? 'TIMEOUT' : 'API_ERROR',
+          errorDetail: error.message,
+          route: `${fromCurrency}-${toCurrency}`
+        }
+      });
+
       throw error; // BullMQ will retry or move to failed depending on queue config
     }
   }

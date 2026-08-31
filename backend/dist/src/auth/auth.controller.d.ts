@@ -5,11 +5,11 @@ import { ForgotPasswordDto } from './dto/forgot-password.dto';
 import { ResetPasswordDto } from './dto/reset-password.dto';
 import { FirebaseLoginDto } from './dto/firebase-login.dto';
 import { VerifyEmailDto } from './dto/verify-email.dto';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 export declare class AuthController {
     private readonly authService;
     constructor(authService: AuthService);
-    register(registerDto: RegisterDto, res: Response): Promise<{
+    register(registerDto: RegisterDto, req: Request, res: Response): Promise<{
         accessToken: string;
         user: {
             id: any;
@@ -20,7 +20,7 @@ export declare class AuthController {
             lastName: any;
         };
     }>;
-    login(loginDto: LoginDto, res: Response): Promise<{
+    login(loginDto: LoginDto, req: Request, res: Response): Promise<{
         accessToken: string;
         user: {
             id: any;
@@ -31,7 +31,7 @@ export declare class AuthController {
             lastName: any;
         };
     }>;
-    firebaseLogin(dto: FirebaseLoginDto, res: Response): Promise<{
+    firebaseLogin(dto: FirebaseLoginDto, req: Request, res: Response): Promise<{
         accessToken: string;
         user: {
             id: any;
@@ -58,7 +58,7 @@ export declare class AuthController {
     forgotPassword(forgotPasswordDto: ForgotPasswordDto): Promise<{
         message: string;
     }>;
-    resetPassword(resetPasswordDto: ResetPasswordDto): Promise<{
+    resetPassword(resetPasswordDto: ResetPasswordDto, req: Request): Promise<{
         message: string;
     }>;
     verifyEmail(verifyEmailDto: VerifyEmailDto): Promise<{

@@ -43,6 +43,7 @@ let RatesController = class RatesController {
             const providers = await this.prisma.provider.findMany();
             const logoMap = new Map();
             const urlMap = new Map();
+            const slugMap = new Map();
             providers.forEach((p) => {
                 let logo = p.logoUrl;
                 try {
@@ -54,7 +55,7 @@ let RatesController = class RatesController {
                 catch (e) {
                 }
                 logoMap.set(p.name.toLowerCase(), logo);
-                urlMap.set(p.name.toLowerCase(), p.affiliateUrl || p.websiteUrl || `https://${p.name.toLowerCase().replace(/\s+/g, '')}.com`);
+                slugMap.set(p.name.toLowerCase(), p.slug);
             });
             const successfulQuotes = result.allQuotes.filter(q => q.status === 'SUCCESS');
             let bestRateProvider = null;
@@ -75,7 +76,7 @@ let RatesController = class RatesController {
                     providerName: q.provider,
                     providerSlug: slug,
                     providerLogo: logoMap.get(q.provider.toLowerCase()),
-                    handoffUrl: urlMap.get(q.provider.toLowerCase()),
+                    handoffUrl: `/api/rates/referral/${slugMap.get(q.provider.toLowerCase()) || slug}`,
                     exchangeRate: q.exchangeRate,
                     fee: q.totalFees,
                     feeType: 'flat',
@@ -117,6 +118,35 @@ let RatesController = class RatesController {
             updatedAt: new Date().toISOString(),
         };
     }
+    async handleReferralRedirect(slug) {
+        const provider = await this.prisma.provider.findUnique({
+            where: { slug }
+        });
+        if (!provider) {
+            return { url: '/', statusCode: 302 };
+        }
+        const referralLink = await this.prisma.referralLink.findFirst({
+            where: {
+                provider: provider.name,
+                isActive: true,
+            }
+        });
+        if (referralLink) {
+            await this.prisma.referralLink.update({
+                where: { id: referralLink.id },
+                data: { clickCount: { increment: 1 } }
+            });
+            let finalUrl = referralLink.url;
+            const urlObj = new URL(finalUrl);
+            if (referralLink.utmSource)
+                urlObj.searchParams.set('utm_source', referralLink.utmSource);
+            if (referralLink.utmCampaign)
+                urlObj.searchParams.set('utm_campaign', referralLink.utmCampaign);
+            return { url: urlObj.toString(), statusCode: 302 };
+        }
+        const fallbackUrl = provider.affiliateUrl || provider.websiteUrl || `https://${provider.name.toLowerCase().replace(/\s+/g, '')}.com`;
+        return { url: fallbackUrl, statusCode: 302 };
+    }
 };
 exports.RatesController = RatesController;
 __decorate([
@@ -150,6 +180,15 @@ __decorate([
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
 ], RatesController.prototype, "getLatest", null);
+__decorate([
+    (0, common_1.Get)('referral/:slug'),
+    (0, swagger_1.ApiOperation)({ summary: 'Redirect to provider via referral link' }),
+    (0, common_1.Redirect)(),
+    __param(0, (0, common_1.Param)('slug')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], RatesController.prototype, "handleReferralRedirect", null);
 exports.RatesController = RatesController = __decorate([
     (0, swagger_1.ApiTags)('rates'),
     (0, common_1.Controller)('api/rates'),

@@ -26,16 +26,16 @@ let AlertsController = class AlertsController {
         return this.alertsService.getAlerts(req.user.id);
     }
     async createAlert(req, body) {
-        return this.alertsService.createAlert(req.user.id, body);
+        return this.alertsService.createAlert(req.user.id, body, req.ip);
     }
     async updateAlert(req, id, body) {
-        return this.alertsService.updateAlert(req.user.id, id, body);
+        return this.alertsService.updateAlert(req.user.id, id, body, req.ip);
     }
     async deleteAlert(req, id) {
-        return this.alertsService.deleteAlert(req.user.id, id);
+        return this.alertsService.deleteAlert(req.user.id, id, req.ip);
     }
     async toggleAlert(req, id) {
-        return this.alertsService.toggleAlert(req.user.id, id);
+        return this.alertsService.toggleAlert(req.user.id, id, req.ip);
     }
 };
 exports.AlertsController = AlertsController;
