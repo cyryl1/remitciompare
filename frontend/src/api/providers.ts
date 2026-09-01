@@ -4,7 +4,7 @@ export interface Provider {
   id: string;
   slug: string;
   name: string;
-  logo?: string;
+  logoUrl?: string;
   tagline?: string;
   description?: string;
   rating: number;

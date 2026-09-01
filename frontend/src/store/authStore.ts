@@ -7,6 +7,7 @@ export interface AuthUser {
   firstName: string;
   lastName: string;
   role: 'user' | 'admin';
+  firebaseUid?: string;
   avatar?: string;
 }
 

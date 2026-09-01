@@ -9,7 +9,7 @@ export interface CompareParams {
 
 interface CompareState extends CompareParams {
   hasSearched: boolean;
-  setParams: (params: CompareParams) => void;
+  setParams: (params: Partial<CompareParams>) => void;
   reset: () => void;
 }
 
@@ -25,7 +25,7 @@ export const useCompareStore = create<CompareState>((set) => ({
   hasSearched: false,
 
   setParams: (params) =>
-    set({ ...params, hasSearched: true }),
+    set((state) => ({ ...state, ...params, hasSearched: true })),
 
   reset: () =>
     set({ ...DEFAULT_PARAMS, hasSearched: false }),

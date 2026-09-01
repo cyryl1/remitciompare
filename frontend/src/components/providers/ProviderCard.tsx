@@ -19,8 +19,8 @@ export function ProviderCard({ provider, className }: ProviderCardProps) {
       {/* Header */}
       <div className="flex items-start justify-between gap-3">
         <div className="w-16 h-10 rounded-lg bg-surface-container-low flex items-center justify-center overflow-hidden shrink-0">
-          {provider.logo ? (
-            <img src={provider.logo} alt={provider.name} className="object-contain w-full h-full p-1" />
+          {provider.logoUrl ? (
+            <img src={provider.logoUrl} alt={provider.name} className="object-contain w-full h-full p-1" />
           ) : (
             <span className="text-title-sm font-bold text-primary">{provider.name.slice(0, 2)}</span>
           )}

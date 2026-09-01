@@ -115,6 +115,7 @@ export interface AdminActivityLog {
 }
 
 export const adminApi = {
+  triggerRateRefresh: () => apiClient.post("/admin/refresh-rates").then((r) => r.data),
   stats: () =>
     apiClient.get<AdminStats>('/admin/stats').then((r) => r.data),
 

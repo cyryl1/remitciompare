@@ -78,7 +78,7 @@ export function useAdminUpdateRoute() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({ id, isActive }: { id: string; isActive: boolean }) =>
-      adminApi.updateRoute(id, isActive),
+      adminApi.updateRoute(id, { isActive }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['admin', 'routes'] });
     },
