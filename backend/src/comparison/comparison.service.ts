@@ -18,14 +18,13 @@ export enum Priority {
 export interface ComparisonResult {
   recommended: ProviderQuote | null;
   allQuotes: ProviderQuote[];
-  moneyLeftOnTable: number; // For MVP: Diff between best and second best recipient amount
+  moneyLeftOnTable: number;
 }
 
 @Injectable()
 export class ComparisonService {
   private readonly logger = new Logger(ComparisonService.name);
 
-  // Hard 5-second timeout for progressive quote loading (OQ-1)
   private readonly TIMEOUT_MS = 5000;
 
   constructor(
@@ -44,7 +43,7 @@ export class ComparisonService {
       `Starting comparison for ${dto.sendAmount} ${dto.sourceCurrency}->${dto.targetCurrency}. Priority: ${dto.priority}`,
     );
 
-    // Pre-flight check: Get active providers for this route
+    // Get active Providers
     let activeProviders = await this.prisma.provider.findMany({
       where: {
         isActive: true,

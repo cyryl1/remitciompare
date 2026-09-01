@@ -37,8 +37,6 @@ export class RatesController {
       CURRENCY_TO_COUNTRY[dto.targetCurrency.toUpperCase()]?.toUpperCase() ||
       dto.targetCurrency.substring(0, 2).toUpperCase();
 
-    // We don't save anonymous sessions automatically here to avoid duplicate comparisons
-    // since the frontend calls POST /comparison to save.
     try {
       const result = await this.comparisonService.compare(
         dto,
@@ -58,7 +56,7 @@ export class RatesController {
             logo = `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
           }
         } catch (e) {
-          // fallback to DB logo if URL parsing fails
+          // Just fallback to DB logo if URL parsing fails
         }
         logoMap.set(p.name.toLowerCase(), logo);
         slugMap.set(p.name.toLowerCase(), p.slug);
@@ -89,11 +87,11 @@ export class RatesController {
           handoffUrl: `/api/rates/referral/${slugMap.get(q.provider.toLowerCase()) || slug}`,
           exchangeRate: q.exchangeRate,
           fee: q.totalFees,
-          feeType: 'flat', // Simplified for frontend
+          feeType: 'flat',
           receiveAmount: q.recipientAmount,
           deliveryTime: q.deliveryEstimate || '1-3 days',
           deliveryMethods: [q.paymentMethod || 'Bank Transfer'],
-          transferLimit: { min: 10, max: 50000 }, // Mock
+          transferLimit: { min: 10, max: 50000 }, // Mock: TODO: will change later
           updatedAt: q.quoteTimestamp.toISOString(),
           status: q.status,
           badges,
@@ -121,7 +119,7 @@ export class RatesController {
     return snapshots.map((s) => ({
       date: s.createdAt.toISOString(),
       rate: s.exchangeRate,
-      provider: s.provider, // We might need the name here
+      provider: s.provider, // Might need the name here later
     }));
   }
 
@@ -137,7 +135,6 @@ export class RatesController {
       24,
     );
     if (snapshots.length > 0) {
-      // Return the most recent
       const latest = snapshots[snapshots.length - 1];
       return {
         rate: latest.exchangeRate,
@@ -155,16 +152,15 @@ export class RatesController {
   @ApiOperation({ summary: 'Redirect to provider via referral link' })
   @Redirect()
   async handleReferralRedirect(@Param('slug') slug: string) {
-    // 1. Find the provider
+
     const provider = await this.prisma.provider.findUnique({
       where: { slug }
     });
 
     if (!provider) {
-      return { url: '/', statusCode: 302 }; // fallback to home
+      return { url: '/', statusCode: 302 }; // fallback to home if provider not found
     }
 
-    // 2. Find an active referral link for this provider
     const referralLink = await this.prisma.referralLink.findFirst({
       where: {
         provider: provider.name,
@@ -188,7 +184,6 @@ export class RatesController {
       return { url: urlObj.toString(), statusCode: 302 };
     }
 
-    // 3. Fallback to basic affiliate URL or website URL
     const fallbackUrl = provider.affiliateUrl || provider.websiteUrl || `https://${provider.name.toLowerCase().replace(/\s+/g, '')}.com`;
     return { url: fallbackUrl, statusCode: 302 };
   }
