@@ -8,4 +8,5 @@ export declare class CreateComparisonDto {
     priority?: Priority;
     paymentMethod?: string;
     deliveryPreference?: string;
+    providerSlug?: string;
 }

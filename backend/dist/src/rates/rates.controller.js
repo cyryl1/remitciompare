@@ -26,12 +26,13 @@ let RatesController = class RatesController {
         this.comparisonService = comparisonService;
         this.prisma = prisma;
     }
-    async compare(amount, sendCurrency, receiveCurrency, priority = comparison_service_1.Priority.MOST_RECEIVED) {
+    async compare(amount, sendCurrency, receiveCurrency, priority = comparison_service_1.Priority.MOST_RECEIVED, providerSlug) {
         const dto = new create_comparison_dto_1.CreateComparisonDto();
         dto.sendAmount = amount ? parseFloat(amount) : 500;
         dto.sourceCurrency = sendCurrency || 'GBP';
         dto.targetCurrency = receiveCurrency || 'NGN';
         dto.priority = priority;
+        dto.providerSlug = providerSlug;
         dto.fromCountry =
             currencies_1.CURRENCY_TO_COUNTRY[dto.sourceCurrency.toUpperCase()]?.toUpperCase() ||
                 dto.sourceCurrency.substring(0, 2).toUpperCase();
@@ -157,8 +158,9 @@ __decorate([
     __param(1, (0, common_1.Query)('sendCurrency')),
     __param(2, (0, common_1.Query)('receiveCurrency')),
     __param(3, (0, common_1.Query)('priority')),
+    __param(4, (0, common_1.Query)('providerSlug')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, String, String, String]),
+    __metadata("design:paramtypes", [String, String, String, String, String]),
     __metadata("design:returntype", Promise)
 ], RatesController.prototype, "compare", null);
 __decorate([

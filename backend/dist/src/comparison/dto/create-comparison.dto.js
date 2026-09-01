@@ -22,6 +22,7 @@ class CreateComparisonDto {
     priority = comparison_service_1.Priority.MOST_RECEIVED;
     paymentMethod;
     deliveryPreference;
+    providerSlug;
 }
 exports.CreateComparisonDto = CreateComparisonDto;
 __decorate([
@@ -78,4 +79,10 @@ __decorate([
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], CreateComparisonDto.prototype, "deliveryPreference", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 'lemfi' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.IsOptional)(),
+    __metadata("design:type", String)
+], CreateComparisonDto.prototype, "providerSlug", void 0);
 //# sourceMappingURL=create-comparison.dto.js.map

@@ -34,13 +34,16 @@ let ComparisonService = ComparisonService_1 = class ComparisonService {
     }
     async compare(dto, userId, anonymousSessionId, persist = true) {
         this.logger.debug(`Starting comparison for ${dto.sendAmount} ${dto.sourceCurrency}->${dto.targetCurrency}. Priority: ${dto.priority}`);
-        const activeProviders = await this.prisma.provider.findMany({
+        let activeProviders = await this.prisma.provider.findMany({
             where: {
                 isActive: true,
                 status: 'INTEGRATED',
             },
             select: { slug: true },
         });
+        if (dto.providerSlug) {
+            activeProviders = activeProviders.filter(p => p.slug === dto.providerSlug);
+        }
         const activeSlugs = new Set(activeProviders.map((p) => p.slug.toLowerCase()));
         const activeAdapters = this.adapters.filter((adapter) => {
             const adapterSlug = adapter.name.toLowerCase().replace(/\s+/g, '');

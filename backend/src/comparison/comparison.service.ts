@@ -45,13 +45,17 @@ export class ComparisonService {
     );
 
     // Pre-flight check: Get active providers for this route
-    const activeProviders = await this.prisma.provider.findMany({
+    let activeProviders = await this.prisma.provider.findMany({
       where: {
         isActive: true,
         status: 'INTEGRATED',
       },
       select: { slug: true },
     });
+    
+    if (dto.providerSlug) {
+      activeProviders = activeProviders.filter(p => p.slug === dto.providerSlug);
+    }
 
     const activeSlugs = new Set(
       activeProviders.map((p) => p.slug.toLowerCase()),

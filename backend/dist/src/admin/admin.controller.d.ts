@@ -17,8 +17,8 @@ export declare class AdminController {
     }>;
     getQuoteFailures(): Promise<{
         id: string;
-        createdAt: Date;
         provider: string;
+        createdAt: Date;
         errorType: string;
         route: string;
         errorDetail: string | null;
@@ -44,13 +44,13 @@ export declare class AdminController {
             };
         } & {
             id: string;
-            status: import("@prisma/client").$Enums.AlertStatus;
-            createdAt: Date;
-            updatedAt: Date;
-            sendAmount: number;
-            paymentMethod: string | null;
             fromCurrency: string;
             toCurrency: string;
+            sendAmount: number;
+            paymentMethod: string | null;
+            createdAt: Date;
+            status: import("@prisma/client").$Enums.AlertStatus;
+            updatedAt: Date;
             fromCountry: string | null;
             toCountry: string | null;
             priority: import("@prisma/client").$Enums.Priority;
@@ -95,8 +95,9 @@ export declare class AdminController {
         isFeatured?: boolean;
     }): Promise<{
         id: string;
-        slug: string;
+        createdAt: Date;
         name: string;
+        slug: string;
         logoUrl: string | null;
         description: string | null;
         about: string | null;
@@ -114,7 +115,6 @@ export declare class AdminController {
         features: string[];
         status: import("@prisma/client").$Enums.ProviderStatus;
         isActive: boolean;
-        createdAt: Date;
         updatedAt: Date;
     }>;
     getQuotes(page?: string, limit?: string, search?: string): Promise<{
@@ -124,22 +124,22 @@ export declare class AdminController {
                 fullName: string | null;
             } | null;
             quotes: {
-                status: import("@prisma/client").$Enums.QuoteStatus;
                 provider: string;
                 recipientAmount: number;
+                status: import("@prisma/client").$Enums.QuoteStatus;
             }[];
         } & {
             id: string;
-            createdAt: Date;
-            sendAmount: number;
-            paymentMethod: string | null;
             fromCurrency: string;
             toCurrency: string;
+            sendAmount: number;
+            paymentMethod: string | null;
+            createdAt: Date;
+            anonymousSessionId: string | null;
             fromCountry: string;
             toCountry: string;
             priority: import("@prisma/client").$Enums.Priority;
             deliveryPreference: string | null;
-            anonymousSessionId: string | null;
             staleAt: Date;
             userId: string | null;
         })[];
@@ -148,16 +148,16 @@ export declare class AdminController {
     getRoutes(page?: string, limit?: string, search?: string): Promise<{
         data: ({
             provider: {
-                slug: string;
                 name: string;
+                slug: string;
                 isActive: boolean;
             };
         } & {
             id: string;
-            isActive: boolean;
-            createdAt: Date;
             fromCurrency: string;
             toCurrency: string;
+            createdAt: Date;
+            isActive: boolean;
             fromCountry: string | null;
             toCountry: string | null;
             providerId: string;
@@ -168,10 +168,10 @@ export declare class AdminController {
         isActive: boolean;
     }): Promise<{
         id: string;
-        isActive: boolean;
-        createdAt: Date;
         fromCurrency: string;
         toCurrency: string;
+        createdAt: Date;
+        isActive: boolean;
         fromCountry: string | null;
         toCountry: string | null;
         providerId: string;
@@ -185,22 +185,22 @@ export declare class AdminController {
         isActive?: boolean;
     }): Promise<{
         id: string;
-        isActive: boolean;
-        createdAt: Date;
         fromCurrency: string;
         toCurrency: string;
+        createdAt: Date;
+        isActive: boolean;
         fromCountry: string | null;
         toCountry: string | null;
         providerId: string;
     }>;
     getReferralLinks(page?: string, limit?: string, search?: string): Promise<{
         data: {
-            url: string;
             id: string;
-            isActive: boolean;
-            createdAt: Date;
-            updatedAt: Date;
             provider: string;
+            createdAt: Date;
+            isActive: boolean;
+            updatedAt: Date;
+            url: string;
             utmSource: string | null;
             utmCampaign: string | null;
             clickCount: number;
@@ -214,12 +214,12 @@ export declare class AdminController {
         utmCampaign?: string;
         utmMedium?: string;
     }): Promise<{
-        url: string;
         id: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
         provider: string;
+        createdAt: Date;
+        isActive: boolean;
+        updatedAt: Date;
+        url: string;
         utmSource: string | null;
         utmCampaign: string | null;
         clickCount: number;
@@ -232,12 +232,12 @@ export declare class AdminController {
         utmMedium?: string;
         isActive?: boolean;
     }): Promise<{
-        url: string;
         id: string;
-        isActive: boolean;
-        createdAt: Date;
-        updatedAt: Date;
         provider: string;
+        createdAt: Date;
+        isActive: boolean;
+        updatedAt: Date;
+        url: string;
         utmSource: string | null;
         utmCampaign: string | null;
         clickCount: number;
@@ -250,13 +250,13 @@ export declare class AdminController {
             };
         } & {
             id: string;
-            status: import("@prisma/client").$Enums.AlertStatus;
-            createdAt: Date;
-            updatedAt: Date;
-            sendAmount: number;
-            paymentMethod: string | null;
             fromCurrency: string;
             toCurrency: string;
+            sendAmount: number;
+            paymentMethod: string | null;
+            createdAt: Date;
+            status: import("@prisma/client").$Enums.AlertStatus;
+            updatedAt: Date;
             fromCountry: string | null;
             toCountry: string | null;
             priority: import("@prisma/client").$Enums.Priority;
@@ -276,8 +276,8 @@ export declare class AdminController {
     getHealthLogs(page?: string, limit?: string, search?: string): Promise<{
         data: {
             id: string;
-            createdAt: Date;
             provider: string;
+            createdAt: Date;
             errorType: string;
             route: string;
             errorDetail: string | null;

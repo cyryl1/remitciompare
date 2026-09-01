@@ -21,12 +21,14 @@ export class RatesController {
     @Query('sendCurrency') sendCurrency: string,
     @Query('receiveCurrency') receiveCurrency: string,
     @Query('priority') priority: Priority = Priority.MOST_RECEIVED,
+    @Query('providerSlug') providerSlug?: string,
   ) {
     const dto = new CreateComparisonDto();
     dto.sendAmount = amount ? parseFloat(amount) : 500;
     dto.sourceCurrency = sendCurrency || 'GBP';
     dto.targetCurrency = receiveCurrency || 'NGN';
     dto.priority = priority;
+    dto.providerSlug = providerSlug;
 
     dto.fromCountry =
       CURRENCY_TO_COUNTRY[dto.sourceCurrency.toUpperCase()]?.toUpperCase() ||

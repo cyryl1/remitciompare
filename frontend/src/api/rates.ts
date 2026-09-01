@@ -5,6 +5,7 @@ export interface CompareParams {
   sendCurrency: string;
   receiveCurrency: string;
   priority?: string;
+  providerSlug?: string;
 }
 
 export interface RateResult {
@@ -34,7 +35,15 @@ export interface RateHistoryPoint {
 
 export const ratesApi = {
   compare: (params: CompareParams) =>
-    apiClient.get<RateResult[]>('/rates/compare', { params }).then((r) => r.data),
+    apiClient.get<RateResult[]>('/rates/compare', { 
+      params: {
+        amount: params.sendAmount,
+        sendCurrency: params.sendCurrency,
+        receiveCurrency: params.receiveCurrency,
+        priority: params.priority,
+        providerSlug: params.providerSlug
+      }
+    }).then((r) => r.data),
 
   history: (params: { sendCurrency: string; receiveCurrency: string; days?: number }) =>
     apiClient.get<RateHistoryPoint[]>('/rates/history', { params }).then((r) => r.data),

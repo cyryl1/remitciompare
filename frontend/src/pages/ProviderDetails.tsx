@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { 
   ChevronRight, 
@@ -13,14 +14,51 @@ import {
   AlertCircle
 } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
 import { PageWrapper } from '@/components/layout/PageWrapper';
 import { PageSpinner } from '@/components/ui/Spinner';
 import { useProvider } from '@/hooks/useProviders';
+import { ratesApi } from '@/api/rates';
 
 export default function ProviderDetails() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const { data: provider, isLoading, isError } = useProvider(slug ?? '');
+
+  const [showForm, setShowForm] = useState(false);
+  const [isQuoting, setIsQuoting] = useState(false);
+  const [sendAmount, setSendAmount] = useState('500');
+  const [sendCur, setSendCur] = useState('GBP');
+  const [recCur, setRecCur] = useState('NGN');
+  const [quoteError, setQuoteError] = useState('');
+
+  const handleGetQuote = async () => {
+    if (!provider) return;
+    setIsQuoting(true);
+    setQuoteError('');
+    try {
+      const results = await ratesApi.compare({
+        sendAmount: parseFloat(sendAmount) || 500,
+        sendCurrency: sendCur,
+        receiveCurrency: recCur,
+        providerSlug: provider.slug,
+      });
+
+      if (results && results.length > 0) {
+        const quote = results[0];
+        navigate(`/providers/${provider.slug}/send`, {
+          state: { result: quote }
+        });
+      } else {
+        setQuoteError('Could not get a quote right now. Please try again later.');
+      }
+    } catch (err) {
+      setQuoteError('An error occurred while fetching the quote.');
+    } finally {
+      setIsQuoting(false);
+    }
+  };
 
   if (isLoading) return <PageSpinner label="Loading provider details..." />;
 
@@ -84,31 +122,67 @@ export default function ProviderDetails() {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row gap-4">
-            <Button 
-              size="lg" 
-              className="bg-vibrant-green text-deep-navy hover:brightness-110" 
-              onClick={() => navigate(`/providers/${provider.slug}/send`, {
-                state: {
-                  result: {
-                    providerId: provider.id,
-                    providerName: provider.name,
-                    providerSlug: provider.slug,
-                    providerLogo: provider.logoUrl,
-                    exchangeRate: 0,
-                    fee: 0,
-                    receiveAmount: 0,
-                    deliveryTime: 'Varies',
-                    badge: null
-                  }
-                }
-              })}
-            >
-              Send with {provider.name}
-            </Button>
-            <Button variant="outline" size="lg" onClick={() => navigate('/compare')}>
-              Compare All Rates
-            </Button>
+          <div className="mt-stack-md">
+            {showForm ? (
+              <div className="bg-surface-container-low p-6 rounded-xl border border-surface-variant flex flex-col gap-4">
+                <h3 className="font-display font-semibold text-primary">Get a live quote</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <Input 
+                    type="number"
+                    label="Amount"
+                    value={sendAmount}
+                    onChange={e => setSendAmount(e.target.value)}
+                    min="1"
+                  />
+                  <Select 
+                    label="Send"
+                    value={sendCur}
+                    onChange={e => setSendCur(e.target.value)}
+                    options={[
+                      { value: 'GBP', label: 'GBP - British Pound' },
+                      { value: 'USD', label: 'USD - US Dollar' },
+                      { value: 'EUR', label: 'EUR - Euro' },
+                    ]}
+                  />
+                  <Select 
+                    label="Receive"
+                    value={recCur}
+                    onChange={e => setRecCur(e.target.value)}
+                    options={[
+                      { value: 'NGN', label: 'NGN - Nigerian Naira' },
+                      { value: 'GHS', label: 'GHS - Ghanaian Cedi' },
+                      { value: 'KES', label: 'KES - Kenyan Shilling' },
+                    ]}
+                  />
+                </div>
+                {quoteError && <p className="text-error text-sm">{quoteError}</p>}
+                <div className="flex gap-4 mt-2">
+                  <Button 
+                    onClick={handleGetQuote} 
+                    disabled={isQuoting}
+                    className="flex-1 bg-vibrant-green text-deep-navy hover:brightness-110"
+                  >
+                    {isQuoting ? 'Getting Quote...' : 'View Transfer Details'}
+                  </Button>
+                  <Button variant="outline" onClick={() => setShowForm(false)}>
+                    Cancel
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button 
+                  size="lg" 
+                  className="bg-vibrant-green text-deep-navy hover:brightness-110" 
+                  onClick={() => setShowForm(true)}
+                >
+                  Send with {provider.name}
+                </Button>
+                <Button variant="outline" size="lg" onClick={() => navigate('/compare')}>
+                  Compare All Rates
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </section>

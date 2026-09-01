@@ -4,7 +4,7 @@ export declare class RatesController {
     private readonly comparisonService;
     private readonly prisma;
     constructor(comparisonService: ComparisonService, prisma: PrismaService);
-    compare(amount: string, sendCurrency: string, receiveCurrency: string, priority?: Priority): Promise<{
+    compare(amount: string, sendCurrency: string, receiveCurrency: string, priority?: Priority, providerSlug?: string): Promise<{
         providerId: string;
         providerName: string;
         providerSlug: string;
@@ -21,7 +21,7 @@ export declare class RatesController {
             max: number;
         };
         updatedAt: string;
-        status: "SUCCESS" | "FAILED" | "TIMEOUT";
+        status: "FAILED" | "TIMEOUT" | "SUCCESS";
         badges: string[];
     }[]>;
     getHistory(sendCurrency?: string, receiveCurrency?: string, days?: string): Promise<{

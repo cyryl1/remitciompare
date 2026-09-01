@@ -55,4 +55,9 @@ export class CreateComparisonDto {
   @IsString()
   @IsOptional()
   deliveryPreference?: string;
+
+  @ApiPropertyOptional({ example: 'lemfi' })
+  @IsString()
+  @IsOptional()
+  providerSlug?: string;
 }
