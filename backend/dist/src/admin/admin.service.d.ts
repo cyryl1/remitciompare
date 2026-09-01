@@ -7,8 +7,8 @@ export declare class AdminService {
     constructor(prisma: PrismaService, alertsWorker: AlertsWorkerService);
     getQuoteFailures(limit?: number): Promise<{
         id: string;
-        provider: string;
         createdAt: Date;
+        provider: string;
         errorType: string;
         route: string;
         errorDetail: string | null;
@@ -34,13 +34,13 @@ export declare class AdminService {
             };
         } & {
             id: string;
-            fromCurrency: string;
-            toCurrency: string;
+            status: import("@prisma/client").$Enums.AlertStatus;
+            createdAt: Date;
+            updatedAt: Date;
             sendAmount: number;
             paymentMethod: string | null;
-            createdAt: Date;
-            status: import("@prisma/client").$Enums.AlertStatus;
-            updatedAt: Date;
+            fromCurrency: string;
+            toCurrency: string;
             fromCountry: string | null;
             toCountry: string | null;
             priority: import("@prisma/client").$Enums.Priority;
@@ -94,22 +94,22 @@ export declare class AdminService {
                 fullName: string | null;
             } | null;
             quotes: {
+                status: import("@prisma/client").$Enums.QuoteStatus;
                 provider: string;
                 recipientAmount: number;
-                status: import("@prisma/client").$Enums.QuoteStatus;
             }[];
         } & {
             id: string;
-            fromCurrency: string;
-            toCurrency: string;
+            createdAt: Date;
             sendAmount: number;
             paymentMethod: string | null;
-            createdAt: Date;
-            anonymousSessionId: string | null;
+            fromCurrency: string;
+            toCurrency: string;
             fromCountry: string;
             toCountry: string;
             priority: import("@prisma/client").$Enums.Priority;
             deliveryPreference: string | null;
+            anonymousSessionId: string | null;
             staleAt: Date;
             userId: string | null;
         })[];
@@ -118,16 +118,16 @@ export declare class AdminService {
     getRoutes(page: number, limit: number, search?: string): Promise<{
         data: ({
             provider: {
-                name: string;
                 slug: string;
+                name: string;
                 isActive: boolean;
             };
         } & {
             id: string;
+            isActive: boolean;
+            createdAt: Date;
             fromCurrency: string;
             toCurrency: string;
-            createdAt: Date;
-            isActive: boolean;
             fromCountry: string | null;
             toCountry: string | null;
             providerId: string;
@@ -138,22 +138,22 @@ export declare class AdminService {
         isActive: boolean;
     }): Promise<{
         id: string;
+        isActive: boolean;
+        createdAt: Date;
         fromCurrency: string;
         toCurrency: string;
-        createdAt: Date;
-        isActive: boolean;
         fromCountry: string | null;
         toCountry: string | null;
         providerId: string;
     }>;
     getReferralLinks(page: number, limit: number, search?: string): Promise<{
         data: {
-            id: string;
-            provider: string;
-            createdAt: Date;
-            isActive: boolean;
-            updatedAt: Date;
             url: string;
+            id: string;
+            isActive: boolean;
+            createdAt: Date;
+            updatedAt: Date;
+            provider: string;
             utmSource: string | null;
             utmCampaign: string | null;
             clickCount: number;
@@ -164,12 +164,12 @@ export declare class AdminService {
         isActive?: boolean;
         url?: string;
     }): Promise<{
-        id: string;
-        provider: string;
-        createdAt: Date;
-        isActive: boolean;
-        updatedAt: Date;
         url: string;
+        id: string;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        provider: string;
         utmSource: string | null;
         utmCampaign: string | null;
         clickCount: number;
@@ -182,13 +182,13 @@ export declare class AdminService {
             };
         } & {
             id: string;
-            fromCurrency: string;
-            toCurrency: string;
+            status: import("@prisma/client").$Enums.AlertStatus;
+            createdAt: Date;
+            updatedAt: Date;
             sendAmount: number;
             paymentMethod: string | null;
-            createdAt: Date;
-            status: import("@prisma/client").$Enums.AlertStatus;
-            updatedAt: Date;
+            fromCurrency: string;
+            toCurrency: string;
             fromCountry: string | null;
             toCountry: string | null;
             priority: import("@prisma/client").$Enums.Priority;
@@ -205,8 +205,8 @@ export declare class AdminService {
     getHealthLogs(page: number, limit: number, search?: string): Promise<{
         data: {
             id: string;
-            provider: string;
             createdAt: Date;
+            provider: string;
             errorType: string;
             route: string;
             errorDetail: string | null;
@@ -234,9 +234,8 @@ export declare class AdminService {
         isFeatured?: boolean;
     }): Promise<{
         id: string;
-        createdAt: Date;
-        name: string;
         slug: string;
+        name: string;
         logoUrl: string | null;
         description: string | null;
         about: string | null;
@@ -254,6 +253,7 @@ export declare class AdminService {
         features: string[];
         status: import("@prisma/client").$Enums.ProviderStatus;
         isActive: boolean;
+        createdAt: Date;
         updatedAt: Date;
     }>;
     createRoute(data: {
@@ -265,10 +265,10 @@ export declare class AdminService {
         isActive?: boolean;
     }): Promise<{
         id: string;
+        isActive: boolean;
+        createdAt: Date;
         fromCurrency: string;
         toCurrency: string;
-        createdAt: Date;
-        isActive: boolean;
         fromCountry: string | null;
         toCountry: string | null;
         providerId: string;
@@ -281,12 +281,12 @@ export declare class AdminService {
         utmMedium?: string;
         isActive?: boolean;
     }): Promise<{
-        id: string;
-        provider: string;
-        createdAt: Date;
-        isActive: boolean;
-        updatedAt: Date;
         url: string;
+        id: string;
+        isActive: boolean;
+        createdAt: Date;
+        updatedAt: Date;
+        provider: string;
         utmSource: string | null;
         utmCampaign: string | null;
         clickCount: number;
