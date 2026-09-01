@@ -143,13 +143,12 @@ export class AuthService {
   async forgotPassword(email: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) {
-      // Return success even if user not found to prevent email enumeration
       return { message: 'If an account exists, a reset link has been sent.' };
     }
 
     const resetToken = crypto.randomBytes(32).toString('hex');
     const expiry = new Date();
-    expiry.setHours(expiry.getHours() + 1); // 1 hour expiry
+    expiry.setHours(expiry.getHours() + 1);
 
     await this.prisma.user.update({
       where: { id: user.id },
