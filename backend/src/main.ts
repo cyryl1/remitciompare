@@ -25,7 +25,11 @@ async function bootstrap() {
 
   // ─── CORS ───────────────────────────────────────────────────────────────
   app.enableCors({
-    origin: process.env.FRONTEND_URL ?? 'http://localhost:5173',
+    origin: [
+      'http://localhost:5173',
+      'https://remitciompare-fe.onrender.com',
+      ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+    ],
     credentials: true,
   });
 
