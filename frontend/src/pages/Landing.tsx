@@ -71,7 +71,7 @@ export default function Landing() {
   return (
     <div className="min-h-screen flex flex-col">
       {/* ── Hero ──────────────────────────────────────────────────────── */}
-      <section className="relative pt-20 pb-32 overflow-hidden rounded-b-[40px] bg-primary-container">
+      <section className="relative pt-12 pb-16 md:pt-20 md:pb-32 overflow-hidden rounded-b-[32px] md:rounded-b-[40px] bg-primary-container">
         <div className="absolute inset-0 bg-gradient-to-b from-primary-container/80 to-primary-container z-0" />
         <div
           className="absolute inset-0 z-0 opacity-20"
@@ -84,14 +84,14 @@ export default function Landing() {
         <div className="max-w-container-max mx-auto px-gutter relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-section-gap items-center">
           {/* Copy */}
           <div className="text-on-primary animate-fade-in">
-            <h1 className="font-display text-display-lg leading-tight mb-stack-md">
+            <h1 className="font-display text-display-sm md:text-display-lg leading-tight mb-stack-md">
               Find the best way to{' '}
               <span className="text-vibrant-green">send your money.</span>
             </h1>
-            <p className="text-body-xl text-primary-fixed-dim mb-stack-lg max-w-xl">
+            <p className="text-body-lg md:text-body-xl text-primary-fixed-dim mb-stack-lg max-w-xl">
               Compare exchange rates, fees, and delivery times from top providers in seconds. Transparent, fast, and free.
             </p>
-            <div className="flex flex-wrap gap-4 mt-8">
+            <div className="flex flex-wrap gap-3 md:gap-4 mt-6 md:mt-8">
               {[
                 { icon: <CheckCircle size={18} />, label: 'Top Providers' },
                 { icon: <Zap size={18} />, label: 'Real-time Rates' },
@@ -106,8 +106,8 @@ export default function Landing() {
           </div>
 
           {/* Calculator card */}
-          <div className="bg-surface-white rounded-2xl shadow-modal p-stack-lg border border-surface-variant w-full max-w-md mx-auto lg:ml-auto animate-slide-up">
-            <h3 className="font-display text-headline-sm text-primary mb-stack-md text-center">
+          <div className="bg-surface-white rounded-2xl shadow-modal p-stack-md md:p-stack-lg border border-surface-variant w-full max-w-md mx-auto lg:ml-auto animate-slide-up mt-8 lg:mt-0">
+            <h3 className="font-display text-title-lg md:text-headline-sm text-primary mb-stack-md text-center">
               Compare Rates
             </h3>
 
@@ -176,13 +176,13 @@ export default function Landing() {
 
       {/* ── Trust bar ──────────────────────────────────────────────────── */}
       <section className="py-stack-lg bg-surface-white border-b border-surface-variant">
-        <div className="max-w-container-max mx-auto px-gutter flex flex-wrap justify-center gap-8 md:gap-16 text-center">
+        <div className="max-w-container-max mx-auto px-gutter flex flex-wrap justify-center gap-6 md:gap-16 text-center">
           {TRUST_ITEMS.map(({ icon, label }) => (
-            <div key={label} className="flex flex-col items-center gap-2">
-              <div className="w-12 h-12 rounded-full bg-primary-container text-primary-fixed flex items-center justify-center">
+            <div key={label} className="flex flex-col items-center gap-2 w-[140px] md:w-auto">
+              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary-container text-primary-fixed flex items-center justify-center">
                 {icon}
               </div>
-              <span className="text-body-md font-semibold text-primary">{label}</span>
+              <span className="text-label-sm md:text-body-md font-semibold text-primary">{label}</span>
             </div>
           ))}
         </div>
@@ -268,15 +268,15 @@ export default function Landing() {
       {/* ── CTA ────────────────────────────────────────────────────────── */}
       <section className="py-section-gap bg-primary-container text-on-primary text-center">
         <div className="max-w-3xl mx-auto px-gutter">
-          <h2 className="font-display text-display-md mb-stack-md">
+          <h2 className="font-display text-headline-lg md:text-display-md mb-stack-md">
             Ready to save on your next transfer?
           </h2>
-          <p className="text-body-xl text-primary-fixed-dim mb-stack-lg">
+          <p className="text-body-lg md:text-body-xl text-primary-fixed-dim mb-stack-lg">
             Join thousands of smart senders who compare before they transfer.
           </p>
           <Link
             to="/compare"
-            className="inline-flex items-center gap-2 bg-vibrant-green text-deep-navy font-display font-bold text-headline-sm px-8 py-4 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all"
+            className="inline-flex items-center gap-2 bg-vibrant-green text-deep-navy font-display font-bold text-title-md md:text-headline-sm px-6 py-3 md:px-8 md:py-4 rounded-xl shadow-lg hover:brightness-110 active:scale-95 transition-all"
           >
             Start Comparing Now
           </Link>
