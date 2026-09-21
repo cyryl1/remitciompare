@@ -23,10 +23,17 @@ import { AdminModule } from './admin/admin.module';
       validate,
     }),
     ScheduleModule.forRoot(),
-    BullModule.forRoot({
-      connection: {
-        host: process.env.REDIS_HOST || 'localhost',
-        port: parseInt(process.env.REDIS_PORT || '6379', 10),
+    BullModule.forRootAsync({
+      useFactory: () => {
+        const redisUrl = new URL(process.env.REDIS_URL || 'redis://localhost:6379');
+        return {
+          connection: {
+            host: redisUrl.hostname,
+            port: parseInt(redisUrl.port || '6379', 10),
+            username: redisUrl.username || undefined,
+            password: redisUrl.password || undefined,
+          },
+        };
       },
     }),
     PrismaModule,

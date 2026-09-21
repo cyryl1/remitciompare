@@ -47,12 +47,7 @@ class EnvironmentVariables {
 
   @IsString()
   @IsNotEmpty()
-  REDIS_HOST: string;
-
-  @IsNumber()
-  @Min(1)
-  @Max(65535)
-  REDIS_PORT: number = 6379;
+  REDIS_URL: string;
 
   @IsString()
   @IsNotEmpty()
