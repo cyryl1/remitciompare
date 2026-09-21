@@ -41,12 +41,12 @@ export function ProfileTab() {
   return (
     <>
       <div className="mb-8 border-b border-outline-variant pb-6">
-        <h1 className="font-display text-headline-lg text-primary">Profile</h1>
+        <h1 className="font-display text-title-lg md:text-headline-lg text-primary">Profile</h1>
         <p className="text-body-md text-data-gray mt-2">Manage your personal information and preferences.</p>
       </div>
 
       <div className="flex items-center space-x-6 mb-10">
-        <div className="w-24 h-24 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-display text-headline-lg font-bold">
+        <div className="w-24 h-24 rounded-full bg-primary-container text-on-primary-container flex items-center justify-center font-display text-title-lg md:text-headline-lg font-bold">
           {fullName.split(' ').map((n: string) => n[0]).join('').substring(0, 2).toUpperCase()}
         </div>
         <div>

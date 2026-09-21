@@ -25,11 +25,11 @@ export default function CompareHistory() {
   };
 
   return (
-    <PageWrapper className="py-stack-lg min-h-screen flex flex-col gap-stack-lg md:gap-section-gap w-full">
+    <PageWrapper className="py-stack-lg min-h-screen flex flex-col gap-stack-md md:p-stack-lg md:gap-section-gap w-full">
       {/* ── Page Header & Stats ───────────────────────────────────────── */}
       <section className="flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-md">
         <div>
-          <h1 className="font-display text-headline-lg text-primary mb-2">Comparison History</h1>
+          <h1 className="font-display text-title-lg md:text-headline-lg text-primary mb-2">Comparison History</h1>
           <p className="text-body-md text-on-surface-variant">Review your previous comparisons and quickly check current rates again.</p>
           
           <div className="flex flex-wrap gap-4 mt-6">
@@ -54,7 +54,7 @@ export default function CompareHistory() {
       {/* ── Main Layout: Sidebar & Content ────────────────────────────── */}
       <div className="flex flex-col lg:flex-row gap-gutter">
         {/* Sidebar */}
-        <aside className="w-full lg:w-1/4 flex flex-col gap-stack-lg">
+        <aside className="w-full lg:w-1/4 flex flex-col gap-stack-md md:p-stack-lg">
           {/* Saved Routes (Mocked) */}
           <div className="bg-surface-white border border-outline-variant rounded-2xl p-6 shadow-sm">
             <h2 className="font-display text-headline-sm text-primary mb-4 flex items-center gap-2">

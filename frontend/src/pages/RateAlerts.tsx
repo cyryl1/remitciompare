@@ -37,12 +37,12 @@ export default function RateAlerts() {
   return (
     <PageWrapper className="py-stack-lg min-h-screen flex flex-col gap-section-gap w-full">
       {/* ── Header ────────────────────────────────────────────────────── */}
-      <section className="flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-lg border-b border-surface-variant pb-stack-lg">
+      <section className="flex flex-col md:flex-row justify-between items-start md:items-end gap-stack-md md:p-stack-lg border-b border-surface-variant pb-stack-lg">
         <div className="max-w-2xl">
           <span className="text-label-sm text-secondary uppercase tracking-wider mb-stack-sm block font-bold">
             RATE MONITORING
           </span>
-          <h1 className="font-display text-headline-lg text-primary mb-stack-sm">Never miss a better rate.</h1>
+          <h1 className="font-display text-title-lg md:text-headline-lg text-primary mb-stack-sm">Never miss a better rate.</h1>
           <p className="text-body-md text-on-surface-variant">
             Set target exchange rates for your preferred routes. We monitor top providers 24/7 and alert you instantly when your target is reached.
           </p>
@@ -72,7 +72,7 @@ export default function RateAlerts() {
       {/* ── Main Two Column Layout ────────────────────────────────────── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-gutter">
         {/* Left Column: Active Alerts */}
-        <div className="lg:col-span-7 flex flex-col gap-stack-lg">
+        <div className="lg:col-span-7 flex flex-col gap-stack-md md:p-stack-lg">
           <h2 className="font-display text-headline-sm text-primary border-b border-surface-variant pb-2">
             Your Rate Alerts
           </h2>
@@ -89,7 +89,7 @@ export default function RateAlerts() {
             alerts?.map((alert) => (
               <article
                 key={alert.id}
-                className={`bg-surface-white rounded-xl border p-stack-lg flex flex-col gap-stack-md relative overflow-hidden transition-all ${
+                className={`bg-surface-white rounded-xl border p-stack-md md:p-stack-lg flex flex-col gap-stack-md relative overflow-hidden transition-all ${
                   alert.status === 'triggered'
                     ? 'border-vibrant-green border-2 shadow-sm'
                     : 'border-outline-variant hover:shadow-card-hover'

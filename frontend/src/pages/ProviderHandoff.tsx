@@ -41,7 +41,7 @@ export default function ProviderHandoff() {
 
   return (
     <PageWrapper className="py-stack-lg min-h-screen flex flex-col items-center w-full">
-      <div className="w-full max-w-3xl flex flex-col gap-stack-lg">
+      <div className="w-full max-w-3xl flex flex-col gap-stack-md md:p-stack-lg">
         {/* ── Header ────────────────────────────────────────────────────── */}
         <div className="flex flex-col gap-stack-sm w-full">
           <div className="flex items-center gap-2 text-label-sm text-on-surface-variant">
@@ -49,12 +49,12 @@ export default function ProviderHandoff() {
             <ChevronRight size={14} />
             <span className="font-semibold text-primary">{result.providerName}</span>
           </div>
-          <h1 className="font-display text-headline-lg text-primary">Review your transfer</h1>
+          <h1 className="font-display text-title-lg md:text-headline-lg text-primary">Review your transfer</h1>
           <p className="text-body-md text-on-surface-variant">Check the details below before continuing to {result.providerName}.</p>
         </div>
 
         {/* ── Provider Card ─────────────────────────────────────────────── */}
-        <div className="bg-surface-white rounded-2xl shadow-sm border border-outline-variant p-stack-lg flex items-center justify-between">
+        <div className="bg-surface-white rounded-2xl shadow-sm border border-outline-variant p-stack-md md:p-stack-lg flex items-center justify-between">
           <div className="flex items-center gap-6">
             <div className="w-16 h-16 rounded-xl border border-outline-variant bg-surface-container flex items-center justify-center overflow-hidden flex-shrink-0">
               {result.providerLogo ? (
@@ -71,7 +71,7 @@ export default function ProviderHandoff() {
         </div>
 
         {/* ── Summary Card ──────────────────────────────────────────────── */}
-        <div className="bg-surface-white rounded-2xl shadow-card border border-outline-variant p-stack-lg relative overflow-hidden flex flex-col gap-stack-lg">
+        <div className="bg-surface-white rounded-2xl shadow-card border border-outline-variant p-stack-md md:p-stack-lg relative overflow-hidden flex flex-col gap-stack-md md:p-stack-lg">
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-primary-container to-vibrant-green" />
           <h3 className="font-display text-headline-sm text-primary border-b border-surface-variant pb-4">
             Your transfer
@@ -124,7 +124,7 @@ export default function ProviderHandoff() {
         </div>
 
         {/* ── Redirect Card ─────────────────────────────────────────────── */}
-        <div className="bg-primary-container rounded-2xl p-stack-lg text-center flex flex-col items-center">
+        <div className="bg-primary-container rounded-2xl p-stack-md md:p-stack-lg text-center flex flex-col items-center">
           <div className="w-16 h-16 rounded-full bg-surface-white flex items-center justify-center shadow-md mb-4 text-primary font-display text-headline-md font-bold">
             {countdown}
           </div>

@@ -42,7 +42,7 @@ export function PrivacyTab() {
   return (
     <>
       <div className="mb-8 border-b border-outline-variant pb-6">
-        <h1 className="font-display text-headline-lg text-primary">Privacy & Data</h1>
+        <h1 className="font-display text-title-lg md:text-headline-lg text-primary">Privacy & Data</h1>
         <p className="text-body-md text-data-gray mt-2">Manage your data and account deletion.</p>
       </div>
 

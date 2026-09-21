@@ -32,7 +32,7 @@ export default function ProviderDirectory() {
 
         <div className="max-w-container-max mx-auto relative z-10 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-12">
           <div className="max-w-2xl">
-            <h1 className="font-display text-display-lg mb-stack-md text-white">Money Transfer Providers</h1>
+            <h1 className="font-display text-display-sm md:text-display-lg mb-stack-md text-white">Money Transfer Providers</h1>
             <p className="text-body-xl text-on-primary-container mb-stack-lg max-w-xl">
               Explore providers, compare their coverage, and find the right option for your transfer with precision.
             </p>
@@ -84,7 +84,7 @@ export default function ProviderDirectory() {
         </div>
       </section>
 
-      <PageWrapper className="py-section-gap w-full grid grid-cols-1 gap-stack-lg">
+      <PageWrapper className="py-section-gap w-full grid grid-cols-1 gap-stack-md md:p-stack-lg">
         {/* ── Toolbar ─────────────────────────────────────────────────── */}
         <div className="flex flex-col md:flex-row justify-between items-center gap-4">
           <h2 className="font-display text-headline-md text-primary">All Providers</h2>

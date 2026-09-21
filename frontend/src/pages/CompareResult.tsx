@@ -99,11 +99,11 @@ export default function CompareResult() {
         </div>
       </div>
 
-      <PageWrapper className="flex-grow py-section-gap w-full grid grid-cols-1 gap-stack-lg">
+      <PageWrapper className="flex-grow py-section-gap w-full grid grid-cols-1 gap-stack-md md:p-stack-lg">
         {/* ── Header & Toolbar ────────────────────────────────────────── */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end border-b border-surface-variant pb-4 gap-4">
           <div>
-            <h1 className="font-display text-headline-lg text-primary mb-2">Compare Providers</h1>
+            <h1 className="font-display text-title-lg md:text-headline-lg text-primary mb-2">Compare Providers</h1>
             <p className="text-body-md text-on-surface-variant flex items-center gap-2">
               {rates?.length ?? 0} providers compared
               <span className="w-1 h-1 rounded-full bg-data-gray" />

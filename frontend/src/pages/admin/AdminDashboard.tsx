@@ -52,7 +52,7 @@ export default function AdminDashboard() {
           <div className="bg-surface-white rounded-xl p-5 border border-surface-variant shadow-sm flex flex-col">
             <span className="text-label-sm text-on-surface-variant uppercase mb-2">Total Comparisons (24h)</span>
             <div className="flex items-end gap-3 mb-2">
-              <span className="font-display text-headline-lg text-primary">{stats?.comparisonsToday ?? 0}</span>
+              <span className="font-display text-title-lg md:text-headline-lg text-primary">{stats?.comparisonsToday ?? 0}</span>
               <span className="text-label-sm text-vibrant-green font-semibold mb-1 bg-vibrant-green/10 px-1.5 py-0.5 rounded">Today</span>
             </div>
             <span className="text-xs text-data-gray">Total: {stats?.totalComparisons ?? 0}</span>
@@ -61,7 +61,7 @@ export default function AdminDashboard() {
           <div className="bg-surface-white rounded-xl p-5 border border-surface-variant shadow-sm flex flex-col">
             <span className="text-label-sm text-on-surface-variant uppercase mb-2">Active Providers</span>
             <div className="flex items-end gap-3 mb-2">
-              <span className="font-display text-headline-lg text-primary">{stats?.activeProviders ?? 0}</span>
+              <span className="font-display text-title-lg md:text-headline-lg text-primary">{stats?.activeProviders ?? 0}</span>
               <span className="text-label-sm text-primary font-semibold mb-1 bg-surface-container px-1.5 py-0.5 rounded">/ {stats?.totalProviders ?? 0}</span>
             </div>
             <span className="text-xs text-data-gray">Total integrated providers</span>
@@ -70,7 +70,7 @@ export default function AdminDashboard() {
           <div className="bg-surface-white rounded-xl p-5 border border-surface-variant shadow-sm flex flex-col">
             <span className="text-label-sm text-on-surface-variant uppercase mb-2">System Health</span>
             <div className="flex items-end gap-3 mb-2">
-              <span className="font-display text-headline-lg text-primary">100%</span>
+              <span className="font-display text-title-lg md:text-headline-lg text-primary">100%</span>
             </div>
             <div className="w-full bg-surface-container-low rounded-full h-1.5 mt-1 overflow-hidden">
               <div className="bg-vibrant-green h-1.5 rounded-full" style={{ width: '100%' }}></div>
@@ -80,7 +80,7 @@ export default function AdminDashboard() {
           <div className="bg-surface-white rounded-xl p-5 border border-surface-variant shadow-sm flex flex-col">
             <span className="text-label-sm text-on-surface-variant uppercase mb-2">Active Alerts</span>
             <div className="flex items-end gap-3 mb-2">
-              <span className="font-display text-headline-lg text-primary">{stats?.activeAlerts ?? 0}</span>
+              <span className="font-display text-title-lg md:text-headline-lg text-primary">{stats?.activeAlerts ?? 0}</span>
               <span className="text-label-sm text-primary mb-1 bg-surface-container px-1.5 py-0.5 rounded">Total: {stats?.totalAlerts ?? 0}</span>
             </div>
             <span className="text-xs text-data-gray">Monitoring rates</span>

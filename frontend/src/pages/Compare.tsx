@@ -44,7 +44,7 @@ export default function Compare() {
           <p className="text-label-sm text-secondary uppercase tracking-widest mb-stack-sm font-semibold">
             Compare Money Transfers
           </p>
-          <h1 className="font-display text-headline-lg text-primary mb-stack-sm">
+          <h1 className="font-display text-title-lg md:text-headline-lg text-primary mb-stack-sm">
             Find the best way to send your money.
           </h1>
           <p className="text-body-md text-on-surface-variant">
@@ -53,7 +53,7 @@ export default function Compare() {
         </div>
 
         {/* Form card */}
-        <div className="bg-surface-white rounded-2xl shadow-card border border-outline-variant w-full max-w-3xl mx-auto p-stack-lg relative">
+        <div className="bg-surface-white rounded-2xl shadow-card border border-outline-variant w-full max-w-3xl mx-auto p-stack-md md:p-stack-lg relative">
 
           {/* Amount section */}
           <div className="mb-stack-lg">
@@ -70,7 +70,7 @@ export default function Compare() {
                   min={1}
                   onChange={(e) => setAmount(Number(e.target.value))}
                   aria-label="Amount to send"
-                  className="w-full font-display text-display-md text-primary border-0 border-b-2 border-surface-variant focus:border-secondary focus:ring-0 bg-transparent pb-2 outline-none"
+                  className="w-full font-display text-title-lg md:text-headline-lg md:text-display-md text-primary border-0 border-b-2 border-surface-variant focus:border-secondary focus:ring-0 bg-transparent pb-2 outline-none"
                 />
               </div>
               {/* From currency */}

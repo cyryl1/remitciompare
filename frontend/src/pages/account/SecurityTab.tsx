@@ -59,7 +59,7 @@ export function SecurityTab() {
   return (
     <>
       <div className="mb-8 border-b border-outline-variant pb-6">
-        <h1 className="font-display text-headline-lg text-primary">Security</h1>
+        <h1 className="font-display text-title-lg md:text-headline-lg text-primary">Security</h1>
         <p className="text-body-md text-data-gray mt-2">Manage your password and authentication methods.</p>
       </div>
 

@@ -8,11 +8,11 @@ export default function SavingsInsight() {
   const timeframes = ['This Month', '3 Months', '6 Months', 'This Year', 'All Time'];
 
   return (
-    <PageWrapper className="py-section-gap flex flex-col gap-stack-lg min-h-screen">
+    <PageWrapper className="py-section-gap flex flex-col gap-stack-md md:p-stack-lg min-h-screen">
       {/* ── Page Hero & Time Selector ─────────────────────────────────── */}
       <header className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 border-b border-surface-variant pb-8">
         <div className="max-w-2xl">
-          <h1 className="font-display text-headline-lg text-primary mb-4">Your RemitCompare Insights</h1>
+          <h1 className="font-display text-title-lg md:text-headline-lg text-primary mb-4">Your RemitCompare Insights</h1>
           <p className="text-body-xl text-on-surface-variant">
             See how your transfer decisions have helped you get more value from every send.
           </p>
@@ -42,7 +42,7 @@ export default function SavingsInsight() {
           
           <div>
             <h2 className="text-label-sm uppercase tracking-wider text-primary-fixed-dim mb-2">Total Potential Savings</h2>
-            <div className="font-display text-display-lg mb-4">
+            <div className="font-display text-display-sm md:text-display-lg mb-4">
               {formatCurrency(128450, 'NGN')}
             </div>
           </div>
@@ -61,7 +61,7 @@ export default function SavingsInsight() {
               <h3 className="text-label-sm text-on-surface-variant uppercase">Comparisons Made</h3>
               <Search size={20} className="text-data-gray" />
             </div>
-            <div className="font-display text-headline-lg text-primary">14</div>
+            <div className="font-display text-title-lg md:text-headline-lg text-primary">14</div>
             <p className="text-label-sm text-data-gray mt-2">Across 4 routes</p>
           </div>
 
@@ -71,7 +71,7 @@ export default function SavingsInsight() {
               <h3 className="text-label-sm text-on-surface-variant uppercase">Average Saving</h3>
               <PiggyBank size={20} className="text-data-gray" />
             </div>
-            <div className="font-display text-headline-lg text-primary">{formatCurrency(9175, 'NGN')}</div>
+            <div className="font-display text-title-lg md:text-headline-lg text-primary">{formatCurrency(9175, 'NGN')}</div>
             <p className="text-label-sm text-data-gray mt-2">Per transfer</p>
           </div>
 
@@ -79,7 +79,7 @@ export default function SavingsInsight() {
           <div className="sm:col-span-2 bg-surface-white rounded-xl p-6 border border-surface-variant shadow-sm flex justify-between items-center">
             <div>
               <h3 className="text-label-sm text-on-surface-variant uppercase mb-2">Total Value Compared</h3>
-              <div className="font-display text-headline-lg text-primary">{formatCurrency(8500, 'GBP')}</div>
+              <div className="font-display text-title-lg md:text-headline-lg text-primary">{formatCurrency(8500, 'GBP')}</div>
             </div>
             <div className="w-16 h-16 rounded-full bg-surface-container-low flex items-center justify-center">
               <ArrowRightLeft size={32} className="text-primary" />

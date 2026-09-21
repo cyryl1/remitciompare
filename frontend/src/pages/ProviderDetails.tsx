@@ -85,7 +85,7 @@ export default function ProviderDetails() {
       </nav>
 
       {/* ── Hero Card ─────────────────────────────────────────────────── */}
-      <section className="bg-surface-white rounded-2xl shadow-card border border-surface-variant p-gutter md:p-section-gap flex flex-col md:flex-row gap-stack-lg items-start md:items-center relative overflow-hidden">
+      <section className="bg-surface-white rounded-2xl shadow-card border border-surface-variant p-gutter md:p-section-gap flex flex-col md:flex-row gap-stack-md md:p-stack-lg items-start md:items-center relative overflow-hidden">
         <div className="absolute top-0 right-0 w-64 h-64 bg-primary-fixed rounded-full blur-3xl opacity-20 -mr-20 -mt-20" />
         
         <div className="flex-shrink-0 bg-surface-container-low p-6 rounded-xl border border-surface-variant shadow-sm w-32 h-32 flex items-center justify-center z-10">
@@ -98,7 +98,7 @@ export default function ProviderDetails() {
 
         <div className="flex-grow z-10">
           <div className="flex items-center gap-3 mb-stack-sm">
-            <h1 className="font-display text-display-md text-primary">{provider.name}</h1>
+            <h1 className="font-display text-title-lg md:text-headline-lg md:text-display-md text-primary">{provider.name}</h1>
             <span className="bg-primary-container text-on-primary-container text-label-sm px-3 py-1 rounded-full font-semibold">
               Transfer Provider
             </span>
@@ -200,7 +200,7 @@ export default function ProviderDetails() {
 
           <section className="bg-surface-white rounded-2xl shadow-card border border-surface-variant p-gutter">
             <h2 className="font-display text-headline-md text-primary mb-stack-md">Key Information</h2>
-            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-stack-lg">
+            <dl className="grid grid-cols-1 sm:grid-cols-2 gap-stack-md md:p-stack-lg">
               <div className="flex flex-col gap-1">
                 <dt className="text-label-sm text-data-gray uppercase tracking-wider flex items-center gap-2">
                   <MapPin size={16} /> Supported Countries

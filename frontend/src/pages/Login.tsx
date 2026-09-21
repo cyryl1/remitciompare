@@ -81,7 +81,7 @@ export default function Login() {
             <ArrowLeftRight size={32} className="text-vibrant-green" />
             <span className="font-display font-bold text-headline-md text-on-primary tracking-tight">RemitCompare</span>
           </div>
-          <h1 className="font-display text-display-md text-on-primary mb-6 leading-tight">
+          <h1 className="font-display text-title-lg md:text-headline-lg md:text-display-md text-on-primary mb-6 leading-tight">
             Precise rates for global citizens.
           </h1>
           <p className="text-body-xl text-primary-fixed-dim opacity-90 max-w-lg">
@@ -100,7 +100,7 @@ export default function Login() {
           </div>
 
           <div className="mb-10">
-            <h2 className="font-display text-headline-lg text-primary mb-2">Welcome back</h2>
+            <h2 className="font-display text-title-lg md:text-headline-lg text-primary mb-2">Welcome back</h2>
             <p className="text-body-md text-on-surface-variant">Log in to your account to continue comparing.</p>
           </div>
 

@@ -11,7 +11,7 @@ export default function HowItWorks() {
           <span className="inline-block px-3 py-1 bg-surface-container-low text-primary font-label-sm rounded-full tracking-widest uppercase">
             How RemitCompare Works
           </span>
-          <h1 className="font-display text-display-lg text-primary">
+          <h1 className="font-display text-display-sm md:text-display-lg text-primary">
             Compare before you send.
           </h1>
           <p className="text-body-xl text-on-surface-variant max-w-2xl mx-auto">
@@ -72,7 +72,7 @@ export default function HowItWorks() {
 
       {/* ── Steps ─────────────────────────────────────────────────────── */}
       <section className="py-section-gap px-gutter max-w-4xl mx-auto w-full">
-        <h2 className="font-display text-headline-lg text-primary text-center mb-section-gap">
+        <h2 className="font-display text-title-lg md:text-headline-lg text-primary text-center mb-section-gap">
           Three steps to a smarter transfer
         </h2>
 
@@ -81,11 +81,11 @@ export default function HowItWorks() {
           <div className="hidden md:block absolute top-0 bottom-0 left-12 w-0.5 bg-surface-variant" />
 
           {/* Step 1 */}
-          <div className="flex flex-col md:flex-row gap-stack-lg relative">
+          <div className="flex flex-col md:flex-row gap-stack-md md:p-stack-lg relative">
             <div className="w-24 h-24 rounded-full bg-primary-container border-4 border-surface text-primary-fixed flex items-center justify-center flex-shrink-0 z-10 mx-auto md:mx-0 shadow-sm">
               <Search size={32} />
             </div>
-            <div className="flex-grow text-center md:text-left bg-surface-white p-stack-lg rounded-2xl border border-surface-variant shadow-sm">
+            <div className="flex-grow text-center md:text-left bg-surface-white p-stack-md md:p-stack-lg rounded-2xl border border-surface-variant shadow-sm">
               <span className="text-label-sm text-secondary uppercase tracking-widest font-bold block mb-2">Step 1</span>
               <h3 className="font-display text-headline-md text-primary mb-3">Tell us your route</h3>
               <p className="text-body-md text-on-surface-variant">
@@ -95,11 +95,11 @@ export default function HowItWorks() {
           </div>
 
           {/* Step 2 */}
-          <div className="flex flex-col md:flex-row gap-stack-lg relative">
+          <div className="flex flex-col md:flex-row gap-stack-md md:p-stack-lg relative">
             <div className="w-24 h-24 rounded-full bg-primary-container border-4 border-surface text-primary-fixed flex items-center justify-center flex-shrink-0 z-10 mx-auto md:mx-0 shadow-sm">
               <ListFilter size={32} />
             </div>
-            <div className="flex-grow text-center md:text-left bg-surface-white p-stack-lg rounded-2xl border border-surface-variant shadow-sm">
+            <div className="flex-grow text-center md:text-left bg-surface-white p-stack-md md:p-stack-lg rounded-2xl border border-surface-variant shadow-sm">
               <span className="text-label-sm text-secondary uppercase tracking-widest font-bold block mb-2">Step 2</span>
               <h3 className="font-display text-headline-md text-primary mb-3">Compare your options</h3>
               <p className="text-body-md text-on-surface-variant">
@@ -114,11 +114,11 @@ export default function HowItWorks() {
           </div>
 
           {/* Step 3 */}
-          <div className="flex flex-col md:flex-row gap-stack-lg relative">
+          <div className="flex flex-col md:flex-row gap-stack-md md:p-stack-lg relative">
             <div className="w-24 h-24 rounded-full bg-primary-container border-4 border-surface text-primary-fixed flex items-center justify-center flex-shrink-0 z-10 mx-auto md:mx-0 shadow-sm">
               <MousePointerClick size={32} />
             </div>
-            <div className="flex-grow text-center md:text-left bg-surface-white p-stack-lg rounded-2xl border border-surface-variant shadow-sm">
+            <div className="flex-grow text-center md:text-left bg-surface-white p-stack-md md:p-stack-lg rounded-2xl border border-surface-variant shadow-sm">
               <span className="text-label-sm text-secondary uppercase tracking-widest font-bold block mb-2">Step 3</span>
               <h3 className="font-display text-headline-md text-primary mb-3">Click and transfer</h3>
               <p className="text-body-md text-on-surface-variant">
@@ -131,9 +131,9 @@ export default function HowItWorks() {
 
       {/* ── FAQ or Trust Section ──────────────────────────────────────── */}
       <section className="py-section-gap bg-surface-white border-t border-surface-variant">
-        <div className="max-w-container-max mx-auto px-gutter grid grid-cols-1 md:grid-cols-2 gap-stack-lg items-center">
+        <div className="max-w-container-max mx-auto px-gutter grid grid-cols-1 md:grid-cols-2 gap-stack-md md:p-stack-lg items-center">
           <div>
-            <h2 className="font-display text-headline-lg text-primary mb-4">Independent and Free</h2>
+            <h2 className="font-display text-title-lg md:text-headline-lg text-primary mb-4">Independent and Free</h2>
             <p className="text-body-md text-on-surface-variant mb-6">
               RemitCompare is completely free to use. We make money by receiving a small commission from the providers if you choose to use their service through our links. This never affects the rate you receive or how we rank the providers — we always show you the best deal first.
             </p>
@@ -142,7 +142,7 @@ export default function HowItWorks() {
               100% Data Security & Privacy
             </div>
           </div>
-          <div className="bg-surface-container rounded-2xl p-stack-lg border border-outline-variant text-center">
+          <div className="bg-surface-container rounded-2xl p-stack-md md:p-stack-lg border border-outline-variant text-center">
              <h3 className="font-display text-headline-sm text-primary mb-4">Start saving on your next transfer</h3>
              <Link to="/compare">
                <Button size="lg" fullWidth className="text-white">Compare Rates Now</Button>

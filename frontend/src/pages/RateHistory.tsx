@@ -34,7 +34,7 @@ export default function RateHistory() {
     <PageWrapper className="py-stack-lg min-h-screen">
       {/* ── Header ────────────────────────────────────────────────────── */}
       <header className="mb-stack-lg">
-        <h1 className="font-display text-headline-lg text-primary mb-stack-sm">Rate History</h1>
+        <h1 className="font-display text-title-lg md:text-headline-lg text-primary mb-stack-sm">Rate History</h1>
         <p className="text-body-xl text-on-surface-variant max-w-2xl">
           See how remittance rates have changed over time across providers.
         </p>

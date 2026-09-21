@@ -87,7 +87,7 @@ export default function Signup() {
             <ArrowLeftRight size={32} className="text-vibrant-green" />
             <span className="font-display font-bold text-headline-md text-on-primary tracking-tight">RemitCompare</span>
           </div>
-          <h1 className="font-display text-display-md text-on-primary mb-6 leading-tight">
+          <h1 className="font-display text-title-lg md:text-headline-lg md:text-display-md text-on-primary mb-6 leading-tight">
             Join the smart money movement.
           </h1>
           <ul className="space-y-4">
@@ -115,7 +115,7 @@ export default function Signup() {
           </div>
 
           <div className="mb-8">
-            <h2 className="font-display text-headline-lg text-primary mb-2">Create an account</h2>
+            <h2 className="font-display text-title-lg md:text-headline-lg text-primary mb-2">Create an account</h2>
             <p className="text-body-md text-on-surface-variant">Start saving on your international transfers today.</p>
           </div>
 
